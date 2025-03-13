@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volcan et Micro</title>
+</head>
+<body>
+    <canvas id="volcanoCanvas" width="400" height="400"></canvas>
+    <p>Intensité du souffle : <span id="intensityText">0</span></p>
+    <script>
+        const canvas = document.getElementById("volcanoCanvas");
+        const ctx = canvas.getContext("2d");
+        const intensityText = document.getElementById("intensityText");
+
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                const audioContext = new AudioContext();
+                const analyser = audioContext.createAnalyser();
+                const mic = audioContext.createMediaStreamSource(stream);
+                mic.connect(analyser);
+                analyser.fftSize = 256;
+                const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+                function draw() {
+                    requestAnimationFrame(draw);
+                    analyser.getByteFrequencyData(dataArray);
+                    let volume = dataArray.reduce((a, b) => a + b) / dataArray.length;
+                    let intensity = Math.min(volume / 2, 100); // Normalisation du volume
+
+                    intensityText.textContent = intensity.toFixed(2);
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    //
+                    // Choix de la couleur de la barre d'intensité
+                    let barColor = "green"; 
+                    if (intensity > 10) barColor = "blue";
+                    if (intensity > 20) barColor = "yellow";
+                    if (intensity > 35) barColor = "orange";
+                    if (intensity > 70) barColor = "red";
+
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    // Dessin du volcan
+                    ctx.fillStyle = "brown";
+                    ctx.beginPath();
+                    ctx.moveTo(150, 300);
+                    ctx.lineTo(250, 300);
+                    ctx.lineTo(200, 200);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    
+
+                    // Dessin de la boule rouge en haut du triangle en fonction de l'intensité (boule)
+                    if (intensity > 10) {
+                        ctx.fillStyle = "red";
+                        ctx.beginPath();
+                        ctx.arc(200, 190, intensity / 2, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    //couleur dynamique
+                    ctx.fillStyle = barColor;
+                    ctx.fillRect(50, 300 - intensity * 2, 20, intensity * 2);
+                    
+                }
+
+                draw();
+            })
+            .catch(err => console.error("Micro inaccessible:", err));
+    </script>
+</body>
+</html>
