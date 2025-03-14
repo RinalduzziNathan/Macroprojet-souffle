@@ -168,20 +168,10 @@
                     ctx.fillStyle = barColor;
                     ctx.fillRect(50, 300 - intensity * 2, 20, intensity * 2);
 
-
-                    function getRndInteger(min, max) {
-                        return Math.floor(Math.random() * (max - min)) + min;
-                    }
-
                     if (finTableau == true) {
                         var finalArray = intensityArray;
 
-                        var fakeArray = []
-                        for (let index = 0; index < 300; index++) {
-
-                            fakeArray.push(getRndInteger(20, 24))
-
-                        }
+                    
                         console.log(finalArray + " c final array de taille " + finalArray.length)
 
                         //console.log(finalArray)
@@ -261,7 +251,7 @@
                         }
                         ctxGraph.strokeStyle = 'blue';
                         ctxGraph.stroke();
-
+                        finTableau = false;
 
 
                     }
