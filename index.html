@@ -9,12 +9,12 @@
         .hidden {
             display: none;
         }
+
         canvas {
             background-color: bisque;
             border: 1px solid black;
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js"></script>
     <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
 </head>
 
@@ -23,22 +23,17 @@
 
     <canvas id="myCanvas" width="800" height="400"></canvas>
     <canvas id="volcanoCanvas" width="400" height="400"></canvas>
-    <dotlottie-player
-    id="base"
-    src="https://lottie.host/bfc76ed8-a603-4705-b1ba-529d3c77dba2/FXRxowFxXs.lottie" 
-    background="transparent" 
-    speed="1" 
-    autoplay
-    loop
-    class="hidden"
-    style="width: 1100px; height: 700px" >
-</dotlottie-player>
+    <dotlottie-player id="base" src="https://lottie.host/bfc76ed8-a603-4705-b1ba-529d3c77dba2/FXRxowFxXs.lottie"
+        background="transparent" speed="1" autoplay loop class="hidden" style="width: 1100px; height: 700px">
+    </dotlottie-player>
     <script>
         const canvas = document.getElementById("volcanoCanvas");
         const ctx = canvas.getContext("2d");
         const intensityText = document.getElementById("intensityText");
-        const effusifVolcano = document.getElementById("base");
-        effusifVolcano.classList.remove("hidden");
+        var baseVolcano = document.getElementById("base");
+        baseVolcano.classList.remove("hidden");
+        baseVolcano.speed = 1;
+        // baseVolcano.src = "https://lottie.host/cc1dc667-d3fb-425f-9230-223e31070f2e/65CBkiaq4d.lottie"
         //effusifVolcano.classList.toggle("hidden");
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(stream => {
@@ -145,29 +140,19 @@
                         let trend = linearRegressionTrend(smoothedArray);
 
                         console.log("Tendance (pente de régression) :", trend);
-                        console.log(trend > 0 ? "L'intensité augmente globalement." : "Pas d'augmentation claire.");
-
-
-                        function movingAverage(array, windowSize) {
-                            let smoothedArray = [];
-                            for (let i = 0; i < array.length; i++) {
-                                let start = Math.max(0, i - Math.floor(windowSize / 2));
-                                let end = Math.min(array.length, i + Math.floor(windowSize / 2) + 1);
-                                let sum = 0;
-                                for (let j = start; j < end; j++) {
-                                    sum += array[j];
-                                }
-                                smoothedArray.push(sum / (end - start));
-                            }
-                            return smoothedArray;
+                        console.log(trend > 0.09 ? "L'intensité augmente globalement." : "Pas d'augmentation claire.");
+                        
+                        if (trend > 0.09) { 
+                            baseVolcano.load("https://lottie.host/1a3a4376-3629-4e3e-aeb2-fcc2d5d49e35/FBCgmw7yBd.lottie") 
                         }
-
-
+                        if (trend < 0.09 && trend > -0.09) { 
+                            baseVolcano.load("https://lottie.host/cc1dc667-d3fb-425f-9230-223e31070f2e/65CBkiaq4d.lottie") 
+                        }
                         // Création du graphique
                         const canvasGraph = document.getElementById('myCanvas');
                         const ctxGraph = canvasGraph.getContext('2d');
                         ctxGraph.fillText(Math.max(...smoothedArray).toFixed(2), 10, 50);
-                       
+
                         // Dessiner l'axe X
                         ctxGraph.beginPath();
                         ctxGraph.moveTo(50, 350);
