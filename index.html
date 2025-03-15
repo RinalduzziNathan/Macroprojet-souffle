@@ -72,7 +72,7 @@
 </head>
 
 <body style="background-color: lightgoldenrodyellow;">
-    <p id="progress">Progression : </p>
+
     <button id="startBouton" class="startBouton center">START</button>
     <button id="boutonRestart" class="startBouton center">RESTART</button>
     <div id="timer" class="timer verticalCenter">Temps restant : 5s</div>
@@ -88,6 +88,7 @@
         boutonRestart.style.visibility = "hidden";
         var remplirTableau = false
         var finTableau = false
+        var isBaseAnim = true
 
         
 
@@ -120,7 +121,12 @@
            
         });
 
-   
+        boutonRestart.addEventListener("click", function () {
+            // Démarrer le timer de 5 secondes
+            startTimer();
+            boutonRestart.style.visibility = "hidden";
+           
+        });
 
         //const intensityText = document.getElementById("intensityText");
         var baseVolcano = document.getElementById("base");
@@ -129,10 +135,16 @@
 
         const progressText = document.getElementById("progress");
         baseVolcano.addEventListener("loopComplete", (event) => {
-        console.log("c terminé");
-            progressText.textContent = "c terminé ;)";
-            boutonRestart.style.visibility = "visible";
-            baseVolcano.load("https://lottie.host/bfc76ed8-a603-4705-b1ba-529d3c77dba2/FXRxowFxXs.lottie")
+            console.log(baseVolcano.src)
+            if(isBaseAnim == false){
+                console.log("dans le if")
+                boutonRestart.style.visibility = "visible";
+                baseVolcano.load("https://lottie.host/bfc76ed8-a603-4705-b1ba-529d3c77dba2/FXRxowFxXs.lottie")
+                isBaseAnim = true;
+            }else
+        {
+            console.log("dans le else" ) 
+        }
             
             
             
@@ -170,6 +182,7 @@
 
                     if (finTableau == true) {
                         var finalArray = intensityArray;
+                        intensityArray = []
 
 
                         console.log(finalArray + " c final array de taille " + finalArray.length)
@@ -213,14 +226,14 @@
                         console.log(trend > 0.09 ? "L'intensité augmente globalement." : "Pas d'augmentation claire.");
 
                         if (trend > 0.09) {
-                            
+                            isBaseAnim = false
                             baseVolcano.load("https://lottie.host/1a3a4376-3629-4e3e-aeb2-fcc2d5d49e35/FBCgmw7yBd.lottie")
-                            baseVolcano.setSpeed(30);
+                            baseVolcano.setSpeed(20);
                         }
                         if (trend < 0.09 && trend > -0.09) {
-                            
+                            isBaseAnim = false
                             baseVolcano.load("https://lottie.host/cc1dc667-d3fb-425f-9230-223e31070f2e/65CBkiaq4d.lottie")
-                            baseVolcano.setSpeed(30);
+                            baseVolcano.setSpeed(20);
 
 
                         }
