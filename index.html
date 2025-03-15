@@ -12,7 +12,7 @@
 
 
 
-        .couleurBouton {
+        .startBouton {
 
             box-shadow: inset 0px 4px 15px 3px #6094e8;
             background: linear-gradient(to bottom, #2e466e 5%, #415989 100%);
@@ -34,7 +34,7 @@
 
 
 
-        .couleurBouton:hover {
+        .startBouton:hover {
             background: linear-gradient(to bottom, #415989 5%, #2e466e 100%);
             background-color: #415989;
         }
@@ -72,20 +72,24 @@
 </head>
 
 <body style="background-color: lightgoldenrodyellow;">
-
-    <button id="couleurBouton" class="couleurBouton center">START</button>
+    <p id="progress">Progression : </p>
+    <button id="startBouton" class="startBouton center">START</button>
+    <button id="boutonRestart" class="startBouton center">RESTART</button>
     <div id="timer" class="timer verticalCenter">Temps restant : 5s</div>
 
     <dotlottie-player id="base" src="https://lottie.host/bfc76ed8-a603-4705-b1ba-529d3c77dba2/FXRxowFxXs.lottie"
         background="transparent" speed="1" autoplay loop class="hidden" style="width: 1400px; height: 700px">
     </dotlottie-player>
     <script>
-        const couleurBouton = document.getElementById("couleurBouton");
+        const startBouton = document.getElementById("startBouton");
+        const boutonRestart = document.getElementById("boutonRestart");
 
         const timerDisplay = document.getElementById("timer");
-
+        boutonRestart.style.visibility = "hidden";
         var remplirTableau = false
         var finTableau = false
+
+        
 
         // Fonction pour démarrer le timer de 5 secondes
         function startTimer() {
@@ -109,16 +113,31 @@
         }
 
         // Écouter le clic du bouton pour démarrer le timer
-        couleurBouton.addEventListener("click", function () {
+        startBouton.addEventListener("click", function () {
             // Démarrer le timer de 5 secondes
             startTimer();
-            couleurBouton.style.visibility = "hidden";
+            startBouton.style.visibility = "hidden";
+           
         });
+
+   
 
         //const intensityText = document.getElementById("intensityText");
         var baseVolcano = document.getElementById("base");
         baseVolcano.classList.remove("hidden");
         baseVolcano.speed = 1;
+
+        const progressText = document.getElementById("progress");
+        baseVolcano.addEventListener("loopComplete", (event) => {
+        console.log("c terminé");
+            progressText.textContent = "c terminé ;)";
+            boutonRestart.style.visibility = "visible";
+            baseVolcano.load("https://lottie.host/bfc76ed8-a603-4705-b1ba-529d3c77dba2/FXRxowFxXs.lottie")
+            
+            
+            
+        });
+
         // baseVolcano.src = "https://lottie.host/cc1dc667-d3fb-425f-9230-223e31070f2e/65CBkiaq4d.lottie"
         //effusifVolcano.classList.toggle("hidden");
         navigator.mediaDevices.getUserMedia({ audio: true })
@@ -194,13 +213,21 @@
                         console.log(trend > 0.09 ? "L'intensité augmente globalement." : "Pas d'augmentation claire.");
 
                         if (trend > 0.09) {
+                            
                             baseVolcano.load("https://lottie.host/1a3a4376-3629-4e3e-aeb2-fcc2d5d49e35/FBCgmw7yBd.lottie")
+                            baseVolcano.setSpeed(30);
                         }
                         if (trend < 0.09 && trend > -0.09) {
+                            
                             baseVolcano.load("https://lottie.host/cc1dc667-d3fb-425f-9230-223e31070f2e/65CBkiaq4d.lottie")
+                            baseVolcano.setSpeed(30);
+
+
                         }
 
+
                         finTableau = false;
+
 
 
                     }
