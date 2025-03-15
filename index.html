@@ -75,7 +75,7 @@
 
     <button id="startBouton" class="startBouton center">START</button>
     <button id="boutonRestart" class="startBouton center">RESTART</button>
-    <div id="timer" class="timer verticalCenter">Temps restant : 5s</div>
+    <div id="timer" class="timer verticalCenter">Soufflez pendant 5s</div>
 
     <dotlottie-player id="base" src="https://lottie.host/bfc76ed8-a603-4705-b1ba-529d3c77dba2/FXRxowFxXs.lottie"
         background="transparent" speed="1" autoplay loop class="hidden" style="width: 1400px; height: 700px">
@@ -98,7 +98,7 @@
             remplirTableau = true
             // Afficher le temps restant dans le div
             const intervalId = setInterval(() => {
-                timerDisplay.textContent = `Temps restant : ${timeLeft}s`;
+                timerDisplay.textContent = ` Soufflez pendant ${timeLeft}s`;
                 timeLeft--;
 
                 // Si le temps est écoulé, arrêter l'intervalle et afficher un message
@@ -228,12 +228,12 @@
                         if (trend > 0.09) {
                             isBaseAnim = false
                             baseVolcano.load("https://lottie.host/1a3a4376-3629-4e3e-aeb2-fcc2d5d49e35/FBCgmw7yBd.lottie")
-                            baseVolcano.setSpeed(20);
+                            baseVolcano.setSpeed(1);
                         }
                         if (trend < 0.09 && trend > -0.09) {
                             isBaseAnim = false
                             baseVolcano.load("https://lottie.host/cc1dc667-d3fb-425f-9230-223e31070f2e/65CBkiaq4d.lottie")
-                            baseVolcano.setSpeed(20);
+                            baseVolcano.setSpeed(1);
 
 
                         }
