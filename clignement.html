@@ -11,16 +11,16 @@
     <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
 
     <style>
-        video { width: 640px; height: 480px; display: block; margin: auto; }
+        video { width: 640px; height: 480px; display: none; margin: auto; }
         canvas { position: absolute; top: 0; left: 0; }
         #status { text-align: center; font-size: 20px; margin-top: 10px; }
     </style>
 </head>
-<body>
-    <video id="video" autoplay></video>
-    <div id="status">Analyse en cours...</div>
-    <dotlottie-player id="base" src="https://lottie.host/1a3a4376-3629-4e3e-aeb2-fcc2d5d49e35/FBCgmw7yBd.lottie"
-    background="transparent" speed="1" autoplay loop class="hidden" style="width: 1100px; height: 700px">
+<body style="background-color: lightgoldenrodyellow;">
+    <video  id="video" autoplay hidden></video>
+    <div id="status">clignez des yeux pour accelérer le temps !</div>
+    <dotlottie-player id="base" src="https://lottie.host/e65b3258-b5ab-4854-a5c6-cebf677180fe/5XFBKi9oGv.lottie"
+    background="transparent" speed="0.2" autoplay loop class="hidden" style="width: 1400px; height: 700px">
 </dotlottie-player>
     <script>
         const videoElement = document.getElementById('video');
@@ -40,17 +40,13 @@
                     const eyeOpen = Math.abs(eyeTop.y - eyeBottom.y);
                     
                     if (eyeOpen < blinkThreshold && previousEyeOpen >= blinkThreshold) {
-                        statusElement.textContent = 'Clignement détecté !';
-                        document.body.style.backgroundColor = "#D8F1F7";
+                        statusElement.textContent = 'Clignements détectés !';
                         baseSpeed++;
                         baseAnimation.setSpeed(baseSpeed);
                     
                         
 
-                    } else {
-                        document.body.style.backgroundColor = "#FF00FF";
-                        statusElement.textContent = 'Analyse en cours...';
-                    }
+                    } 
                     previousEyeOpen = eyeOpen;
                 }
             });
