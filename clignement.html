@@ -8,6 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+
     <style>
         video { width: 640px; height: 480px; display: block; margin: auto; }
         canvas { position: absolute; top: 0; left: 0; }
@@ -17,13 +19,16 @@
 <body>
     <video id="video" autoplay></video>
     <div id="status">Analyse en cours...</div>
-    
+    <dotlottie-player id="base" src="https://lottie.host/1a3a4376-3629-4e3e-aeb2-fcc2d5d49e35/FBCgmw7yBd.lottie"
+    background="transparent" speed="1" autoplay loop class="hidden" style="width: 1100px; height: 700px">
+</dotlottie-player>
     <script>
         const videoElement = document.getElementById('video');
         const statusElement = document.getElementById('status');
         let blinkThreshold = 0.015;
         let previousEyeOpen = 1;
-
+        var baseAnimation = document.getElementById("base");
+        var baseSpeed = 1
         async function detectBlink() {
             const faceMesh = new FaceMesh({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}` });
             faceMesh.setOptions({ maxNumFaces: 1, refineLandmarks: true, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
@@ -37,6 +42,11 @@
                     if (eyeOpen < blinkThreshold && previousEyeOpen >= blinkThreshold) {
                         statusElement.textContent = 'Clignement détecté !';
                         document.body.style.backgroundColor = "#D8F1F7";
+                        baseSpeed++;
+                        baseAnimation.setSpeed(baseSpeed);
+                    
+                        
+
                     } else {
                         document.body.style.backgroundColor = "#FF00FF";
                         statusElement.textContent = 'Analyse en cours...';
