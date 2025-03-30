@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,69 +11,54 @@
     <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
 
     <style>
-        video {
-            width: 640px;
-            height: 480px;
-            display: none;
-            margin: auto;
-        }
-
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        #status {
-            text-align: center;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 20px;
-            margin-top: 10px;
-        }
-
-        #temps {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 20px;
-            margin-top: 10px;
-        }
+        video { width: 640px; height: 480px; display: none; margin: auto; }
+        canvas { position: absolute; top: 0; left: 0; }
+        #status { text-align: center; font-family: 'Courier New', Courier, monospace; font-size: 20px; margin-top: 10px; }
+        #temps { font-family: 'Courier New', Courier, monospace; font-size: 20px; margin-top: 10px; }
     </style>
 </head>
-
 <body style="background-color: lightgoldenrodyellow;">
     <video id="video" autoplay hidden></video>
-    <div id="status">clignez des yeux pour accelérer le temps !</div>
+    <div id="status">Clignez des yeux pour accélérer le temps !</div>
     <div id="temps">Il y a <span id="tempsValeur">100</span> millions d'années</div>
+    
     <dotlottie-player id="base" src="https://lottie.host/e65b3258-b5ab-4854-a5c6-cebf677180fe/5XFBKi9oGv.lottie"
-        background="transparent" speed="0.2" autoplay loop class="hidden" style="width: 1400px; height: 700px">
+    background="transparent" speed="0.2" autoplay loop class="hidden" style="width: 1400px; height: 700px">
     </dotlottie-player>
+
     <script>
         const videoElement = document.getElementById('video');
         const statusElement = document.getElementById('status');
         const tempsValeur = document.getElementById('tempsValeur');
+        
         let blinkThreshold = 0.0015;
         let previousEyeOpen = 1;
-        var baseAnimation = document.getElementById("base");
-        var baseSpeed = 0.2
+        let baseSpeed = 0.2;
         let tempsRestant = 100; // Nombre d'années initial
         let decrementStep = 1; // Vitesse de diminution
         let blinkCount = 0; // Nombre de clignements
-        let lastBlinkTime = Date.now(); // Pour suivre le temps entre deux clignement
+        let lastBlinkTime = Date.now(); // Pour suivre le temps entre deux clignements
+
+        var baseAnimation = document.getElementById("base");
+
         async function detectBlink() {
             const faceMesh = new FaceMesh({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}` });
             faceMesh.setOptions({ maxNumFaces: 1, refineLandmarks: true, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
+
             faceMesh.onResults((results) => {
                 if (results.multiFaceLandmarks.length > 0) {
                     const landmarks = results.multiFaceLandmarks[0];
                     const eyeTop = landmarks[159];
                     const eyeBottom = landmarks[145];
                     const eyeOpen = Math.abs(eyeTop.y - eyeBottom.y);
-
+                    
                     if (eyeOpen < blinkThreshold && previousEyeOpen >= blinkThreshold) {
                         blinkCount++; // Incrémente le nombre de clignements
+                        lastBlinkTime = Date.now(); // Enregistre le temps du dernier clignement
 
-                        // Augmenter la vitesse de diminution au fil du temps
+                        // Augmenter la vitesse de diminution progressivement
                         if (blinkCount % 5 === 0) { // Tous les 5 clignements, on accélère
-                            decrementStep *= 2; // On double la vitesse de diminution
+                            decrementStep *= 2; // Double la vitesse de diminution
                         }
 
                         // Réduire les années restantes
@@ -85,11 +69,12 @@
                         }
 
                         // Accélérer l'animation
-                        baseSpeed += 0.2;
+                        baseSpeed = Math.min(5, baseSpeed + 0.2); // Limite la vitesse max à 5
                         baseAnimation.setSpeed(baseSpeed);
 
                         statusElement.textContent = 'Clignement détecté !';
-                    }
+                    } 
+
                     previousEyeOpen = eyeOpen;
                 }
             });
@@ -102,21 +87,20 @@
                 height: 480
             });
             camera.start();
+
+            // Vérification toutes les secondes pour ralentir l'animation si l'élève cligne moins
+            setInterval(() => {
+                let timeSinceLastBlink = (Date.now() - lastBlinkTime) / 1000; // Temps en secondes
+
+                if (timeSinceLastBlink > 5) { // Si l'élève ne cligne plus pendant 5 secondes
+                    decrementStep = Math.max(1, decrementStep / 2); // Ralentit la diminution du temps
+                    baseSpeed = Math.max(0.2, baseSpeed - 0.1); // Ralentit aussi l'animation
+                    baseAnimation.setSpeed(baseSpeed);
+                }
+            }, 1000);
         }
-        // Lancer un intervalle qui vérifie si les clignements ralentissent
-        setInterval(() => {
-            let timeSinceLastBlink = (Date.now() - lastBlinkTime) / 1000; // Temps en secondes
 
-            if (timeSinceLastBlink > 5) { // Si l'élève ne cligne plus pendant 5 secondes
-                decrementStep = Math.max(1, decrementStep / 2); // Réduire la vitesse de diminution
-                baseSpeed = Math.max(0.2, baseSpeed - 0.1); // Ralentir l'animation
-                baseAnimation.setSpeed(baseSpeed);
-            }
-        }, 1000); // Vérification toutes les secondes
-        
-
-        detectBlink(); // On laisse Camera gérer l'accès à la caméra
+        detectBlink();
     </script>
 </body>
-
 </html>

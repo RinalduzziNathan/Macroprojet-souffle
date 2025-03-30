@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détection de Clignement avec MediaPipe</title>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+
+    <style>
+        video { display: none; } 
+        #status, #temps { text-align: center; font-family: 'Courier New', Courier, monospace; font-size: 20px; margin-top: 10px; }
+        #imageContainer { display: flex; justify-content: center; margin-top: 20px; }
+        #sequenceImage { width: 800px; height: auto; }
+    </style>
+</head>
+<body style="background-color: lightgoldenrodyellow;">
+    <video id="video" autoplay hidden></video>
+    <div id="status">Clignez des yeux pour avancer dans le temps !</div>
+    <div id="temps">Il y a <span id="tempsValeur">100</span> millions d'années</div>
+
+    <!-- Conteneur de l'image -->
+    <div id="imageContainer">
+        <img id="sequenceImage" src="image/pangee1.png" alt="Séquence temporelle">
+    </div>
+
+    <script>
+        const videoElement = document.getElementById('video');
+        const statusElement = document.getElementById('status');
+        const tempsValeur = document.getElementById('tempsValeur');
+        const sequenceImage = document.getElementById('sequenceImage');
+
+        let blinkThreshold = 0.0015;
+        let previousEyeOpen = 1;
+        
+        // Liste des images de la séquence
+        const imageSequence = [
+            "image/pangee1.png",
+            "image/pangee2.png",
+            "image/pangee3.png",
+            "image/pangee4.png",
+            "image/pangee5.png",
+            "image/pangee6.png",
+            "image/pangee7.png",
+            "image/pangee8.png",
+            "image/pangee9.png",
+            "image/pangee10.png",
+            "image/pangee11.png",
+            "image/pangee12.png",
+            "image/pangee13.png",
+            "image/pangee14.png",
+            "image/pangee15.png",
+            "image/pangee16.png",
+            "image/pangee17.png",
+            "image/pangee18.png",
+            "image/pangee19.png",
+
+            
+        ];
+        let currentImageIndex = 0; // Suivi de l’image actuelle
+        let startYear = 100; // Année de départ
+
+        async function detectBlink() {
+            const faceMesh = new FaceMesh({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}` });
+            faceMesh.setOptions({ maxNumFaces: 1, refineLandmarks: true, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
+
+            faceMesh.onResults((results) => {
+                if (results.multiFaceLandmarks.length > 0) {
+                    const landmarks = results.multiFaceLandmarks[0];
+                    const eyeTop = landmarks[159];
+                    const eyeBottom = landmarks[145];
+                    const eyeOpen = Math.abs(eyeTop.y - eyeBottom.y);
+
+                    if (eyeOpen < blinkThreshold && previousEyeOpen >= blinkThreshold) {
+                        // Changer d’image si possible
+                        if (currentImageIndex < imageSequence.length - 1) {
+                            currentImageIndex++;
+                            sequenceImage.src = imageSequence[currentImageIndex];
+                            tempsValeur.textContent = startYear - currentImageIndex;
+                        }
+
+                        statusElement.textContent = 'Clignement détecté !';
+                    } 
+
+                    previousEyeOpen = eyeOpen;
+                }
+            });
+
+            const camera = new Camera(videoElement, {
+                onFrame: async () => {
+                    await faceMesh.send({ image: videoElement });
+                },
+                width: 640,
+                height: 480
+            });
+            camera.start();
+        }
+
+        detectBlink();
+    </script>
+</body>
+</html>
