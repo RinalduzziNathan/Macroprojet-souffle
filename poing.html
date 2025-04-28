@@ -3,24 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détection de poing fermé</title>
+    <title>Détection main et poing</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
     <style>
         video, canvas { position: absolute; left: 0; top: 0; width: 80%; height: auto; }
         body { transition: background 0.5s; }
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-family: sans-serif;
+        }
     </style>
 </head>
 <body>
     <video id="video" autoplay playsinline></video>
     <canvas id="canvas"></canvas>
+    <div id="info">Détection en cours...</div>
 
     <script>
         async function startGestureRecognition() {
             const video = document.getElementById("video");
             const canvas = document.getElementById("canvas");
             const ctx = canvas.getContext("2d");
+            const info = document.getElementById("info");
 
             await tf.setBackend("webgl");
 
@@ -45,22 +57,36 @@
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
 
-                if (results.multiHandLandmarks.length > 0) {
-                    let poingDetecte = false;
+                let color = "white";
+                let messages = [];
 
-                    results.multiHandLandmarks.forEach((hand) => {
-                        drawHand(hand);
-                        if (isFist(hand)) {
-                            poingDetecte = true;
+                if (results.multiHandLandmarks.length > 0) {
+                    results.multiHandLandmarks.forEach((handLandmarks, i) => {
+                        drawHand(handLandmarks);
+
+                        const isFistPose = isFist(handLandmarks);
+                        const handedness = results.multiHandedness[i].label; // "Left" ou "Right"
+
+                        if (handedness === "Right" && isFistPose) {
+                            color = "pink";
+                            messages.push("Main droite : Poing fermé");
+                        } else if (handedness === "Right" && !isFistPose) {
+                            color = "green";
+                            messages.push("Main droite : Main tendue");
+                        } else if (handedness === "Left" && isFistPose) {
+                            color = "blue";
+                            messages.push("Main gauche : Poing fermé");
+                        } else if (handedness === "Left" && !isFistPose) {
+                            color = "yellow";
+                            messages.push("Main gauche : Main tendue");
                         }
                     });
-
-                    if (poingDetecte) {
-                        document.body.style.background = "pink";
-                    } else {
-                        document.body.style.background = "white";
-                    }
+                } else {
+                    messages.push("Aucune main détectée");
                 }
+
+                document.body.style.background = color;
+                info.innerText = messages.join("\n");
             });
 
             async function detectHands() {
@@ -80,13 +106,10 @@
             }
 
             function isFist(landmarks) {
-                // Pour chaque doigt (index, majeur, annulaire, auriculaire)
-                const foldedFingers = [8, 12, 16, 20].every((tipIndex, i) => {
+                return [8, 12, 16, 20].every(tipIndex => {
                     const pipIndex = tipIndex - 2;
                     return landmarks[tipIndex].y > landmarks[pipIndex].y;
                 });
-
-                return foldedFingers;
             }
         }
 
