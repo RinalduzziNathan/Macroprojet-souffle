@@ -5,7 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volcan et Micro</title>
-    <style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300&display=swap" rel="stylesheet">
+   
+   
+   
+   <style>
+
+        body {
+            background-image: url('interface/cerclevolcan.png'), url('interface/quadrillage.png');
+            background-size: 90%, cover; 
+            background-position: center 20px, center;
+            background-repeat: no-repeat;
+            height: 100vh;
+        }
+
         .hidden {
             display: none;
         }
@@ -66,16 +84,66 @@
             z-index: 10;
             /* Met le bouton au-dessus de l'animation */
         }
+
+        #clickZoneVentilator {
+            position: absolute;
+            top: 5px; /* même top que ton lunettes.png */
+            left: 5px; /* même left que ton lunettes.png */
+            width: 150px; /* taille à ajuster selon la taille de l'image */
+            height: 100px; /* taille à ajuster aussi */
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0); /* transparent */
+            z-index: 10; /* au-dessus du background */
+        }
+
+        #expandingCircle {
+            position: absolute;
+            top: 0px; /* Position where you want it */
+            left: 0px; /* Position where you want it */
+            width: 250px;  /* Initial small size */
+            height: 250px; /* Initial small size */
+            border-radius: 50%; /* Make it a circle */
+            background-color: white; /* White fill */
+            border: 2.5px solid black; /* Black border */
+            z-index: 1;  /* Make sure it's above other elements */
+            transition: all 1s ease;  /* Smooth animation */
+        }
+
+        #ventilatorImage {
+            position: absolute;
+            top: 55px; /* Or wherever you want */
+            left: 75px; /* Or wherever you want */
+            z-index: 10; /* Make sure it is in front of the circle */
+            width: 100px; /* taille à ajuster selon la taille de l'image */
+            height: 150px;
+            rotate: 10deg;
+        }
+
+        #volcanImage {
+            position: absolute;
+            top: 10%; /* Or wherever you want */
+            left: 23%; /* Or wherever you want */
+            z-index: 10; /* Make sure it is in front of the circle */
+            width: 800px; /* taille à ajuster selon la taille de l'image */
+            height: 675px;
+
+        }
+
     </style>
     <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
 
 </head>
 
-<body style="background-color: lightgoldenrodyellow;">
+<body>
 
     <button id="startBouton" class="startBouton center">START</button>
     <button id="boutonRestart" class="startBouton center">RESTART</button>
     <div id="timer" class="timer verticalCenter">Soufflez pendant 5s</div>
+    <div id="clickZoneVentilator">
+        <img id="ventilatorImage" src="interface/ventilateur.png" alt="ventilator" />
+        <div id="expandingCircle"></div>  <!-- Circle behind the lunettes image -->
+    </div>
+    <img id="volcanImage" src="interface/volcanintro.png" alt="volcanintro" />
 
     <dotlottie-player id="base" src="https://lottie.host/bfc76ed8-a603-4705-b1ba-529d3c77dba2/FXRxowFxXs.lottie"
         background="transparent" speed="1" autoplay loop class="hidden" style="width: 1400px; height: 700px">
@@ -250,6 +318,30 @@
 
             })
             .catch(err => console.error("Micro inaccessible:", err));
+
+        const ventilatorImage = document.getElementById('ventilatorImage');
+        const expandingCircle = document.getElementById('expandingCircle');
+
+        // Track the state of the circle (expanded or normal)
+        let isCircleExpanded = false;
+
+        ventilatorImage.addEventListener('click', () => {
+            // Hide the lunettes image and expand the circle when clicked
+            ventilatorImage.style.display = 'none';
+            expandingCircle.style.width = '650px';  // Final expanded size
+            expandingCircle.style.height = '650px'; // Final expanded size
+            isCircleExpanded = true; // Set state to expanded
+        });
+
+        expandingCircle.addEventListener('click', () => {
+            if (isCircleExpanded) {
+                // Reset the circle back to normal size and show the lunettes image again
+                expandingCircle.style.width = '250px';  // Original size
+                expandingCircle.style.height = '250px'; // Original size
+                ventilatorImage.style.display = 'block'; // Show the lunettes image again
+                isCircleExpanded = false; // Set state to normal
+            }
+        });
     </script>
 </body>
 
