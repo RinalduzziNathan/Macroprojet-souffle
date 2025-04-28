@@ -257,4 +257,40 @@
                     let newHeight = 200 + intensity; // Minimum height is 100px
                     soundRectangle.style.height = `${newHeight}px`; // Apply the calculated height
                 } else {
-                    console.error("
+                    console.error("Invalid intensity value:", intensity);
+                    // Fallback height in case of error
+                    soundRectangle.style.height = '200px';
+                }
+            }
+
+            draw(); // Start drawing
+
+        })
+        .catch(err => console.error("Microphone access error: ", err));
+
+    const ventilatorImage = document.getElementById('ventilatorImage');
+    const expandingCircle = document.getElementById('expandingCircle');
+
+    let isCircleExpanded = false;
+
+    ventilatorImage.addEventListener('click', () => {
+        ventilatorImage.style.display = 'none';
+        expandingCircle.style.width = '650px';
+        expandingCircle.style.height = '650px';
+        isCircleExpanded = true;
+    });
+
+    expandingCircle.addEventListener('click', () => {
+        if (isCircleExpanded) {
+            expandingCircle.style.width = '250px';
+            expandingCircle.style.height = '250px';
+            ventilatorImage.style.display = 'block';
+            isCircleExpanded = false;
+        }
+    });
+});
+
+    </script>
+</body>
+
+</html>

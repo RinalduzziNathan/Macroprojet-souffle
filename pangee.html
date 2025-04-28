@@ -107,4 +107,146 @@
     <video id="video" autoplay hidden></video>
     <div id="status"></div>
     <div id="temps">Il y a <span id="tempsValeur">250</span> millions d'années</div>
-    <div 
+    <div id="clickZoneLunettes">
+        <img id="lunettesImage" src="interface/lunettes.png" alt="Lunettes" />
+        <div id="expandingCircle"></div>  <!-- Circle behind the lunettes image -->
+    </div>
+
+
+    <!-- Conteneur de l'image -->
+    <div id="imageContainer">
+        <img id="sequenceImage1" src="image/pangee1.png" alt="Séquence temporelle">
+        <img id="sequenceImage2" src="image/pangee1.png" alt="Séquence temporelle" style="opacity: 0;">
+    </div>
+
+    <script>
+        const videoElement = document.getElementById('video');
+        const statusElement = document.getElementById('status');
+        const tempsValeur = document.getElementById('tempsValeur');
+        const sequenceImage1 = document.getElementById('sequenceImage1');
+        const sequenceImage2 = document.getElementById('sequenceImage2');
+
+        let activeImage = 1; // Start with sequenceImage1
+
+        function changeImageCrossfade(nextImageSrc) {
+            if (activeImage === 1) {
+                sequenceImage2.src = nextImageSrc;
+                sequenceImage2.style.opacity = 1; // Fade in image 2
+                sequenceImage1.style.opacity = 0; // Fade out image 1
+                activeImage = 2;
+            } else {
+                sequenceImage1.src = nextImageSrc;
+                sequenceImage1.style.opacity = 1; // Fade in image 1
+                sequenceImage2.style.opacity = 0; // Fade out image 2
+                activeImage = 1;
+            }
+        }
+
+
+        let blinkThreshold = 0.0015;
+        let previousEyeOpen = 1;
+        
+        // Liste des images de la séquence
+        const imageSequence = [
+            "image/pangee1.png",
+            "image/pangee2.png",
+            "image/pangee3.png",
+            "image/pangee4.png",
+            "image/pangee5.png",
+            "image/pangee6.png",
+            "image/pangee7.png",
+            "image/pangee8.png",
+            "image/pangee9.png",
+            "image/pangee10.png",
+            "image/pangee11.png",
+            "image/pangee12.png",
+            "image/pangee13.png",
+            "image/pangee14.png",
+            "image/pangee15.png",
+            "image/pangee16.png",
+            "image/pangee17.png",
+            "image/pangee18.png",
+            "image/pangee19.png",
+            "image/pangee20.png",
+            "image/pangee21.png",
+            "image/pangee22.png",
+            "image/pangee23.png",
+            "image/pangee24.png",
+            "image/pangee25.png",
+            "image/pangee26.png",];
+            
+            let currentImageIndex = 0;
+        let startYear = 250;
+
+        async function detectBlink() {
+            const faceMesh = new FaceMesh({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}` });
+            faceMesh.setOptions({ maxNumFaces: 1, refineLandmarks: true, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
+
+            faceMesh.onResults((results) => {
+                if (results.multiFaceLandmarks.length > 0) {
+                    const landmarks = results.multiFaceLandmarks[0];
+                    const eyeTop = landmarks[159];
+                    const eyeBottom = landmarks[145];
+                    const eyeOpen = Math.abs(eyeTop.y - eyeBottom.y);
+
+                    if (eyeOpen < blinkThreshold && previousEyeOpen >= blinkThreshold) {
+                        if (currentImageIndex < imageSequence.length - 1) {
+                            //sequenceImage.style.opacity = 0; // Fade out
+                            setTimeout(() => {
+                                currentImageIndex++;
+                                changeImageCrossfade(imageSequence[currentImageIndex]);
+                                if (currentImageIndex === imageSequence.length - 2) {
+                                    tempsValeur.textContent = startYear - (currentImageIndex - 1) * 10 - 5;
+                                } else {
+                                    tempsValeur.textContent = startYear - currentImageIndex * 10;
+                                }
+                                sequenceImage.style.opacity = 1; // Fade in
+                            }, 300);
+                        }
+                        statusElement.textContent = 'Clignement détecté !';
+                    }
+
+                    previousEyeOpen = eyeOpen;
+                }
+            });
+
+            const camera = new Camera(videoElement, {
+                onFrame: async () => {
+                    await faceMesh.send({ image: videoElement });
+                },
+                width: 640,
+                height: 480
+            });
+            camera.start();
+        }
+
+        detectBlink();
+    
+        const lunettesImage = document.getElementById('lunettesImage');
+        const expandingCircle = document.getElementById('expandingCircle');
+
+        // Track the state of the circle (expanded or normal)
+        let isCircleExpanded = false;
+
+        lunettesImage.addEventListener('click', () => {
+            // Hide the lunettes image and expand the circle when clicked
+            lunettesImage.style.display = 'none';
+            expandingCircle.style.width = '650px';  // Final expanded size
+            expandingCircle.style.height = '650px'; // Final expanded size
+            isCircleExpanded = true; // Set state to expanded
+        });
+
+        expandingCircle.addEventListener('click', () => {
+            if (isCircleExpanded) {
+                // Reset the circle back to normal size and show the lunettes image again
+                expandingCircle.style.width = '250px';  // Original size
+                expandingCircle.style.height = '250px'; // Original size
+                lunettesImage.style.display = 'block'; // Show the lunettes image again
+                isCircleExpanded = false; // Set state to normal
+            }
+        });
+
+
+    </script>
+</body>
+</html>
