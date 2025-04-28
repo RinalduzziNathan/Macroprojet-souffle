@@ -68,10 +68,15 @@
         }
     </style>
     <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+    <script src="https://unpkg.com/@rive-app/canvas@2.24.0"></script>
+
+
 
 </head>
 
 <body style="background-color: lightgoldenrodyellow;">
+    <canvas id="riveCanvas" width="500" height="500"></canvas>
+
 
     <button id="startBouton" class="startBouton center">START</button>
     <button id="boutonRestart" class="startBouton center">RESTART</button>
@@ -90,7 +95,17 @@
         var finTableau = false
         var isBaseAnim = true
 
-        
+        const r = new rive.Rive({
+        src: "https://rinalduzzinathan.github.io/uploaded-rive-files/rive/volcan.riv",
+        canvas: document.getElementById("riveCanvas"),
+        autoplay: false,
+        // artboard: "Arboard", // Optional. If not supplied the default is selected
+        stateMachines: "bumpy",
+        onLoad: () => {
+          r.resizeDrawingSurfaceToCanvas();
+        },
+    });
+
 
         // Fonction pour démarrer le timer de 5 secondes
         function startTimer() {
@@ -139,6 +154,7 @@
             if(isBaseAnim == false){
                 console.log("dans le if")
                 boutonRestart.style.visibility = "visible";
+                
                 baseVolcano.load("https://lottie.host/bfc76ed8-a603-4705-b1ba-529d3c77dba2/FXRxowFxXs.lottie")
                 isBaseAnim = true;
             }else
