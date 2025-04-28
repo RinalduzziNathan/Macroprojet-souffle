@@ -26,20 +26,24 @@
         }
 
         .startBouton {
-            box-shadow: inset 0px 4px 15px 3px #6094e8;
-            background: linear-gradient(to bottom, #2e466e 5%, #415989 100%);
-            background-color: #2e466e;
-            border-radius: 17px;
-            border: 1px solid #1f2f47;
+            
+            background-color: white;
             display: inline-block;
+            padding: 40px 100px;
+            visibility: hidden;
+            background-color: white;
+            color: rgb(0, 0, 0);
+            border: 3px, solid black;
+            border-radius: 100px;
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 700;
+            font-style: normal;
+            font-variation-settings:"wdth" 100;
+            font-size: 90px;
+            color: black;
             cursor: pointer;
-            color: #ffffff;
-            font-family: Courier New;
-            font-size: 21px;
-            padding: 12px 52px;
-            text-decoration: none;
-            position: relative;
-            z-index: 10;
+            z-index: 20;
         }
 
         .startBouton:hover {
@@ -62,6 +66,14 @@
             transform: translate(-50%, -50%);
         }
 
+        .centerTop {
+            margin: 0;
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
         .timer {
             margin-top: 20px;
             color: #333;
@@ -79,7 +91,7 @@
             height: 100px;
             cursor: pointer;
             background-color: rgba(255, 255, 255, 0);
-            z-index: 10;
+            z-index: 8;
         }
 
         #expandingCircle {
@@ -91,7 +103,7 @@
             border-radius: 50%;
             background-color: white;
             border: 2.5px solid black;
-            z-index: 1;
+            z-index: 6;
             transition: all 1s ease;
         }
 
@@ -99,7 +111,7 @@
             position: absolute;
             top: 55px;
             left: 75px;
-            z-index: 10;
+            z-index: 7;
             width: 100px;
             height: 150px;
             rotate: 10deg;
@@ -109,7 +121,7 @@
             position: absolute;
             top: 10%;
             left: 22%;
-            z-index: 10;
+            z-index: 4;
             width: 800px;
             height: 675px;
         }
@@ -117,16 +129,17 @@
         /* New Rectangle */
         #soundRectangle {
             position: absolute;
-            top: 200px;
-            left: 50%;
+            top: 80%;
+            left: 49%;
             transform: translateX(-50%);
             width: 300px;
             background-color: red;
-            height: 400px;
-            z-index: 10;
+            height: 100px;
+            z-index: 3;
             visibility: visible; /* Ensure the rectangle is visible */
-            transition: height 0.1s ease-out; /* Smooth transition */
+            transition: height 0.1s ease-out, top 0.1s ease-out; /* Smooth transition for both height and top */
         }
+
 
         /* CSS classes for different heights */
         .height-100 {
@@ -153,6 +166,32 @@
             height: 1100px;
         }
 
+        .showButton {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 40px;
+            background-color: white;
+            color: rgb(0, 0, 0);
+            border: 3px, solid black;
+            border-radius: 50px;
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 700;
+            font-style: normal;
+            font-variation-settings:"wdth" 100;
+            font-size: 24px;
+            color: black;
+            cursor: pointer;
+            z-index: 20;
+            
+        }
+
+        .showButton:hover {
+            background-color: red;
+        }
+
+
     </style>
     <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
 
@@ -160,8 +199,8 @@
 
 <body>
 
-    <button id="startBouton" class="startBouton center">START</button>
-    <button id="boutonRestart" class="startBouton center">RESTART</button>
+    <button id="startBouton" class="startBouton centerTop">prêt ?</button>
+    <button id="boutonRestart" class="startBouton centerTop">recommencer</button>
     <div id="timer" class="timer verticalCenter">Soufflez pendant 5s</div>
     <div id="clickZoneVentilator">
         <img id="ventilatorImage" src="interface/ventilateur.png" alt="ventilator" />
@@ -169,6 +208,8 @@
     </div>
     <img id="volcanImage" src="interface/volcanintro.png" alt="volcanintro" />
     <div id="soundRectangle"></div>
+    <button id="showAnimationButton" class="showButton"> >>></button>
+
 
 
     <dotlottie-player id="base" src="https://lottie.host/bfc76ed8-a603-4705-b1ba-529d3c77dba2/FXRxowFxXs.lottie" background="transparent" speed="1" autoplay loop class="hidden" style="width: 1400px; height: 700px">
@@ -184,20 +225,43 @@
     var finTableau = false;
     var isBaseAnim = true;
 
+    const showAnimationButton = document.getElementById('showAnimationButton');
+
+    showAnimationButton.addEventListener('click', () => {
+        baseVolcano.classList.remove('hidden'); // Remove the "hidden" class
+        // Hide the volcano image
+        const volcanImage = document.getElementById('volcanImage');
+        volcanImage.style.display = 'none';
+
+        // Hide the sound rectangle
+        const soundRectangle = document.getElementById('soundRectangle');
+        soundRectangle.style.display = 'none';
+
+        // Show the Start button
+        const startButton = document.getElementById('startBouton');
+        startButton.style.visibility = 'visible';
+    });
+
+
     function startTimer() {
-        let timeLeft = 5;
-        remplirTableau = true;
-        const intervalId = setInterval(() => {
-            timerDisplay.textContent = ` Soufflez pendant ${timeLeft}s`;
-            timeLeft--;
-            if (timeLeft < 0) {
-                clearInterval(intervalId);
-                timerDisplay.textContent = "Temps écoulé";
-                remplirTableau = false;
-                finTableau = true;
-            }
-        }, 1000);
-    }
+    let timeLeft = 5;
+    remplirTableau = true;
+    const intervalId = setInterval(() => {
+        timerDisplay.textContent = ` Soufflez pendant ${timeLeft}s`;
+        timeLeft--;
+        if (timeLeft < 0) {
+            clearInterval(intervalId);
+            timerDisplay.textContent = "Temps écoulé";
+            remplirTableau = false;
+            finTableau = true;
+
+            // --- ADD THIS ---
+            baseVolcano.load("https://lottie.host/your-effusif-animation.lottie");
+            isBaseAnim = false;
+        }
+    }, 1000);
+}
+
 
     startBouton.addEventListener("click", function () {
         startTimer();
@@ -210,7 +274,7 @@
     });
 
     var baseVolcano = document.getElementById("base");
-    baseVolcano.classList.remove("hidden");
+    //baseVolcano.classList.remove("hidden");
     baseVolcano.speed = 1;
 
     baseVolcano.addEventListener("loopComplete", (event) => {
@@ -222,51 +286,128 @@
     });
 
     navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(stream => {
-            const audioContext = new AudioContext();
-            const analyser = audioContext.createAnalyser();
-            const mic = audioContext.createMediaStreamSource(stream);
-            mic.connect(analyser);
-            analyser.fftSize = 256;
-            const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    .then(stream => {
+        const audioContext = new AudioContext();
+        const analyser = audioContext.createAnalyser();
+        const mic = audioContext.createMediaStreamSource(stream);
+        mic.connect(analyser);
+        analyser.fftSize = 256;
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+        var intensityArray = []
 
-            // Get the rectangle element
-            const soundRectangle = document.getElementById("soundRectangle");
+        // Get the rectangle element
+        // Get the rectangle element
+        const soundRectangle = document.getElementById("soundRectangle");
 
-            // Check if soundRectangle exists
-            if (!soundRectangle) {
-                console.error("soundRectangle element not found.");
-                return;
+        // Check if soundRectangle exists
+        if (!soundRectangle) {
+            console.error("soundRectangle element not found.");
+            return;
+        }
+
+        // Get initial top position from CSS
+        const initialTop = parseInt(window.getComputedStyle(soundRectangle).top, 10);
+
+        function draw() {
+            requestAnimationFrame(draw);
+
+            analyser.getByteFrequencyData(dataArray);
+            let volume = dataArray.reduce((a, b) => a + b) / dataArray.length;
+            let intensity = Math.min(volume / 2, 100); // Normalize volume
+
+            if (intensity !== null && intensity !== undefined && !isNaN(intensity)) {
+                let newHeight = 100 + intensity * 4;
+                soundRectangle.style.height = `${newHeight}px`;
+
+                let newTop = initialTop - intensity; // Use dynamic initialTop
+                soundRectangle.style.top = `${newTop}px`;
+            } else {
+                console.error("Invalid intensity value:", intensity);
+                soundRectangle.style.height = '100px';
+                soundRectangle.style.top = `${initialTop}px`;
             }
 
-            function draw() {
-                requestAnimationFrame(draw);
+            if (remplirTableau == true) {
+                        let addIntensity = intensityArray.push(intensity)
+                    }
 
-                analyser.getByteFrequencyData(dataArray);
-                let volume = dataArray.reduce((a, b) => a + b) / dataArray.length;
-                let intensity = Math.min(volume / 2, 100); // Normalize the volume, limiting the max height
-                        
-                
 
-                // Improved check for NaN and null
-                if (intensity !== null && intensity !== undefined && !isNaN(intensity)) {
-                    // Remove all height classes before adding the new one
-                    soundRectangle.classList.remove("height-100", "height-150", "height-200", "height-250", "height-300", "height-350");
-                    
-                    // Dynamically calculate height based on intensity
-                    let newHeight = 200 + intensity; // Minimum height is 100px
-                    soundRectangle.style.height = `${newHeight}px`; // Apply the calculated height
-                } else {
-                    console.error("Invalid intensity value:", intensity);
-                    // Fallback height in case of error
-                    soundRectangle.style.height = '200px';
-                }
-            }
+                    //intensityText.textContent = intensity.toFixed(2);
+                    //ctx.clearRect(0, 0, canvas.width, canvas.height);
+             if (finTableau == true) {
+                     var finalArray = intensityArray;
+                    intensityArray = []
 
-            draw(); // Start drawing
 
-        })
-        .catch(err => console.error("Microphone access error: ", err));
+                    console.log(finalArray + " c final array de taille " + finalArray.length)
+
+                        //console.log(finalArray)
+                    function movingAverage(array, windowSize) {
+                        let smoothedArray = [];
+                            for (let i = 0; i < array.length; i++) {
+                                let start = Math.max(0, i - Math.floor(windowSize / 2));
+                                let end = Math.min(array.length, i + Math.floor(windowSize / 2) + 1);
+                                let sum = 0;
+                                for (let j = start; j < end; j++) {
+                                    sum += array[j];
+                                }
+                                smoothedArray.push(sum / (end - start));
+                            }
+                            return smoothedArray;
+                        }
+
+                        function linearRegressionTrend(array) {
+                            let n = array.length;
+                            let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+
+                            for (let i = 0; i < n; i++) {
+                                sumX += i;
+                                sumY += array[i];
+                                sumXY += i * array[i];
+                                sumXX += i * i;
+                            }
+
+                            let slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+                            return slope; // Si > 0, tendance à la hausse
+                        }
+
+                        // Utilisation :
+                        let windowSize = 10; // Ajuste la taille du lissage selon ton besoin
+                        let smoothedArray = movingAverage(finalArray, windowSize);
+                        let trend = linearRegressionTrend(smoothedArray);
+
+                        console.log("Tendance (pente de régression) :", trend);
+                        console.log(trend > 0.09 ? "L'intensité augmente globalement." : "Pas d'augmentation claire.");
+
+                        if (trend > 0.09) {
+                            isBaseAnim = false
+                            baseVolcano.load("https://lottie.host/1a3a4376-3629-4e3e-aeb2-fcc2d5d49e35/FBCgmw7yBd.lottie")
+                            baseVolcano.setSpeed(1);
+                        }
+                        if (trend < 0.09 && trend > -0.09) {
+                            isBaseAnim = false
+                            baseVolcano.load("https://lottie.host/cc1dc667-d3fb-425f-9230-223e31070f2e/65CBkiaq4d.lottie")
+                            baseVolcano.setSpeed(1);
+
+
+                        }
+
+
+                        finTableau = false;
+
+
+        }
+    }
+
+
+
+
+
+        draw(); // Start drawing
+
+    })
+    .catch(err => console.error("Microphone access error: ", err));
+
 
     const ventilatorImage = document.getElementById('ventilatorImage');
     const expandingCircle = document.getElementById('expandingCircle');
