@@ -30,9 +30,10 @@
 <body>
 
   <div id="controls">
-    <button id="trigger1">Déclencher baseToEffu </button>
-    <button id="trigger2">Déclencher baseToExplo</button>
-    <button id="trigger3">Déclencher toBase</button>
+    <button id="trigger1">Déclencher baseToOK </button>
+    <button id="trigger2">Déclencher baseToPasOK</button>
+    <button id="trigger3">Déclencher baseToVib</button>
+    <button id="trigger4">Déclencher toBase</button>
   </div>
 
   <canvas id="canvas" width="600" height="600"></canvas>
@@ -43,7 +44,7 @@
     let trigger1, trigger2;
 
       const r = new rive.Rive({
-        src: "https://rinalduzzinathan.github.io/file-stash/rive/volcan_final6.riv",
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/seisme.riv",
         canvas: document.getElementById("canvas"),
         autoplay: true,
         stateMachines: "State Machine 1",
@@ -51,9 +52,10 @@
         
         // Récupère les inputs (dont les triggers)
         const inputs = r.stateMachineInputs('State Machine 1');
-        trigger1 = inputs.find(i => i.name === 'baseToEffu');
-        trigger2 = inputs.find(i => i.name === 'baseToExplo');
-        trigger3 = inputs.find(i => i.name === 'toBase');
+        trigger1 = inputs.find(i => i.name === 'baseToOK');
+        trigger2 = inputs.find(i => i.name === 'baseToPasOK');
+        trigger3 = inputs.find(i => i.name === 'baseToVib');
+        trigger4 = inputs.find(i => i.name === 'toBase');
      
         
       },
@@ -75,6 +77,9 @@
 
     document.getElementById('trigger3').addEventListener('click', () => {
       if (trigger3) trigger3.fire();
+    });
+    document.getElementById('trigger4').addEventListener('click', () => {
+      if (trigger4) trigger4.fire();
     });
    
     

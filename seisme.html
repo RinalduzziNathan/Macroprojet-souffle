@@ -1,181 +1,214 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détection de rapprochement des mains</title>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
-    <style>
-        video, canvas { position: absolute; left: 0; top: 0; width: 80%; height: auto; }
-        
-        body {
-            background-image: url('interface/quadrillage.png');
-            background-size: cover; 
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
-            transition: background 0.5s;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Détection de rapprochement des mains</title>
 
-        #clickZonePompe {
-            position: absolute;
-            top: 5px; /* même top que ton lunettes.png */
-            left: 5px; /* même left que ton lunettes.png */
-            width: 150px; /* taille à ajuster selon la taille de l'image */
-            height: 100px; /* taille à ajuster aussi */
-            cursor: pointer;
-            background-color: rgba(255, 255, 255, 0); /* transparent */
-            z-index: 10; /* au-dessus du background */
-        }
+  <!-- External Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+  <script src="https://unpkg.com/@rive-app/canvas"></script>
 
-        #expandingCircle {
-            position: absolute;
-            top: 0px; /* Position where you want it */
-            left: 0px; /* Position where you want it */
-            width: 250px;  /* Initial small size */
-            height: 250px; /* Initial small size */
-            border-radius: 50%; /* Make it a circle */
-            background-color: white; /* White fill */
-            border: 2.5px solid black; /* Black border */
-            z-index: 1;  /* Make sure it's above other elements */
-            transition: all 1s ease;  /* Smooth animation */
-        }
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-image: url('interface/quadrillage.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      transition: background 0.5s;
+    }
 
-        #pompeImage {
-            position: absolute;
-            top: 30px; /* Or wherever you want */
-            left: 75px; /* Or wherever you want */
-            z-index: 10; /* Make sure it is in front of the circle */
-            width: 90px; /* taille à ajuster selon la taille de l'image */
-            height: 205px;
-            rotate: 10deg;
-        }
-    </style>
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%; 
+      height: auto;
+    }
+
+    #riveCanvas {
+        width: 1366;
+        height: 768;
+      z-index: 1;
+    }
+
+    #handCanvas {
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    #video {
+      display: none;
+    }
+
+    #clickZonePompe {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 150px;
+      height: 100px;
+      cursor: pointer;
+      background-color: rgba(255, 255, 255, 0);
+      z-index: 3;
+    }
+
+    #expandingCircle {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background-color: white;
+      border: 2.5px solid black;
+      z-index: 1;
+      transition: all 1s ease;
+    }
+
+    #pompeImage {
+      position: absolute;
+      top: 30px;
+      left: 75px;
+      z-index: 10;
+      width: 90px;
+      height: 205px;
+      rotate: 10deg;
+    }
+  </style>
 </head>
 <body>
-    <video id="video" autoplay playsinline></video>
-    <canvas id="canvas"></canvas>
-    <div id="clickZonePompe">
-        <img id="pompeImage" src="interface/pompe.png" alt="Pompe" />
-        <div id="expandingCircle"></div>  <!-- Circle behind the lunettes image -->
-    </div>
+  <video id="video" autoplay playsinline></video>
+  <canvas id="riveCanvas"></canvas>
+  <canvas id="handCanvas"></canvas>
 
-    <script>
-        async function startGestureRecognition() {
-            const video = document.getElementById("video");
-            const canvas = document.getElementById("canvas");
-            const ctx = canvas.getContext("2d");
+  <div id="clickZonePompe">
+    <img id="pompeImage" src="interface/pompe.png" alt="Pompe" />
+    <div id="expandingCircle"></div>
+  </div>
 
-            // Activation du backend WebGL
-            await tf.setBackend("webgl");
-            console.log("Backend actif :", tf.getBackend());
+  <script>
+    async function startGestureRecognition() {
+      const video = document.getElementById("video");
+      const handCanvas = document.getElementById("handCanvas");
+      const ctx = handCanvas.getContext("2d");
 
-            // Configuration de la webcam
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            video.srcObject = stream;
+      let baseToVib, baseToOK, baseToPasOK, toBase;
 
-            video.onloadedmetadata = () => {
-                video.play();
-                detectHands();
-            };
+      // Rive setup on separate canvas
+      const r = new rive.Rive({
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/seisme.riv",
+        canvas: document.getElementById("riveCanvas"),
+        autoplay: true,
+        stateMachines: "State Machine 1",
+        onLoad: () => {
+          const inputs = r.stateMachineInputs("State Machine 1");
+          baseToVib = inputs.find(i => i.name === "baseToVib");
+          baseToOK = inputs.find(i => i.name === "baseToOK");
+          baseToPasOK = inputs.find(i => i.name === "baseToPasOK");
+          toBase = inputs.find(i => i.name === "toBase");
 
-            // Initialisation de MediaPipe Hands
-            const hands = new Hands({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}` });
-            hands.setOptions({
-                maxNumHands: 2, // Détection de 2 mains
-                modelComplexity: 1,
-                minDetectionConfidence: 0.9,
-                minTrackingConfidence: 0.9
-            });
+          r.resizeDrawingSurfaceToCanvas();
+        }
+      });
 
-            hands.onResults((results) => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-              
-                if (results.multiHandLandmarks.length === 2) {
-                    
-                    
-                    const hand1 = results.multiHandLandmarks[0];
-                    const hand2 = results.multiHandLandmarks[1];
-                    console.log (distanceFromHands (hand1,hand2));
-                    drawHand(hand1);
-                    drawHand(hand2);
+      await tf.setBackend("webgl");
+      console.log("Backend actif :", tf.getBackend());
 
-                    if (areHandsTouching(hand1, hand2)) {
-                        console.log("coucou"+ results.multiHandLandmarks)
-                        document.body.style.background = "lightgreen"; // Action déclenchée si les mains se touchent
-                    } else {
-                        document.body.style.background = "white";
-                    }
-                }
-            });
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      video.srcObject = stream;
 
-            async function detectHands() {
-                await hands.send({ image: video });
-                requestAnimationFrame(detectHands);
-            }
+      video.onloadedmetadata = () => {
+        video.play();
+        handCanvas.width = video.videoWidth;
+        handCanvas.height = video.videoHeight;
+        detectHands();
+      };
 
-            function drawHand(landmarks) {
-                ctx.strokeStyle = "red";
-                ctx.lineWidth = 2;
-                for (let i = 0; i < landmarks.length; i++) {
-                    const { x, y } = landmarks[i];
-                    ctx.beginPath();
-                    ctx.arc(x * canvas.width, y * canvas.height, 5, 0, 2 * Math.PI);
-                    ctx.fill();
-                }
-            }
+      const hands = new Hands({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}` });
+      hands.setOptions({
+        maxNumHands: 2,
+        modelComplexity: 1,
+        minDetectionConfidence: 0.9,
+        minTrackingConfidence: 0.9
+      });
 
-            function areHandsTouching(hand1, hand2) {
-                const index1 = hand1[8]; // Bout de l'index main 1
-                const index2 = hand2[8]; // Bout de l'index main 2
-                const distance = Math.sqrt(
-                    Math.pow((index1.x - index2.x) * canvas.width, 2) +
-                    Math.pow((index1.y - index2.y) * canvas.height, 2)
-                );
-                return distance < 20; // Seuil de détection du contact
-            }
+      hands.onResults((results) => {
+        ctx.clearRect(0, 0, handCanvas.width, handCanvas.height);
 
-            function distanceFromHands(hand1, hand2) {
-                const index1 = hand1[8]; // Bout de l'index main 1
-                const index2 = hand2[8]; // Bout de l'index main 2
-                const distance = Math.sqrt(
-                    Math.pow((index1.x - index2.x) * canvas.width, 2) +
-                    Math.pow((index1.y - index2.y) * canvas.height, 2)
-                );
-                return distance; // Seuil de détection du contact
-            }
+        if (!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) {
+            if (toBase) toBase.fire(); // 👈 Fire 'toBase' when no hands are seen
+            return; // Exit early
         }
 
-        startGestureRecognition();
+        if (results.multiHandLandmarks.length === 2) {
+          const hand1 = results.multiHandLandmarks[0];
+          const hand2 = results.multiHandLandmarks[1];
 
-        const pompeImage = document.getElementById('pompeImage');
-        const expandingCircle = document.getElementById('expandingCircle');
+          drawHand(hand1);
+          drawHand(hand2);
 
-        // Track the state of the circle (expanded or normal)
-        let isCircleExpanded = false;
+          if (areHandsTouching(hand1, hand2)) {
+            if (baseToVib) baseToVib.fire();
+          } else {
+            if (toBase) toBase.fire();
+          }
+        }
+      });
 
-        pompeImage.addEventListener('click', () => {
-            // Hide the lunettes image and expand the circle when clicked
-            pompeImage.style.display = 'none';
-            expandingCircle.style.width = '650px';  // Final expanded size
-            expandingCircle.style.height = '650px'; // Final expanded size
-            isCircleExpanded = true; // Set state to expanded
-        });
+      async function detectHands() {
+        await hands.send({ image: video });
+        requestAnimationFrame(detectHands);
+      }
 
-        expandingCircle.addEventListener('click', () => {
-            if (isCircleExpanded) {
-                // Reset the circle back to normal size and show the lunettes image again
-                expandingCircle.style.width = '250px';  // Original size
-                expandingCircle.style.height = '250px'; // Original size
-                pompeImage.style.display = 'block'; // Show the lunettes image again
-                isCircleExpanded = false; // Set state to normal
-            }
-        });
+      function drawHand(landmarks) {
+        ctx.strokeStyle = "red";
+        ctx.fillStyle = "red";
+        ctx.lineWidth = 2;
+        for (let i = 0; i < landmarks.length; i++) {
+          const { x, y } = landmarks[i];
+          ctx.beginPath();
+          ctx.arc(x * handCanvas.width, y * handCanvas.height, 5, 0, 2 * Math.PI);
+          ctx.fill();
+        }
+      }
 
-    </script>
+      function areHandsTouching(hand1, hand2) {
+        const index1 = hand1[8];
+        const index2 = hand2[8];
+        const distance = Math.sqrt(
+          Math.pow((index1.x - index2.x) * handCanvas.width, 2) +
+          Math.pow((index1.y - index2.y) * handCanvas.height, 2)
+        );
+        return distance < 90;
+      }
+    }
+
+    startGestureRecognition();
+
+    const pompeImage = document.getElementById('pompeImage');
+    const expandingCircle = document.getElementById('expandingCircle');
+    let isCircleExpanded = false;
+
+    pompeImage.addEventListener('click', () => {
+      pompeImage.style.display = 'none';
+      expandingCircle.style.width = '650px';
+      expandingCircle.style.height = '650px';
+      isCircleExpanded = true;
+    });
+
+    expandingCircle.addEventListener('click', () => {
+      if (isCircleExpanded) {
+        expandingCircle.style.width = '250px';
+        expandingCircle.style.height = '250px';
+        pompeImage.style.display = 'block';
+        isCircleExpanded = false;
+      }
+    });
+  </script>
 </body>
 </html>
