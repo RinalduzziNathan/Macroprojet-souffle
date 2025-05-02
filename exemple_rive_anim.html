@@ -43,7 +43,7 @@
     let trigger1, trigger2;
 
       const r = new rive.Rive({
-        src: "https://rinalduzzinathan.github.io/file-stash/rive/volcan_final.riv",
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/volcan_final6.riv",
         canvas: document.getElementById("canvas"),
         autoplay: true,
         stateMachines: "State Machine 1",
@@ -57,7 +57,14 @@
      
         
       },
+
     });
+    r.on(rive.EventType.RiveEvent, (event) => {
+    const data = event.data;
+    if (data.type === rive.RiveEventType.General) {
+      alert("Event reçu : " + data.name);
+    }
+  });
       document.getElementById('trigger1').addEventListener('click', () => {
       if (trigger1) trigger1.fire();
     });

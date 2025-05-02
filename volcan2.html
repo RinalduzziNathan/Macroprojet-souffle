@@ -216,7 +216,6 @@
 
 
     <script>
-
        window.addEventListener('DOMContentLoaded', (event) => {
     const startBouton = document.getElementById("startBouton");
     const boutonRestart = document.getElementById("boutonRestart");
@@ -228,13 +227,14 @@
 
     let baseToEffu;
     let baseToExplo;
+    
     const r = new rive.Rive({
-        src: "https://rinalduzzinathan.github.io/file-stash/rive/volcan_final.riv",
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/volcan_final2.riv",
         canvas: document.getElementById("canvas"),
         autoplay: true,
         stateMachines: "State Machine 1",
         onLoad: () => {
-        
+            //r.resizeDrawingSurfaceToCanvas();
         // Récupère les inputs (dont les triggers)
         const inputs = r.stateMachineInputs('State Machine 1');
         baseToEffu = inputs.find(i => i.name === 'baseToEffu');
@@ -243,8 +243,37 @@
      
         
       },
+    onStop: () => {
+      console.log("L'animation est terminée !");
+      // Tu peux faire une autre action ici
+      alert("Animation terminée !");
+    }
     });
 
+    function onRiveEventReceived(riveEvent) {
+        alert("coucou");
+const eventData = riveEvent.data;
+const eventProperties = eventData.properties;
+if (eventData.type === rive.RiveEventType.General) {
+    console.log("Event name", eventData.name);
+    alert("ici");
+    // Added relevant metadata from the event
+    console.log("Rating", eventProperties.rating);
+    console.log("Message", eventProperties.message);
+} else if (eventData.type === rive.RiveEventType.OpenUrl) {
+    console.log("Event name", eventData.name);
+    window.open(eventData.url);
+}
+}
+r.on(rive.EventType.RiveEvent, (event) => {
+    const data = event.data;
+    if (data.type === rive.RiveEventType.General) {
+      alert("Event reçu : " + data.name);
+    }
+  });
+    
+
+    
     const showAnimationButton = document.getElementById('showAnimationButton');
 
     showAnimationButton.addEventListener('click', () => {
@@ -403,12 +432,14 @@
 
                         if (trend > 0.09) {
                             if (baseToExplo) baseToExplo.fire();
+                            
                          //   isBaseAnim = false
                           //  baseVolcano.load("https://lottie.host/1a3a4376-3629-4e3e-aeb2-fcc2d5d49e35/FBCgmw7yBd.lottie")
                             //baseVolcano.setSpeed(1);
                         }
                         if (trend < 0.09 && trend > -0.09) {
                             if (baseToEffu) baseToEffu.fire();
+                            //r.stop("baseToEffu");
                            // isBaseAnim = false
                             //baseVolcano.load("https://lottie.host/cc1dc667-d3fb-425f-9230-223e31070f2e/65CBkiaq4d.lottie")
                             //baseVolcano.setSpeed(1);
