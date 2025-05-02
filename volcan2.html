@@ -200,7 +200,7 @@
     <script src="https://unpkg.com/@rive-app/canvas"></script>
 
 </head>
-
+<canvas id="canvas" width="1366" height="768"></canvas>
 <body>
 
     <button id="startBouton" class="startBouton centerTop">prêt ?</button>
@@ -225,7 +225,25 @@
     var remplirTableau = false;
     var finTableau = false;
     var isBaseAnim = true;
+
+    let baseToEffu;
+    let baseToExplo;
+    const r = new rive.Rive({
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/volcan_final.riv",
+        canvas: document.getElementById("canvas"),
+        autoplay: true,
+        stateMachines: "State Machine 1",
+        onLoad: () => {
+        
+        // Récupère les inputs (dont les triggers)
+        const inputs = r.stateMachineInputs('State Machine 1');
+        baseToEffu = inputs.find(i => i.name === 'baseToEffu');
+        baseToExplo = inputs.find(i => i.name === 'baseToExplo');
+        toBase = inputs.find(i => i.name === 'toBase');
      
+        
+      },
+    });
 
     const showAnimationButton = document.getElementById('showAnimationButton');
 
@@ -384,11 +402,13 @@
                         console.log(trend > 0.09 ? "L'intensité augmente globalement." : "Pas d'augmentation claire.");
 
                         if (trend > 0.09) {
+                            if (baseToExplo) baseToExplo.fire();
                          //   isBaseAnim = false
                           //  baseVolcano.load("https://lottie.host/1a3a4376-3629-4e3e-aeb2-fcc2d5d49e35/FBCgmw7yBd.lottie")
                             //baseVolcano.setSpeed(1);
                         }
                         if (trend < 0.09 && trend > -0.09) {
+                            if (baseToEffu) baseToEffu.fire();
                            // isBaseAnim = false
                             //baseVolcano.load("https://lottie.host/cc1dc667-d3fb-425f-9230-223e31070f2e/65CBkiaq4d.lottie")
                             //baseVolcano.setSpeed(1);
