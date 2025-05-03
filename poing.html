@@ -18,13 +18,29 @@
         }
 
         #handCanvas {
-        z-index: 2;
-        pointer-events: none;
-        transform: scaleX(-1);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10; /* optional, make sure it stays on top */
         }
 
+        #output_canvas {
+            position: absolute;
+            width: 80%;
+            top: 50%;
+            left: 50%;
+            height: auto;
+            display: block;
+            transform: translate(-50%, -50%) scaleX(-1);
+
+            }
+
         #video {
-        display: none;
+            width: 100%;
+            height: auto;
+            display: none;
         }
     
         
@@ -101,6 +117,31 @@
             z-index: 10;
             width: 230px;
             height: auto; /* Optional, makes it responsive */
+        }
+
+        #bigcontidroite {
+            z-index: 10;
+            width: 300px;
+            height: auto; /* Optional, makes it responsive */
+            display: none;
+        }
+        #bigcontigauche {
+            z-index: 10;
+            width: 300px;
+            height: auto; /* Optional, makes it responsive */
+            display: none;
+        }
+        #bigoceandroite {
+            z-index: 10;
+            width: 300px;
+            height: auto; /* Optional, makes it responsive */
+            display: none;
+        }
+        #bigoceangauche {
+            z-index: 10;
+            width: 300px;
+            height: auto; /* Optional, makes it responsive */
+            display: none;
         }
         
         .showButton {
@@ -193,6 +234,20 @@
             transform: translate(-50%, -50%);
         }
 
+        .centerRight {
+            position: absolute;
+            top: 50%;
+            right: 10%;
+            transform: translate(-50%, -50%);
+        }
+
+        .centerLeft {
+            position: absolute;
+            top: 50%;
+            left: 30%;
+            transform: translate(-50%, -50%);
+        }
+
 
         .centerTop {
             margin: 0;
@@ -236,6 +291,7 @@
     <video id="video" autoplay playsinline></video>
     <canvas id="riveCanvas"></canvas>
     <canvas id="handCanvas"></canvas>
+    <canvas id="output_canvas"></canvas>
     <div id="info">Détection en cours...</div>
     <div id="clickZoneGant">
         <img id="gantImage" src="interface/gant.png" alt ="Pompe" />
@@ -250,22 +306,47 @@
     <img id="contigauche" src="interface/conti.png" class="bottomLeft" alt="contigauche" />
     <img id="oceandroite" src="interface/ocean.png" class="bottomRight" alt="oceandroite" />
     <img id="oceangauche" src="interface/ocean.png" class="topLeft" alt="oceangauche" />
+    <img id="bigcontidroite" src="interface/conti.png" class="centerRight" alt="bigcontidroite" />
+    <img id="bigcontigauche" src="interface/conti.png" class="centerLeft" alt="bigcontigauche" />
+    <img id="bigoceandroite" src="interface/ocean.png" class="centerRight" alt="bigoceandroite" />
+    <img id="bigoceangauche" src="interface/ocean.png" class="centerLeft" alt="bigoceangauche" />
 
     <script>
+        let animationStarted = false;
+
         async function startGestureRecognition() {
-            const video = document.getElementById("video");
+  
             const handCanvas = document.getElementById("handCanvas");
-            const ctx = handCanvas.getContext("2d");
+            //const ctx = handCanvas.getContext("2d");
             const startBouton = document.getElementById("startBouton");
             const boutonRestart = document.getElementById("boutonRestart")
             const contidroite = document.getElementById('contidroite');
             const contigauche = document.getElementById('contigauche');
             const oceandroite = document.getElementById('oceandroite');
             const oceangauche = document.getElementById('oceangauche');
-            //contidroite.style.display = 'none';
-            //contigauche.style.display = 'none';
-            //oceangauche.style.display = 'none';
-           // oceandroite.style.display = 'none';
+            const bigcontidroite = document.getElementById('bigcontidroite');
+            const bigcontigauche = document.getElementById('bigcontigauche');
+            const bigoceandroite = document.getElementById('bigoceandroite');
+            const bigoceangauche = document.getElementById('bigoceangauche');
+            const video = document.getElementById("video");
+            const canvas = document.getElementById("output_canvas");
+            const ctx = canvas.getContext("2d");
+            
+
+            // Set canvas size to match video size exactly
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            window.addEventListener("resize", () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+
+            video.addEventListener("loadedmetadata", () => {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+            });
+
             boutonRestart.style.visibility = "hidden";
 
 
@@ -276,8 +357,8 @@
 
             video.onloadedmetadata = () => {
                 video.play();
-                handCanvas.width = video.videoWidth;
-                handCanvas.height = video.videoHeight;
+                //handCanvas.width = video.videoWidth;
+                //handCanvas.height = video.videoHeight;
                 detectHands();
             };
 
@@ -293,6 +374,7 @@
                 ctx.clearRect(0, 0, handCanvas.width, handCanvas.height);
                 handCanvas.width = video.videoWidth;
                 handCanvas.height = video.videoHeight;
+                
 
                 //let color = "white";
                 let messages = [];
@@ -329,6 +411,34 @@
                     messages.push("Aucune main détectée");
                 }
 
+                document.getElementById("bigcontidroite").style.display = "none";
+                document.getElementById("bigoceandroite").style.display = "none";
+                document.getElementById("bigcontigauche").style.display = "none";
+                document.getElementById("bigoceangauche").style.display = "none";
+                
+
+                if (results.multiHandLandmarks.length > 0) {
+                    results.multiHandLandmarks.forEach((handLandmarks, i) => {
+                        drawHand(handLandmarks);
+
+                        const isFistPose = isFist(handLandmarks);
+                        const handedness = results.multiHandedness[i].label; 
+
+                        if (animationStarted) {
+                           
+                            if (handedness === "Right" && !isFistPose) {
+                                document.getElementById("bigoceangauche").style.display = "block";
+                            } else if (handedness === "Left" && isFistPose) {
+                                document.getElementById("bigcontidroite").style.display = "block";
+                            } else if (handedness === "Left" && !isFistPose) {
+                                document.getElementById("bigoceandroite").style.display = "block";
+                            } else if (handedness === "Right" && isFistPose) {
+                                  document.getElementById("bigcontigauche").style.display = "block";
+                            }
+                        }
+                    });
+                }
+
                 //document.body.style.background = color;
                 info.innerText = messages.join("\n");
 
@@ -351,7 +461,7 @@
                 for (let i = 0; i < landmarks.length; i++) {
                     const { x, y } = landmarks[i];
                     ctx.beginPath();
-                    ctx.arc(x * handCanvas.width, y * handCanvas.height, 5, 0, 2 * Math.PI);
+                    ctx.arc(x * canvas.width, y * canvas.height, 5, 0, 2 * Math.PI);
                     ctx.fill();
                 }
             }
@@ -362,9 +472,39 @@
                     return landmarks[tipIndex].y > landmarks[pipIndex].y;
                 });
             }
+
+            function hideAllPlaques() {
+                document.getElementById("contidroite").style.display = "none";
+                document.getElementById("oceandroite").style.display = "none";
+                document.getElementById("contigauche").style.display = "none";
+                document.getElementById("oceangauche").style.display = "none";
+            }
         }
 
         startGestureRecognition();
+
+        const startBouton = document.getElementById("startBouton");
+        const timerDisplay = document.getElementById("timerDisplay");
+
+        startBouton.addEventListener("click", () => {
+            startBouton.style.visibility = "hidden";
+            timerDisplay.classList.remove("hidden");
+
+            let startTime = Date.now();
+
+            animationStarted = true;
+
+            const interval = setInterval(() => {
+                const elapsed = (Date.now() - startTime) / 1000;
+                timerDisplay.innerText = `${elapsed.toFixed(1)}s`;
+
+                if (elapsed >= 5) {
+                    clearInterval(interval);
+                    timerDisplay.classList.add("hidden");
+                    hideAllPlaques(); // Optionally hide plaques after timer
+                }
+            }, 100);
+        });
 
         const gantImage = document.getElementById('gantImage');
         const expandingCircle = document.getElementById('expandingCircle');
@@ -388,6 +528,17 @@
                 gantImage.style.display = 'block'; // Show the lunettes image again
                 isCircleExpanded = false; // Set state to normal
             }
+        });
+
+        document.getElementById("showAnimationButton").addEventListener("click", () => {
+            document.getElementById("contidroite").style.display = "none";
+            document.getElementById("contigauche").style.display = "none";
+            document.getElementById("oceandroite").style.display = "none";
+            document.getElementById("oceangauche").style.display = "none";
+
+            document.getElementById("showAnimationButton").style.display = "none";
+
+            document.getElementById("startBouton").style.visibility = "visible";
         });
 
     </script>
