@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,295 +9,23 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
     <script src="https://unpkg.com/@rive-app/canvas"></script>
-    <style>
-       
-       
-        #riveCanvas {
-        width: 1366;
-        height: 768;
-        z-index: 1;
-        }
-
-        #handCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 10; /* optional, make sure it stays on top */
-        }
-
-        #output_canvas {
-            position: absolute;
-            width: 80%;
-            top: 50%;
-            left: 50%;
-            height: auto;
-            display: block;
-            transform: translate(-50%, -50%) scaleX(-1);
-
-            }
-
-        #video {
-            width: 100%;
-            height: auto;
-            display: none;
-        }
-    
-        
-        body { 
-            background-image: url('interface/quadrillage.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
-            transition: background 0.5s; 
-        }
-
-        #info {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(255, 255, 255, 0.7);
-            padding: 10px 15px;
-            border-radius: 10px;
-            font-size: 18px;
-            font-family: sans-serif;
-            z-index: 12;
-        }
-
-        #clickZoneGant {
-            position: absolute;
-            top: 5px; /* même top que ton lunettes.png */
-            left: 5px; /* même left que ton lunettes.png */
-            width: 150px; /* taille à ajuster selon la taille de l'image */
-            height: 100px; /* taille à ajuster aussi */
-            cursor: pointer;
-            background-color: rgba(255, 255, 255, 0); /* transparent */
-            z-index: 10; /* au-dessus du background */
-        }
-
-        #expandingCircle {
-            position: absolute;
-            top: 0px; /* Position where you want it */
-            left: 0px; /* Position where you want it */
-            width: 250px;  /* Initial small size */
-            height: 250px; /* Initial small size */
-            border-radius: 50%; /* Make it a circle */
-            background-color: white; /* White fill */
-            border: 2.5px solid black; /* Black border */
-            z-index: 1;  /* Make sure it's above other elements */
-            transition: all 1s ease;  /* Smooth animation */
-        }
-
-        #gantImage {
-            position: absolute;
-            top: 30px; 
-            left: 75px; 
-            z-index: 10; 
-            width: 90px; 
-            height: 205px;
-            rotate: 30deg;
-        }
-        #contidroite {
-            z-index: 10;
-            width: 230px;
-            height: auto; /* Optional, makes it responsive */
-        }
-        #contigauche {
-            z-index: 10;
-            width: 230px;
-            height: auto; /* Optional, makes it responsive */
-        }
-        #oceandroite {
-            z-index: 10;
-            width: 230px;
-            height: auto; /* Optional, makes it responsive */
-        }
-        #oceangauche {
-            z-index: 10;
-            width: 230px;
-            height: auto; /* Optional, makes it responsive */
-        }
-
-        #bigcontidroite {
-            z-index: 10;
-            width: 300px;
-            height: auto; /* Optional, makes it responsive */
-            display: none;
-        }
-        #bigcontigauche {
-            z-index: 10;
-            width: 300px;
-            height: auto; /* Optional, makes it responsive */
-            display: none;
-        }
-        #bigoceandroite {
-            z-index: 10;
-            width: 300px;
-            height: auto; /* Optional, makes it responsive */
-            display: none;
-        }
-        #bigoceangauche {
-            z-index: 10;
-            width: 300px;
-            height: auto; /* Optional, makes it responsive */
-            display: none;
-        }
-        
-        .showButton {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 10px 40px;
-            background-color: white;
-            color: rgb(0, 0, 0);
-            border: 3px, solid black;
-            border-radius: 50px;
-            font-family: "Bricolage Grotesque", sans-serif;
-            font-optical-sizing: auto;
-            font-weight: 700;
-            font-style: normal;
-            font-variation-settings:"wdth" 100;
-            font-size: 24px;
-            color: black;
-            cursor: pointer;
-            z-index: 20;
-            
-        }
-
-        .showButton:hover {
-            background-color: red;
-        }
-
-        .startBouton {
-            
-            background-color: white;
-            display: inline-block;
-            padding: 40px 100px;
-            visibility: hidden;
-            background-color: white;
-            color: rgb(0, 0, 0);
-            border: 3px, solid black;
-            border-radius: 100px;
-            font-family: "Bricolage Grotesque", sans-serif;
-            font-optical-sizing: auto;
-            font-weight: 700;
-            font-style: normal;
-            font-variation-settings:"wdth" 100;
-            font-size: 90px;
-            color: black;
-            cursor: pointer;
-            z-index: 20;
-        }
-
-        .startBouton:hover {
-            background-color: red;
-        }
-
-        .verticalCenter {
-            margin: 0;
-            position: absolute;
-            left: 48%;
-            transform: translateY(-50%);
-        }
-
-        .center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .topLeft {
-            position: absolute;
-            top: 25%;
-            left: 35%;
-            transform: translate(-50%, -50%);
-        }
-
-        .bottomLeft {
-            position: absolute;
-            bottom: -8%;
-            left: 35%;
-            transform: translate(-50%, -50%);
-        }
-        .topRight {
-            position: absolute;
-            top: 27%;
-            right: 20%;
-            transform: translate(-50%, -50%);
-        }
-
-        .bottomRight {
-            position: absolute;
-            bottom: -10%;
-            right: 20%;
-            transform: translate(-50%, -50%);
-        }
-
-        .centerRight {
-            position: absolute;
-            top: 50%;
-            right: 10%;
-            transform: translate(-50%, -50%);
-        }
-
-        .centerLeft {
-            position: absolute;
-            top: 50%;
-            left: 30%;
-            transform: translate(-50%, -50%);
-        }
-
-
-        .centerTop {
-            margin: 0;
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .timer {
-            margin-top: 70px;
-            color: black;
-            font-family: "Bricolage Grotesque", sans-serif;
-            font-optical-sizing: auto;
-            font-weight: 700;
-            font-style: normal;
-            font-variation-settings:"wdth" 100;
-            font-size: 90px;
-            color: black;
-            z-index: 10;
-            
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        @keyframes bounce {
-            0%   { transform: translate(-50%, -50%) scale(1); }
-            50%  { transform: translate(-50%, -50%) scale(1.15); }
-            100% { transform: translate(-50%, -50%) scale(1); }
-        }
-
-        .bounce {
-            animation: bounce 0.4s ease;
-        }
-
+   
     </style>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <video id="video" autoplay playsinline></video>
     <canvas id="riveCanvas"></canvas>
     <canvas id="handCanvas"></canvas>
     <canvas id="output_canvas"></canvas>
+    <canvas id="riveCanvasConverge" width="500" height="500" style="display: none;"></canvas>
+    <canvas id="riveCanvasDiverge" width="500" height="500" style="display: none;"></canvas>
     <div id="info">Détection en cours...</div>
     <div id="clickZoneGant">
-        <img id="gantImage" src="interface/gant.png" alt ="Pompe" />
+        <img id="gantImage" src="interface/gant.png" alt="Pompe" />
 
-        <div id="expandingCircle"></div>  <!-- Circle behind the lunettes image -->
+        <div id="expandingCircle"></div> <!-- Circle behind the lunettes image -->
     </div>
     <button id="showAnimationButton" class="showButton"> >>></button>
     <button id="startBouton" class="startBouton centerTop">prêt ?</button>
@@ -312,10 +41,11 @@
     <img id="bigoceangauche" src="interface/ocean.png" class="centerLeft" alt="bigoceangauche" />
 
     <script>
-        let animationStarted = false;
+        let TimerStarted = false;
+        let TimerOver = false;
 
         async function startGestureRecognition() {
-  
+
             const handCanvas = document.getElementById("handCanvas");
             //const ctx = handCanvas.getContext("2d");
             const startBouton = document.getElementById("startBouton");
@@ -331,7 +61,46 @@
             const video = document.getElementById("video");
             const canvas = document.getElementById("output_canvas");
             const ctx = canvas.getContext("2d");
-            
+
+            let previousDistance = null;
+
+            // Get both canvases
+            const canvasConverge = document.getElementById("riveCanvasConverge");
+            const canvasDiverge = document.getElementById("riveCanvasDiverge");
+
+            // Load convergence Rive
+            const rConverge = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_convergence.riv",
+                canvas: canvasConverge,
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rConverge.stateMachineInputs("State Machine 1");
+                    baseToCC = inputs.find(i => i.name === "baseToCC");
+                    baseToCO = inputs.find(i => i.name === "baseToCO");
+                    baseToOO = inputs.find(i => i.name === "baseToOO");
+                    baseToOC = inputs.find(i => i.name === "baseToOC");
+
+                    rConverge.resizeDrawingSurfaceToCanvas();
+                }
+            });
+
+            // Load divergence Rive
+            const rDiverge = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_divergence.riv",
+                canvas: canvasDiverge,
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rDiverge.stateMachineInputs("State Machine 1");
+                    DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
+                    DIVbaseToCO = inputs.find(i => i.name === "DIVbaseToCO");
+                    DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
+                    DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
+
+                    rDiverge.resizeDrawingSurfaceToCanvas();
+                }
+            });
 
             // Set canvas size to match video size exactly
             canvas.width = video.videoWidth;
@@ -374,7 +143,7 @@
                 ctx.clearRect(0, 0, handCanvas.width, handCanvas.height);
                 handCanvas.width = video.videoWidth;
                 handCanvas.height = video.videoHeight;
-                
+
 
                 //let color = "white";
                 let messages = [];
@@ -415,17 +184,17 @@
                 document.getElementById("bigoceandroite").style.display = "none";
                 document.getElementById("bigcontigauche").style.display = "none";
                 document.getElementById("bigoceangauche").style.display = "none";
-                
+
 
                 if (results.multiHandLandmarks.length > 0) {
                     results.multiHandLandmarks.forEach((handLandmarks, i) => {
                         drawHand(handLandmarks);
 
                         const isFistPose = isFist(handLandmarks);
-                        const handedness = results.multiHandedness[i].label; 
+                        const handedness = results.multiHandedness[i].label;
 
-                        if (animationStarted) {
-                           
+                        if (TimerStarted) {
+
                             if (handedness === "Right" && !isFistPose) {
                                 document.getElementById("bigoceangauche").style.display = "block";
                             } else if (handedness === "Left" && isFistPose) {
@@ -433,7 +202,7 @@
                             } else if (handedness === "Left" && !isFistPose) {
                                 document.getElementById("bigoceandroite").style.display = "block";
                             } else if (handedness === "Right" && isFistPose) {
-                                  document.getElementById("bigcontigauche").style.display = "block";
+                                document.getElementById("bigcontigauche").style.display = "block";
                             }
                         }
                     });
@@ -449,6 +218,35 @@
                     void el.offsetWidth;           // force reflow
                     el.classList.add("bounce");
                 }
+
+                if (TimerStarted) {
+                    if (results.multiHandLandmarks.length >= 2) {
+                        const hand1 = results.multiHandLandmarks[0][8]; // Index finger
+                        const hand2 = results.multiHandLandmarks[1][8];
+
+                        const dist = Math.sqrt(
+                            Math.pow(hand1.x - hand2.x, 2) + Math.pow(hand1.y - hand2.y, 2)
+                        );
+
+                        if (previousDistance !== null) {
+                            if (dist < previousDistance - 0.01) {
+                                // Hands getting closer
+                                canvasConverge.style.display = "block";
+                                canvasDiverge.style.display = "none";
+                                if (baseToCC) baseToCC.fire(); // example trigger
+                            } else if (dist > previousDistance + 0.01) {
+                                // Hands moving apart
+                                canvasDiverge.style.display = "block";
+                                canvasConverge.style.display = "none";
+                                if (DIVbaseToOO) DIVbaseToOO.fire(); // example trigger
+                            }
+                        }
+
+
+                        previousDistance = dist;
+                    }
+                }
+                ;
             });
 
             async function detectHands() {
@@ -473,12 +271,14 @@
                 });
             }
 
-            function hideAllPlaques() {
-                document.getElementById("contidroite").style.display = "none";
-                document.getElementById("oceandroite").style.display = "none";
-                document.getElementById("contigauche").style.display = "none";
-                document.getElementById("oceangauche").style.display = "none";
-            }
+
+        }
+        function hideAllPlaques() {
+            
+            document.getElementById("contidroite").style.display = "none";
+            document.getElementById("oceandroite").style.display = "none";
+            document.getElementById("contigauche").style.display = "none";
+            document.getElementById("oceangauche").style.display = "none";
         }
 
         startGestureRecognition();
@@ -492,13 +292,15 @@
 
             let startTime = Date.now();
 
-            animationStarted = true;
+            TimerStarted = true;
+            TimerOver = false;
 
             const interval = setInterval(() => {
                 const elapsed = (Date.now() - startTime) / 1000;
                 timerDisplay.innerText = `${elapsed.toFixed(1)}s`;
 
                 if (elapsed >= 5) {
+                    TimerOver = true;
                     clearInterval(interval);
                     timerDisplay.classList.add("hidden");
                     hideAllPlaques(); // Optionally hide plaques after timer
@@ -543,4 +345,5 @@
 
     </script>
 </body>
+
 </html>
