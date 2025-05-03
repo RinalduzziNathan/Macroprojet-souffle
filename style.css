@@ -1,5 +1,25 @@
 
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+}
+
 #riveCanvas {
+    width: 1366;
+    height: 768;
+    z-index: 1;
+}
+
+#riveCanvasConverge{
+    width: 1366;
+    height: 768;
+    z-index: 1;
+}
+
+#riveCanvasDiverge{
     width: 1366;
     height: 768;
     z-index: 1;

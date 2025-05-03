@@ -16,11 +16,11 @@
 
 <body>
     <video id="video" autoplay playsinline></video>
-    <canvas id="riveCanvas"></canvas>
+    <canvas id="riveCanvas" ></canvas>
     <canvas id="handCanvas"></canvas>
     <canvas id="output_canvas"></canvas>
-    <canvas id="riveCanvasConverge" width="500" height="500" style="display: none;"></canvas>
-    <canvas id="riveCanvasDiverge" width="500" height="500" style="display: none;"></canvas>
+    <canvas id="riveCanvasConverge" style="display: none;"></canvas>
+    <canvas id="riveCanvasDiverge" style="display: none;"></canvas>
     <div id="info">Détection en cours...</div>
     <div id="clickZoneGant">
         <img id="gantImage" src="interface/gant.png" alt="Pompe" />
@@ -49,6 +49,7 @@
         async function startGestureRecognition() {
 
             const handCanvas = document.getElementById("handCanvas");
+            const riveCanvas = document.getElementById("riveCanvas");
             //const ctx = handCanvas.getContext("2d");
             const startBouton = document.getElementById("startBouton");
             const boutonRestart = document.getElementById("boutonRestart")
@@ -64,17 +65,19 @@
             const canvas = document.getElementById("output_canvas");
             const ctx = canvas.getContext("2d");
             let distances = [];
+            riveCanvas.style.visibility = "hidden";
 
             let previousDistance = null;
 
             // Get both canvases
-            const canvasConverge = document.getElementById("riveCanvasConverge");
-            const canvasDiverge = document.getElementById("riveCanvasDiverge");
+            //const canvasConverge = document.getElementById("riveCanvasConverge");
+           
+           // const canvasDiverge = document.getElementById("riveCanvasDiverge");
 
             // Load convergence Rive
             const rConverge = new rive.Rive({
                 src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_convergence.riv",
-                canvas: canvasConverge,
+                canvas: document.getElementById("riveCanvas"),
                 autoplay: true,
                 stateMachines: "State Machine 1",
                 onLoad: () => {
@@ -89,21 +92,21 @@
             });
 
             // Load divergence Rive
-            const rDiverge = new rive.Rive({
-                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_divergence.riv",
-                canvas: canvasDiverge,
-                autoplay: true,
-                stateMachines: "State Machine 1",
-                onLoad: () => {
-                    const inputs = rDiverge.stateMachineInputs("State Machine 1");
-                    DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
-                    DIVbaseToCO = inputs.find(i => i.name === "DIVbaseToCO");
-                    DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
-                    DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
+            //const rDiverge = new rive.Rive({
+             //   src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_divergence.riv",
+             //   canvas: document.getElementById("riveCanvasDiverge"),
+             //   autoplay: true,
+             //   stateMachines: "State Machine 1",
+             //  onLoad: () => {
+             //      const inputs = rDiverge.stateMachineInputs("State Machine 1");
+             //       DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
+              //      DIVbaseToCO = inputs.find(i => i.name === "DIVbaseToCO");
+              //      DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
+               //     DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
 
-                    rDiverge.resizeDrawingSurfaceToCanvas();
-                }
-            });
+                //    rDiverge.resizeDrawingSurfaceToCanvas();
+              //  }
+           // });
 
             // Set canvas size to match video size exactly
             canvas.width = video.videoWidth;
@@ -253,6 +256,7 @@
                     DistanceIsCalculated = true;
                     console.log(distances);
                     analyzeDistanceChange();
+                    riveCanvas.style.visibility = "visible";
 
 
                     function analyzeDistanceChange() {
@@ -267,15 +271,15 @@
                         const endAvg = avg(secondHalf);
 
                         if (endAvg > startAvg + 0.01) {
-                            canvasConverge.style.display = "block";
-                            canvasDiverge.style.display = "none";
+                            //riveCanvas.style.display = "block";
+                            //canvasDiverge.style.display = "none";
                             console.log("Les mains s'éloignent → divergence");
-                            DIVbaseToOO.fire(); // exemple
-                        } else if (endAvg < startAvg - 0.01) {
-                            canvasDiverge.style.display = "block";
-                            canvasConverge.style.display = "none";
-                            console.log("Les mains se rapprochent → convergence");
                             baseToOO.fire(); // exemple
+                        } else if (endAvg < startAvg - 0.01) {
+                            //canvasDiverge.style.display = "block";
+                            //riveCanvas.style.display = "block";
+                            console.log("Les mains se rapprochent → convergence");
+                            baseToCC.fire(); // exemple
                         } else {
                             console.log("Pas de changement significatif");
                         }
@@ -310,10 +314,10 @@
         }
         function hideAllPlaques() {
 
-            document.getElementById("contidroite").style.display = "none";
-            document.getElementById("oceandroite").style.display = "none";
-            document.getElementById("contigauche").style.display = "none";
-            document.getElementById("oceangauche").style.display = "none";
+            document.getElementById("bigcontidroite").style.display = "none";
+            document.getElementById("bigoceandroite").style.display = "none";
+            document.getElementById("bigcontigauche").style.display = "none";
+            document.getElementById("bigoceangauche").style.display = "none";
         }
 
         startGestureRecognition();
