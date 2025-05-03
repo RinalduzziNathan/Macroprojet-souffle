@@ -9,7 +9,15 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
     <style>
         video, canvas { position: absolute; left: 0; top: 0; width: 80%; height: auto; }
-        body { transition: background 0.5s; }
+        body { 
+            background-image: url('interface/quadrillage.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            transition: background 0.5s; 
+        }
+
         #info {
             position: absolute;
             top: 10px;
@@ -20,12 +28,50 @@
             font-size: 18px;
             font-family: sans-serif;
         }
+
+        #clickZoneGant {
+            position: absolute;
+            top: 5px; /* même top que ton lunettes.png */
+            left: 5px; /* même left que ton lunettes.png */
+            width: 150px; /* taille à ajuster selon la taille de l'image */
+            height: 100px; /* taille à ajuster aussi */
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0); /* transparent */
+            z-index: 10; /* au-dessus du background */
+        }
+
+        #expandingCircle {
+            position: absolute;
+            top: 0px; /* Position where you want it */
+            left: 0px; /* Position where you want it */
+            width: 250px;  /* Initial small size */
+            height: 250px; /* Initial small size */
+            border-radius: 50%; /* Make it a circle */
+            background-color: white; /* White fill */
+            border: 2.5px solid black; /* Black border */
+            z-index: 1;  /* Make sure it's above other elements */
+            transition: all 1s ease;  /* Smooth animation */
+        }
+
+        #gantImage {
+            position: absolute;
+            top: 30px; /* Or wherever you want */
+            left: 75px; /* Or wherever you want */
+            z-index: 10; /* Make sure it is in front of the circle */
+            width: 90px; /* taille à ajuster selon la taille de l'image */
+            height: 205px;
+            rotate: 30deg;
+        }
     </style>
 </head>
 <body>
     <video id="video" autoplay playsinline></video>
     <canvas id="canvas"></canvas>
     <div id="info">Détection en cours...</div>
+    <div id="clickZoneGant">
+        <img id="gantImage" src="interface/gant.png" alt="Pompe" />
+        <div id="expandingCircle"></div>  <!-- Circle behind the lunettes image -->
+    </div>
 
     <script>
         async function startGestureRecognition() {
@@ -114,6 +160,31 @@
         }
 
         startGestureRecognition();
+
+        const gantImage = document.getElementById('gantImage');
+        const expandingCircle = document.getElementById('expandingCircle');
+
+        // Track the state of the circle (expanded or normal)
+        let isCircleExpanded = false;
+
+        gantImage.addEventListener('click', () => {
+            // Hide the lunettes image and expand the circle when clicked
+            gantImage.style.display = 'none';
+            expandingCircle.style.width = '650px';  // Final expanded size
+            expandingCircle.style.height = '650px'; // Final expanded size
+            isCircleExpanded = true; // Set state to expanded
+        });
+
+        expandingCircle.addEventListener('click', () => {
+            if (isCircleExpanded) {
+                // Reset the circle back to normal size and show the lunettes image again
+                expandingCircle.style.width = '250px';  // Original size
+                expandingCircle.style.height = '250px'; // Original size
+                gantImage.style.display = 'block'; // Show the lunettes image again
+                isCircleExpanded = false; // Set state to normal
+            }
+        });
+
     </script>
 </body>
 </html>

@@ -47,15 +47,14 @@
         }
 
         .startBouton:hover {
-            background: linear-gradient(to bottom, #415989 5%, #2e466e 100%);
-            background-color: #415989;
+            background-color: red;
         }
 
         .verticalCenter {
             margin: 0;
             position: absolute;
-            left: 45%;
-            transform: translateY(-45%);
+            left: 48%;
+            transform: translateY(-50%);
         }
 
         .center {
@@ -75,12 +74,17 @@
         }
 
         .timer {
-            margin-top: 20px;
-            color: #333;
-            font-family: Courier New;
-            font-size: 15px;
-            position: relative;
+            margin-top: 70px;
+            color: black;
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 700;
+            font-style: normal;
+            font-variation-settings:"wdth" 100;
+            font-size: 90px;
+            color: black;
             z-index: 10;
+            
         }
 
         #clickZoneVentilator {
@@ -193,15 +197,15 @@
 
 
     </style>
-    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+    <script src="https://unpkg.com/@rive-app/canvas"></script>
 
 </head>
-
+<canvas id="canvas" width="1366" height="768"></canvas>
 <body>
 
     <button id="startBouton" class="startBouton centerTop">prêt ?</button>
     <button id="boutonRestart" class="startBouton centerTop">recommencer</button>
-    <div id="timer" class="timer verticalCenter">Soufflez pendant 5s</div>
+    <div id="timer" class="timer verticalCenter"></div>
     <div id="clickZoneVentilator">
         <img id="ventilatorImage" src="interface/ventilateur.png" alt="ventilator" />
         <div id="expandingCircle"></div>
@@ -210,10 +214,6 @@
     <div id="soundRectangle"></div>
     <button id="showAnimationButton" class="showButton"> >>></button>
 
-
-
-    <dotlottie-player id="base" src="https://lottie.host/bfc76ed8-a603-4705-b1ba-529d3c77dba2/FXRxowFxXs.lottie" background="transparent" speed="1" autoplay loop class="hidden" style="width: 1400px; height: 700px">
-    </dotlottie-player>
 
     <script>
        window.addEventListener('DOMContentLoaded', (event) => {
@@ -225,10 +225,59 @@
     var finTableau = false;
     var isBaseAnim = true;
 
+    let baseToEffu;
+    let baseToExplo;
+    
+    const r = new rive.Rive({
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/volcan_final2.riv",
+        canvas: document.getElementById("canvas"),
+        autoplay: true,
+        stateMachines: "State Machine 1",
+        onLoad: () => {
+            //r.resizeDrawingSurfaceToCanvas();
+        // Récupère les inputs (dont les triggers)
+        const inputs = r.stateMachineInputs('State Machine 1');
+        baseToEffu = inputs.find(i => i.name === 'baseToEffu');
+        baseToExplo = inputs.find(i => i.name === 'baseToExplo');
+        toBase = inputs.find(i => i.name === 'toBase');
+     
+        
+      },
+    onStop: () => {
+      console.log("L'animation est terminée !");
+      // Tu peux faire une autre action ici
+      alert("Animation terminée !");
+    }
+    });
+
+    function onRiveEventReceived(riveEvent) {
+        alert("coucou");
+const eventData = riveEvent.data;
+const eventProperties = eventData.properties;
+if (eventData.type === rive.RiveEventType.General) {
+    console.log("Event name", eventData.name);
+    alert("ici");
+    // Added relevant metadata from the event
+    console.log("Rating", eventProperties.rating);
+    console.log("Message", eventProperties.message);
+} else if (eventData.type === rive.RiveEventType.OpenUrl) {
+    console.log("Event name", eventData.name);
+    window.open(eventData.url);
+}
+}
+r.on(rive.EventType.RiveEvent, (event) => {
+    const data = event.data;
+    if (data.type === rive.RiveEventType.General) {
+      alert("Event reçu : " + data.name);
+    }
+  });
+    
+
+    
     const showAnimationButton = document.getElementById('showAnimationButton');
 
     showAnimationButton.addEventListener('click', () => {
-        baseVolcano.classList.remove('hidden'); // Remove the "hidden" class
+      //  baseVolcano.classList.remove('hidden'); // Remove the "hidden" class
         // Hide the volcano image
         const volcanImage = document.getElementById('volcanImage');
         volcanImage.style.display = 'none';
@@ -238,8 +287,10 @@
         soundRectangle.style.display = 'none';
 
         // Show the Start button
-        const startButton = document.getElementById('startBouton');
-        startButton.style.visibility = 'visible';
+        const startBouton = document.getElementById('startBouton');
+        startBouton.style.visibility = 'visible';
+
+        
     });
 
 
@@ -247,16 +298,16 @@
     let timeLeft = 5;
     remplirTableau = true;
     const intervalId = setInterval(() => {
-        timerDisplay.textContent = ` Soufflez pendant ${timeLeft}s`;
+        timerDisplay.textContent = `${timeLeft}`;
         timeLeft--;
         if (timeLeft < 0) {
+            timerDisplay.textContent = "";
             clearInterval(intervalId);
-            timerDisplay.textContent = "Temps écoulé";
             remplirTableau = false;
             finTableau = true;
 
             // --- ADD THIS ---
-            baseVolcano.load("https://lottie.host/your-effusif-animation.lottie");
+           // baseVolcano.load("https://lottie.host/your-effusif-animation.lottie");
             isBaseAnim = false;
         }
     }, 1000);
@@ -273,17 +324,17 @@
         boutonRestart.style.visibility = "hidden";
     });
 
-    var baseVolcano = document.getElementById("base");
+    //var baseVolcano = document.getElementById("base");
     //baseVolcano.classList.remove("hidden");
-    baseVolcano.speed = 1;
+    //baseVolcano.speed = 1;
 
-    baseVolcano.addEventListener("loopComplete", (event) => {
-        if (isBaseAnim == false) {
-            boutonRestart.style.visibility = "visible";
-            baseVolcano.load("https://lottie.host/bfc76ed8-a603-4705-b1ba-529d3c77dba2/FXRxowFxXs.lottie");
-            isBaseAnim = true;
-        }
-    });
+    //baseVolcano.addEventListener("loopComplete", (event) => {
+      //  if (isBaseAnim == false) {
+        //    boutonRestart.style.visibility = "visible";
+           // baseVolcano.load("https://lottie.host/bfc76ed8-a603-4705-b1ba-529d3c77dba2/FXRxowFxXs.lottie");
+          //  isBaseAnim = true;
+        //}
+    //});
 
     navigator.mediaDevices.getUserMedia({ audio: true })
     .then(stream => {
@@ -380,14 +431,18 @@
                         console.log(trend > 0.09 ? "L'intensité augmente globalement." : "Pas d'augmentation claire.");
 
                         if (trend > 0.09) {
-                            isBaseAnim = false
-                            baseVolcano.load("https://lottie.host/1a3a4376-3629-4e3e-aeb2-fcc2d5d49e35/FBCgmw7yBd.lottie")
-                            baseVolcano.setSpeed(1);
+                            if (baseToExplo) baseToExplo.fire();
+                            
+                         //   isBaseAnim = false
+                          //  baseVolcano.load("https://lottie.host/1a3a4376-3629-4e3e-aeb2-fcc2d5d49e35/FBCgmw7yBd.lottie")
+                            //baseVolcano.setSpeed(1);
                         }
                         if (trend < 0.09 && trend > -0.09) {
-                            isBaseAnim = false
-                            baseVolcano.load("https://lottie.host/cc1dc667-d3fb-425f-9230-223e31070f2e/65CBkiaq4d.lottie")
-                            baseVolcano.setSpeed(1);
+                            if (baseToEffu) baseToEffu.fire();
+                            //r.stop("baseToEffu");
+                           // isBaseAnim = false
+                            //baseVolcano.load("https://lottie.host/cc1dc667-d3fb-425f-9230-223e31070f2e/65CBkiaq4d.lottie")
+                            //baseVolcano.setSpeed(1);
 
 
                         }
