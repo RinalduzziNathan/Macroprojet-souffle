@@ -19,8 +19,8 @@
     <canvas id="riveCanvas" ></canvas>
     <canvas id="handCanvas"></canvas>
     <canvas id="output_canvas"></canvas>
-    <canvas id="riveCanvasConverge" style="display: none;"></canvas>
-    <canvas id="riveCanvasDiverge" style="display: none;"></canvas>
+    <canvas id="riveCanvasConverge" ></canvas>
+    <canvas id="riveCanvasDiverge"></canvas>
     <div id="info">Détection en cours...</div>
     <div id="clickZoneGant">
         <img id="gantImage" src="interface/gant.png" alt="Pompe" />
@@ -49,6 +49,8 @@
         async function startGestureRecognition() {
 
             const handCanvas = document.getElementById("handCanvas");
+            const riveCanvasDiverge = document.getElementById("riveCanvasDiverge");
+            const riveCanvasConverge = document.getElementById("riveCanvasConverge");
             const riveCanvas = document.getElementById("riveCanvas");
             //const ctx = handCanvas.getContext("2d");
             const startBouton = document.getElementById("startBouton");
@@ -66,6 +68,8 @@
             const ctx = canvas.getContext("2d");
             let distances = [];
             riveCanvas.style.visibility = "hidden";
+            riveCanvasConverge.style.visibility = "hidden";
+            riveCanvasDiverge.style.visibility = "hidden";
 
             let previousDistance = null;
 
@@ -77,7 +81,7 @@
             // Load convergence Rive
             const rConverge = new rive.Rive({
                 src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_convergence.riv",
-                canvas: document.getElementById("riveCanvas"),
+                canvas: document.getElementById("riveCanvasConverge"),
                 autoplay: true,
                 stateMachines: "State Machine 1",
                 onLoad: () => {
@@ -92,21 +96,21 @@
             });
 
             // Load divergence Rive
-            //const rDiverge = new rive.Rive({
-             //   src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_divergence.riv",
-             //   canvas: document.getElementById("riveCanvasDiverge"),
-             //   autoplay: true,
-             //   stateMachines: "State Machine 1",
-             //  onLoad: () => {
-             //      const inputs = rDiverge.stateMachineInputs("State Machine 1");
-             //       DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
-              //      DIVbaseToCO = inputs.find(i => i.name === "DIVbaseToCO");
-              //      DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
-               //     DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
+            const rDiverge = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_divergence.riv",
+                canvas: document.getElementById("riveCanvasDiverge"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+               onLoad: () => {
+                   const inputs = rDiverge.stateMachineInputs("State Machine 1");
+                    DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
+                    DIVbaseToCO = inputs.find(i => i.name === "DIVbaseToCO");
+                    DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
+                    DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
 
-                //    rDiverge.resizeDrawingSurfaceToCanvas();
-              //  }
-           // });
+                    rDiverge.resizeDrawingSurfaceToCanvas();
+                }
+            });
 
             // Set canvas size to match video size exactly
             canvas.width = video.videoWidth;
@@ -164,22 +168,22 @@
                         if (handedness === "Right" && isFistPose) {
                             //color = "pink";
                             messages.push("Main droite : Poing fermé");
-                            triggerBounce("contigauche");
+                            triggerBounce("oceangauche");
 
                         } else if (handedness === "Right" && !isFistPose) {
                             //color = "green";
                             messages.push("Main droite : Main tendue");
-                            triggerBounce("oceangauche");
+                            triggerBounce("contigauche");
 
                         } else if (handedness === "Left" && isFistPose) {
                             //color = "blue";
                             messages.push("Main gauche : Poing fermé");
-                            triggerBounce("contidroite");
+                            triggerBounce("oceandroite");
 
                         } else if (handedness === "Left" && !isFistPose) {
                             //color = "yellow";
                             messages.push("Main gauche : Main tendue");
-                            triggerBounce("oceandroite");
+                            triggerBounce("contidroite");
                         }
                     })
                 } else {
@@ -256,7 +260,13 @@
                     DistanceIsCalculated = true;
                     console.log(distances);
                     analyzeDistanceChange();
-                    riveCanvas.style.visibility = "visible";
+                    
+                    bigcontidroite.style.visibility = "hidden";
+                    bigcontigauche.style.visibility = "hidden";
+                    bigoceandroite.style.visibility = "hidden";
+                    bigoceangauche.style.visibility = "hidden";
+                    
+
 
 
                     function analyzeDistanceChange() {
@@ -273,11 +283,13 @@
                         if (endAvg > startAvg + 0.01) {
                             //riveCanvas.style.display = "block";
                             //canvasDiverge.style.display = "none";
+                            riveCanvasDiverge.style.visibility = "visible";
                             console.log("Les mains s'éloignent → divergence");
-                            baseToOO.fire(); // exemple
+                            DIVbaseToOO.fire(); // exemple
                         } else if (endAvg < startAvg - 0.01) {
                             //canvasDiverge.style.display = "block";
                             //riveCanvas.style.display = "block";
+                            riveCanvasConverge.style.visibility = "visible";
                             console.log("Les mains se rapprochent → convergence");
                             baseToCC.fire(); // exemple
                         } else {
