@@ -7,8 +7,27 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+    <script src="https://unpkg.com/@rive-app/canvas"></script>
     <style>
-        video, canvas { position: absolute; left: 0; top: 0; width: 80%; height: auto; }
+       
+       
+        #riveCanvas {
+        width: 1366;
+        height: 768;
+        z-index: 1;
+        }
+
+        #handCanvas {
+        z-index: 2;
+        pointer-events: none;
+        transform: scaleX(-1);
+        }
+
+        #video {
+        display: none;
+        }
+    
+        
         body { 
             background-image: url('interface/quadrillage.png');
             background-size: cover;
@@ -27,6 +46,7 @@
             border-radius: 10px;
             font-size: 18px;
             font-family: sans-serif;
+            z-index: 12;
         }
 
         #clickZoneGant {
@@ -55,30 +75,199 @@
 
         #gantImage {
             position: absolute;
-            top: 30px; /* Or wherever you want */
-            left: 75px; /* Or wherever you want */
-            z-index: 10; /* Make sure it is in front of the circle */
-            width: 90px; /* taille à ajuster selon la taille de l'image */
+            top: 30px; 
+            left: 75px; 
+            z-index: 10; 
+            width: 90px; 
             height: 205px;
             rotate: 30deg;
         }
+        #contidroite {
+            z-index: 10;
+            width: 230px;
+            height: auto; /* Optional, makes it responsive */
+        }
+        #contigauche {
+            z-index: 10;
+            width: 230px;
+            height: auto; /* Optional, makes it responsive */
+        }
+        #oceandroite {
+            z-index: 10;
+            width: 230px;
+            height: auto; /* Optional, makes it responsive */
+        }
+        #oceangauche {
+            z-index: 10;
+            width: 230px;
+            height: auto; /* Optional, makes it responsive */
+        }
+        
+        .showButton {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 40px;
+            background-color: white;
+            color: rgb(0, 0, 0);
+            border: 3px, solid black;
+            border-radius: 50px;
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 700;
+            font-style: normal;
+            font-variation-settings:"wdth" 100;
+            font-size: 24px;
+            color: black;
+            cursor: pointer;
+            z-index: 20;
+            
+        }
+
+        .showButton:hover {
+            background-color: red;
+        }
+
+        .startBouton {
+            
+            background-color: white;
+            display: inline-block;
+            padding: 40px 100px;
+            visibility: hidden;
+            background-color: white;
+            color: rgb(0, 0, 0);
+            border: 3px, solid black;
+            border-radius: 100px;
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 700;
+            font-style: normal;
+            font-variation-settings:"wdth" 100;
+            font-size: 90px;
+            color: black;
+            cursor: pointer;
+            z-index: 20;
+        }
+
+        .startBouton:hover {
+            background-color: red;
+        }
+
+        .verticalCenter {
+            margin: 0;
+            position: absolute;
+            left: 48%;
+            transform: translateY(-50%);
+        }
+
+        .center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .topLeft {
+            position: absolute;
+            top: 25%;
+            left: 35%;
+            transform: translate(-50%, -50%);
+        }
+
+        .bottomLeft {
+            position: absolute;
+            bottom: -8%;
+            left: 35%;
+            transform: translate(-50%, -50%);
+        }
+        .topRight {
+            position: absolute;
+            top: 27%;
+            right: 20%;
+            transform: translate(-50%, -50%);
+        }
+
+        .bottomRight {
+            position: absolute;
+            bottom: -10%;
+            right: 20%;
+            transform: translate(-50%, -50%);
+        }
+
+
+        .centerTop {
+            margin: 0;
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .timer {
+            margin-top: 70px;
+            color: black;
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 700;
+            font-style: normal;
+            font-variation-settings:"wdth" 100;
+            font-size: 90px;
+            color: black;
+            z-index: 10;
+            
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @keyframes bounce {
+            0%   { transform: translate(-50%, -50%) scale(1); }
+            50%  { transform: translate(-50%, -50%) scale(1.15); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .bounce {
+            animation: bounce 0.4s ease;
+        }
+
     </style>
 </head>
 <body>
     <video id="video" autoplay playsinline></video>
-    <canvas id="canvas"></canvas>
+    <canvas id="riveCanvas"></canvas>
+    <canvas id="handCanvas"></canvas>
     <div id="info">Détection en cours...</div>
     <div id="clickZoneGant">
-        <img id="gantImage" src="interface/gant.png" alt="Pompe" />
+        <img id="gantImage" src="interface/gant.png" alt ="Pompe" />
+
         <div id="expandingCircle"></div>  <!-- Circle behind the lunettes image -->
     </div>
+    <button id="showAnimationButton" class="showButton"> >>></button>
+    <button id="startBouton" class="startBouton centerTop">prêt ?</button>
+    <div id="timerDisplay" class="timer centerTop hidden">0.0s</div>
+    <button id="boutonRestart" class="startBouton centerTop">recommencer</button>
+    <img id="contidroite" src="interface/conti.png" class="topRight" alt="contidroite" />
+    <img id="contigauche" src="interface/conti.png" class="bottomLeft" alt="contigauche" />
+    <img id="oceandroite" src="interface/ocean.png" class="bottomRight" alt="oceandroite" />
+    <img id="oceangauche" src="interface/ocean.png" class="topLeft" alt="oceangauche" />
 
     <script>
         async function startGestureRecognition() {
             const video = document.getElementById("video");
-            const canvas = document.getElementById("canvas");
-            const ctx = canvas.getContext("2d");
-            const info = document.getElementById("info");
+            const handCanvas = document.getElementById("handCanvas");
+            const ctx = handCanvas.getContext("2d");
+            const startBouton = document.getElementById("startBouton");
+            const boutonRestart = document.getElementById("boutonRestart")
+            const contidroite = document.getElementById('contidroite');
+            const contigauche = document.getElementById('contigauche');
+            const oceandroite = document.getElementById('oceandroite');
+            const oceangauche = document.getElementById('oceangauche');
+            //contidroite.style.display = 'none';
+            //contigauche.style.display = 'none';
+            //oceangauche.style.display = 'none';
+           // oceandroite.style.display = 'none';
+            boutonRestart.style.visibility = "hidden";
+
 
             await tf.setBackend("webgl");
 
@@ -87,6 +276,8 @@
 
             video.onloadedmetadata = () => {
                 video.play();
+                handCanvas.width = video.videoWidth;
+                handCanvas.height = video.videoHeight;
                 detectHands();
             };
 
@@ -99,11 +290,11 @@
             });
 
             hands.onResults((results) => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
+                ctx.clearRect(0, 0, handCanvas.width, handCanvas.height);
+                handCanvas.width = video.videoWidth;
+                handCanvas.height = video.videoHeight;
 
-                let color = "white";
+                //let color = "white";
                 let messages = [];
 
                 if (results.multiHandLandmarks.length > 0) {
@@ -114,25 +305,40 @@
                         const handedness = results.multiHandedness[i].label; // "Left" ou "Right"
 
                         if (handedness === "Right" && isFistPose) {
-                            color = "pink";
+                            //color = "pink";
                             messages.push("Main droite : Poing fermé");
+                            triggerBounce("contigauche");
+
                         } else if (handedness === "Right" && !isFistPose) {
-                            color = "green";
+                            //color = "green";
                             messages.push("Main droite : Main tendue");
+                            triggerBounce("oceangauche");
+
                         } else if (handedness === "Left" && isFistPose) {
-                            color = "blue";
+                            //color = "blue";
                             messages.push("Main gauche : Poing fermé");
+                            triggerBounce("contidroite");
+
                         } else if (handedness === "Left" && !isFistPose) {
-                            color = "yellow";
+                            //color = "yellow";
                             messages.push("Main gauche : Main tendue");
+                            triggerBounce("oceandroite");
                         }
-                    });
+                    })
                 } else {
                     messages.push("Aucune main détectée");
                 }
 
-                document.body.style.background = color;
+                //document.body.style.background = color;
                 info.innerText = messages.join("\n");
+
+                function triggerBounce(id) {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    el.classList.remove("bounce"); // reset in case it's still animating
+                    void el.offsetWidth;           // force reflow
+                    el.classList.add("bounce");
+                }
             });
 
             async function detectHands() {
@@ -141,12 +347,11 @@
             }
 
             function drawHand(landmarks) {
-                ctx.strokeStyle = "red";
-                ctx.lineWidth = 2;
+                ctx.fillStyle = "red"; // Set fill color to red
                 for (let i = 0; i < landmarks.length; i++) {
                     const { x, y } = landmarks[i];
                     ctx.beginPath();
-                    ctx.arc(x * canvas.width, y * canvas.height, 5, 0, 2 * Math.PI);
+                    ctx.arc(x * handCanvas.width, y * handCanvas.height, 5, 0, 2 * Math.PI);
                     ctx.fill();
                 }
             }
