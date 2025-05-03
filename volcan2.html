@@ -7,10 +7,12 @@
     <title>Volcan et Micro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&display=swap"
+        rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300&display=swap"
+        rel="stylesheet">
 
     <style>
         body {
@@ -26,7 +28,7 @@
         }
 
         .startBouton {
-            
+
             background-color: white;
             display: inline-block;
             padding: 40px 100px;
@@ -39,7 +41,7 @@
             font-optical-sizing: auto;
             font-weight: 700;
             font-style: normal;
-            font-variation-settings:"wdth" 100;
+            font-variation-settings: "wdth" 100;
             font-size: 90px;
             color: black;
             cursor: pointer;
@@ -80,11 +82,11 @@
             font-optical-sizing: auto;
             font-weight: 700;
             font-style: normal;
-            font-variation-settings:"wdth" 100;
+            font-variation-settings: "wdth" 100;
             font-size: 90px;
             color: black;
             z-index: 10;
-            
+
         }
 
         #clickZoneVentilator {
@@ -140,8 +142,10 @@
             background-color: red;
             height: 100px;
             z-index: 3;
-            visibility: visible; /* Ensure the rectangle is visible */
-            transition: height 0.1s ease-out, top 0.1s ease-out; /* Smooth transition for both height and top */
+            visibility: visible;
+            /* Ensure the rectangle is visible */
+            transition: height 0.1s ease-out, top 0.1s ease-out;
+            /* Smooth transition for both height and top */
         }
 
 
@@ -183,24 +187,23 @@
             font-optical-sizing: auto;
             font-weight: 700;
             font-style: normal;
-            font-variation-settings:"wdth" 100;
+            font-variation-settings: "wdth" 100;
             font-size: 24px;
             color: black;
             cursor: pointer;
             z-index: 20;
-            
+
         }
 
         .showButton:hover {
             background-color: red;
         }
-
-
     </style>
     <script src="https://unpkg.com/@rive-app/canvas"></script>
 
 </head>
 <canvas id="canvas" width="1366" height="768"></canvas>
+
 <body>
 
     <button id="startBouton" class="startBouton centerTop">prêt ?</button>
@@ -216,275 +219,244 @@
 
 
     <script>
-       window.addEventListener('DOMContentLoaded', (event) => {
-    const startBouton = document.getElementById("startBouton");
-    const boutonRestart = document.getElementById("boutonRestart");
-    const timerDisplay = document.getElementById("timer");
-    boutonRestart.style.visibility = "hidden";
-    var remplirTableau = false;
-    var finTableau = false;
-    var isBaseAnim = true;
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const startBouton = document.getElementById("startBouton");
+            const boutonRestart = document.getElementById("boutonRestart");
+            const timerDisplay = document.getElementById("timer");
+            boutonRestart.style.visibility = "hidden";
+            var remplirTableau = false;
+            var finTableau = false;
+           
 
-    let baseToEffu;
-    let baseToExplo;
-    
-    const r = new rive.Rive({
-        src: "https://rinalduzzinathan.github.io/file-stash/rive/volcan_final2.riv",
-        canvas: document.getElementById("canvas"),
-        autoplay: true,
-        stateMachines: "State Machine 1",
-        onLoad: () => {
-            //r.resizeDrawingSurfaceToCanvas();
-        // Récupère les inputs (dont les triggers)
-        const inputs = r.stateMachineInputs('State Machine 1');
-        baseToEffu = inputs.find(i => i.name === 'baseToEffu');
-        baseToExplo = inputs.find(i => i.name === 'baseToExplo');
-        toBase = inputs.find(i => i.name === 'toBase');
-     
-        
-      },
-    onStop: () => {
-      console.log("L'animation est terminée !");
-      // Tu peux faire une autre action ici
-      alert("Animation terminée !");
-    }
-    });
+            let baseToEffu;
+            let baseToExplo;
+            let toBase;
+         
 
-    function onRiveEventReceived(riveEvent) {
-        alert("coucou");
-const eventData = riveEvent.data;
-const eventProperties = eventData.properties;
-if (eventData.type === rive.RiveEventType.General) {
-    console.log("Event name", eventData.name);
-    alert("ici");
-    // Added relevant metadata from the event
-    console.log("Rating", eventProperties.rating);
-    console.log("Message", eventProperties.message);
-} else if (eventData.type === rive.RiveEventType.OpenUrl) {
-    console.log("Event name", eventData.name);
-    window.open(eventData.url);
-}
-}
-r.on(rive.EventType.RiveEvent, (event) => {
-    const data = event.data;
-    if (data.type === rive.RiveEventType.General) {
-      alert("Event reçu : " + data.name);
-    }
-  });
-    
-
-    
-    const showAnimationButton = document.getElementById('showAnimationButton');
-
-    showAnimationButton.addEventListener('click', () => {
-      //  baseVolcano.classList.remove('hidden'); // Remove the "hidden" class
-        // Hide the volcano image
-        const volcanImage = document.getElementById('volcanImage');
-        volcanImage.style.display = 'none';
-
-        // Hide the sound rectangle
-        const soundRectangle = document.getElementById('soundRectangle');
-        soundRectangle.style.display = 'none';
-
-        // Show the Start button
-        const startBouton = document.getElementById('startBouton');
-        startBouton.style.visibility = 'visible';
-
-        
-    });
+            const r = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/volcan_final.riv",
+                canvas: document.getElementById("canvas"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    //r.resizeDrawingSurfaceToCanvas();
+                    // Récupère les inputs (dont les triggers)
+                    const inputs = r.stateMachineInputs('State Machine 1');
+                    baseToEffu = inputs.find(i => i.name === 'baseToEffu');
+                    baseToExplo = inputs.find(i => i.name === 'baseToExplo');
+                    toBase = inputs.find(i => i.name === 'toBase');
+                    
 
 
-    function startTimer() {
-    let timeLeft = 5;
-    remplirTableau = true;
-    const intervalId = setInterval(() => {
-        timerDisplay.textContent = `${timeLeft}`;
-        timeLeft--;
-        if (timeLeft < 0) {
-            timerDisplay.textContent = "";
-            clearInterval(intervalId);
-            remplirTableau = false;
-            finTableau = true;
+                },
+                onStop: () => {
+                    console.log("L'animation est terminée !");
+                    // Tu peux faire une autre action ici
+                    alert("Animation terminée !");
+                }
+            });
 
-            // --- ADD THIS ---
-           // baseVolcano.load("https://lottie.host/your-effusif-animation.lottie");
-            isBaseAnim = false;
-        }
-    }, 1000);
-}
+            r.on(rive.EventType.RiveEvent, (event) => {
+                const data = event.data;
+                if (data.type === rive.RiveEventType.General) {
+                    console.log("Event reçu : " + data.name);
+                    boutonRestart.style.visibility = "visible";
+                    if (toBase) toBase.fire();
+                }
+            });
 
 
-    startBouton.addEventListener("click", function () {
-        startTimer();
-        startBouton.style.visibility = "hidden";
-    });
 
-    boutonRestart.addEventListener("click", function () {
-        startTimer();
-        boutonRestart.style.visibility = "hidden";
-    });
+            const showAnimationButton = document.getElementById('showAnimationButton');
 
-    //var baseVolcano = document.getElementById("base");
-    //baseVolcano.classList.remove("hidden");
-    //baseVolcano.speed = 1;
+            showAnimationButton.addEventListener('click', () => {
+               
+                const volcanImage = document.getElementById('volcanImage');
+                volcanImage.style.display = 'none';
+                showAnimationButton.hidden = true;
 
-    //baseVolcano.addEventListener("loopComplete", (event) => {
-      //  if (isBaseAnim == false) {
-        //    boutonRestart.style.visibility = "visible";
-           // baseVolcano.load("https://lottie.host/bfc76ed8-a603-4705-b1ba-529d3c77dba2/FXRxowFxXs.lottie");
-          //  isBaseAnim = true;
-        //}
-    //});
+                // Hide the sound rectangle
+                const soundRectangle = document.getElementById('soundRectangle');
+                soundRectangle.style.display = 'none';
 
-    navigator.mediaDevices.getUserMedia({ audio: true })
-    .then(stream => {
-        const audioContext = new AudioContext();
-        const analyser = audioContext.createAnalyser();
-        const mic = audioContext.createMediaStreamSource(stream);
-        mic.connect(analyser);
-        analyser.fftSize = 256;
-        const dataArray = new Uint8Array(analyser.frequencyBinCount);
-        var intensityArray = []
+                // Show the Start button
+                const startBouton = document.getElementById('startBouton');
+                startBouton.style.visibility = 'visible';
 
-        // Get the rectangle element
-        // Get the rectangle element
-        const soundRectangle = document.getElementById("soundRectangle");
 
-        // Check if soundRectangle exists
-        if (!soundRectangle) {
-            console.error("soundRectangle element not found.");
-            return;
-        }
+            });
 
-        // Get initial top position from CSS
-        const initialTop = parseInt(window.getComputedStyle(soundRectangle).top, 10);
 
-        function draw() {
-            requestAnimationFrame(draw);
-
-            analyser.getByteFrequencyData(dataArray);
-            let volume = dataArray.reduce((a, b) => a + b) / dataArray.length;
-            let intensity = Math.min(volume / 2, 100); // Normalize volume
-
-            if (intensity !== null && intensity !== undefined && !isNaN(intensity)) {
-                let newHeight = 100 + intensity * 4;
-                soundRectangle.style.height = `${newHeight}px`;
-
-                let newTop = initialTop - intensity; // Use dynamic initialTop
-                soundRectangle.style.top = `${newTop}px`;
-            } else {
-                console.error("Invalid intensity value:", intensity);
-                soundRectangle.style.height = '100px';
-                soundRectangle.style.top = `${initialTop}px`;
+            function startTimer() {
+                let timeLeft = 5;
+                remplirTableau = true;
+                const intervalId = setInterval(() => {
+                    timerDisplay.textContent = `${timeLeft}`;
+                    timeLeft--;
+                    if (timeLeft < 0) {
+                        timerDisplay.textContent = "";
+                        clearInterval(intervalId);
+                        remplirTableau = false;
+                        finTableau = true;
+                    }
+                }, 1000);
             }
 
-            if (remplirTableau == true) {
-                        let addIntensity = intensityArray.push(intensity)
+
+            startBouton.addEventListener("click", function () {
+                console.log("startBouton clicked");
+                if (toBase) toBase.fire();
+                startTimer();
+                startBouton.style.visibility = "hidden";
+            });
+
+            boutonRestart.addEventListener("click", function () {
+                console.log("REstartBouton clicked");
+                if (toBase) toBase.fire();
+                startTimer(); 
+                boutonRestart.style.visibility = "hidden";
+              
+            });
+
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    const audioContext = new AudioContext();
+                    const analyser = audioContext.createAnalyser();
+                    const mic = audioContext.createMediaStreamSource(stream);
+                    mic.connect(analyser);
+                    analyser.fftSize = 256;
+                    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+                    var intensityArray = []
+
+                    // Get the rectangle element
+                    // Get the rectangle element
+                    const soundRectangle = document.getElementById("soundRectangle");
+
+                    // Check if soundRectangle exists
+                    if (!soundRectangle) {
+                        console.error("soundRectangle element not found.");
+                        return;
+                    }
+
+                    // Get initial top position from CSS
+                    const initialTop = parseInt(window.getComputedStyle(soundRectangle).top, 10);
+
+                    function draw() {
+                        requestAnimationFrame(draw);
+
+                        analyser.getByteFrequencyData(dataArray);
+                        let volume = dataArray.reduce((a, b) => a + b) / dataArray.length;
+                        let intensity = Math.min(volume / 2, 100); // Normalize volume
+
+                        if (intensity !== null && intensity !== undefined && !isNaN(intensity)) {
+                            let newHeight = 100 + intensity * 4;
+                            soundRectangle.style.height = `${newHeight}px`;
+
+                            let newTop = initialTop - intensity; // Use dynamic initialTop
+                            soundRectangle.style.top = `${newTop}px`;
+                        } else {
+                            console.error("Invalid intensity value:", intensity);
+                            soundRectangle.style.height = '100px';
+                            soundRectangle.style.top = `${initialTop}px`;
+                        }
+
+                        if (remplirTableau == true) {
+                            let addIntensity = intensityArray.push(intensity)
+                        }
+
+
+                        //intensityText.textContent = intensity.toFixed(2);
+                        //ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        if (finTableau == true) {
+                            var finalArray = intensityArray;
+                            intensityArray = []
+
+
+                            console.log(finalArray + "c final array de taille" + finalArray.length)
+
+                            //console.log(finalArray)
+                            function movingAverage(array, windowSize) {
+                                let smoothedArray = [];
+                                for (let i = 0; i < array.length; i++) {
+                                    let start = Math.max(0, i - Math.floor(windowSize / 2));
+                                    let end = Math.min(array.length, i + Math.floor(windowSize / 2) + 1);
+                                    let sum = 0;
+                                    for (let j = start; j < end; j++) {
+                                        sum += array[j];
+                                    }
+                                    smoothedArray.push(sum / (end - start));
+                                }
+                                return smoothedArray;
+                            }
+
+                            function linearRegressionTrend(array) {
+                                let n = array.length;
+                                let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+
+                                for (let i = 0; i < n; i++) {
+                                    sumX += i;
+                                    sumY += array[i];
+                                    sumXY += i * array[i];
+                                    sumXX += i * i;
+                                }
+
+                                let slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+                                return slope; // Si > 0, tendance à la hausse
+                            }
+
+                            // Utilisation :
+                            let windowSize = 10; // Ajuste la taille du lissage selon ton besoin
+                            let smoothedArray = movingAverage(finalArray, windowSize);
+                            let trend = linearRegressionTrend(smoothedArray);
+
+                            console.log("Tendance (pente de régression) :", trend);
+                            console.log(trend > 0.09 ? "L'intensité augmente globalement." : "Pas d'augmentation claire.");
+
+                            if (trend > 0.09) {
+                                if (baseToExplo) baseToExplo.fire();
+                            }
+                            if (trend < 0.09 && trend > -0.09) {
+                                if (baseToEffu) baseToEffu.fire();
+                            }
+
+
+                            finTableau = false;
+
+
+                        }
                     }
 
 
-                    //intensityText.textContent = intensity.toFixed(2);
-                    //ctx.clearRect(0, 0, canvas.width, canvas.height);
-             if (finTableau == true) {
-                     var finalArray = intensityArray;
-                    intensityArray = []
-
-
-                    console.log(finalArray + " c final array de taille " + finalArray.length)
-
-                        //console.log(finalArray)
-                    function movingAverage(array, windowSize) {
-                        let smoothedArray = [];
-                            for (let i = 0; i < array.length; i++) {
-                                let start = Math.max(0, i - Math.floor(windowSize / 2));
-                                let end = Math.min(array.length, i + Math.floor(windowSize / 2) + 1);
-                                let sum = 0;
-                                for (let j = start; j < end; j++) {
-                                    sum += array[j];
-                                }
-                                smoothedArray.push(sum / (end - start));
-                            }
-                            return smoothedArray;
-                        }
-
-                        function linearRegressionTrend(array) {
-                            let n = array.length;
-                            let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
-
-                            for (let i = 0; i < n; i++) {
-                                sumX += i;
-                                sumY += array[i];
-                                sumXY += i * array[i];
-                                sumXX += i * i;
-                            }
-
-                            let slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-                            return slope; // Si > 0, tendance à la hausse
-                        }
-
-                        // Utilisation :
-                        let windowSize = 10; // Ajuste la taille du lissage selon ton besoin
-                        let smoothedArray = movingAverage(finalArray, windowSize);
-                        let trend = linearRegressionTrend(smoothedArray);
-
-                        console.log("Tendance (pente de régression) :", trend);
-                        console.log(trend > 0.09 ? "L'intensité augmente globalement." : "Pas d'augmentation claire.");
-
-                        if (trend > 0.09) {
-                            if (baseToExplo) baseToExplo.fire();
-                            
-                         //   isBaseAnim = false
-                          //  baseVolcano.load("https://lottie.host/1a3a4376-3629-4e3e-aeb2-fcc2d5d49e35/FBCgmw7yBd.lottie")
-                            //baseVolcano.setSpeed(1);
-                        }
-                        if (trend < 0.09 && trend > -0.09) {
-                            if (baseToEffu) baseToEffu.fire();
-                            //r.stop("baseToEffu");
-                           // isBaseAnim = false
-                            //baseVolcano.load("https://lottie.host/cc1dc667-d3fb-425f-9230-223e31070f2e/65CBkiaq4d.lottie")
-                            //baseVolcano.setSpeed(1);
-
-
-                        }
-
-
-                        finTableau = false;
-
-
-        }
-    }
 
 
 
+                    draw(); // Start drawing
+
+                })
+                .catch(err => console.error("Microphone access error: ", err));
 
 
-        draw(); // Start drawing
+            const ventilatorImage = document.getElementById('ventilatorImage');
+            const expandingCircle = document.getElementById('expandingCircle');
 
-    })
-    .catch(err => console.error("Microphone access error: ", err));
+            let isCircleExpanded = false;
 
+            ventilatorImage.addEventListener('click', () => {
+                ventilatorImage.style.display = 'none';
+                expandingCircle.style.width = '650px';
+                expandingCircle.style.height = '650px';
+                isCircleExpanded = true;
+            });
 
-    const ventilatorImage = document.getElementById('ventilatorImage');
-    const expandingCircle = document.getElementById('expandingCircle');
-
-    let isCircleExpanded = false;
-
-    ventilatorImage.addEventListener('click', () => {
-        ventilatorImage.style.display = 'none';
-        expandingCircle.style.width = '650px';
-        expandingCircle.style.height = '650px';
-        isCircleExpanded = true;
-    });
-
-    expandingCircle.addEventListener('click', () => {
-        if (isCircleExpanded) {
-            expandingCircle.style.width = '250px';
-            expandingCircle.style.height = '250px';
-            ventilatorImage.style.display = 'block';
-            isCircleExpanded = false;
-        }
-    });
-});
+            expandingCircle.addEventListener('click', () => {
+                if (isCircleExpanded) {
+                    expandingCircle.style.width = '250px';
+                    expandingCircle.style.height = '250px';
+                    ventilatorImage.style.display = 'block';
+                    isCircleExpanded = false;
+                }
+            });
+        });
 
     </script>
 </body>
