@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
     <script src="https://unpkg.com/@rive-app/canvas"></script>
-   
+
     </style>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -43,6 +43,8 @@
     <script>
         let TimerStarted = false;
         let TimerOver = false;
+        let TimerIsRunning = false;
+        let DistanceIsCalculated = false;
 
         async function startGestureRecognition() {
 
@@ -61,6 +63,7 @@
             const video = document.getElementById("video");
             const canvas = document.getElementById("output_canvas");
             const ctx = canvas.getContext("2d");
+            let distances = [];
 
             let previousDistance = null;
 
@@ -219,31 +222,63 @@
                     el.classList.add("bounce");
                 }
 
-                if (TimerStarted) {
+
+                if (TimerIsRunning) {
+
+                    function onHandsDetected(hand1, hand2) {
+                        const dist = Math.sqrt(
+                            Math.pow(hand1.x - hand2.x, 2)
+                        );
+                        distances.push(dist);
+                    }
+
+
+
+
+
                     if (results.multiHandLandmarks.length >= 2) {
+
                         const hand1 = results.multiHandLandmarks[0][8]; // Index finger
                         const hand2 = results.multiHandLandmarks[1][8];
+                        onHandsDetected(hand1, hand2);
 
-                        const dist = Math.sqrt(
-                            Math.pow(hand1.x - hand2.x, 2) + Math.pow(hand1.y - hand2.y, 2)
-                        );
 
-                        if (previousDistance !== null) {
-                            if (dist < previousDistance - 0.01) {
-                                // Hands getting closer
-                                canvasConverge.style.display = "block";
-                                canvasDiverge.style.display = "none";
-                                if (baseToCC) baseToCC.fire(); // example trigger
-                            } else if (dist > previousDistance + 0.01) {
-                                // Hands moving apart
-                                canvasDiverge.style.display = "block";
-                                canvasConverge.style.display = "none";
-                                if (DIVbaseToOO) DIVbaseToOO.fire(); // example trigger
-                            }
+
+
+
+                        //   previousDistance = dist;
+                    }
+                }
+                if (TimerOver && !DistanceIsCalculated) {
+                    DistanceIsCalculated = true;
+                    console.log(distances);
+                    analyzeDistanceChange();
+
+
+                    function analyzeDistanceChange() {
+                        const len = distances.length;
+                        if (len < 4) return; // pas assez de données
+
+                        const firstHalf = distances.slice(0, len / 2);
+                        const secondHalf = distances.slice(len / 2);
+
+                        const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+                        const startAvg = avg(firstHalf);
+                        const endAvg = avg(secondHalf);
+
+                        if (endAvg > startAvg + 0.01) {
+                            canvasConverge.style.display = "block";
+                            canvasDiverge.style.display = "none";
+                            console.log("Les mains s'éloignent → divergence");
+                            DIVbaseToOO.fire(); // exemple
+                        } else if (endAvg < startAvg - 0.01) {
+                            canvasDiverge.style.display = "block";
+                            canvasConverge.style.display = "none";
+                            console.log("Les mains se rapprochent → convergence");
+                            baseToOO.fire(); // exemple
+                        } else {
+                            console.log("Pas de changement significatif");
                         }
-
-
-                        previousDistance = dist;
                     }
                 }
                 ;
@@ -274,7 +309,7 @@
 
         }
         function hideAllPlaques() {
-            
+
             document.getElementById("contidroite").style.display = "none";
             document.getElementById("oceandroite").style.display = "none";
             document.getElementById("contigauche").style.display = "none";
@@ -294,12 +329,13 @@
 
             TimerStarted = true;
             TimerOver = false;
-
+            TimerIsRunning = true;
             const interval = setInterval(() => {
                 const elapsed = (Date.now() - startTime) / 1000;
                 timerDisplay.innerText = `${elapsed.toFixed(1)}s`;
 
                 if (elapsed >= 5) {
+                    TimerIsRunning = false;
                     TimerOver = true;
                     clearInterval(interval);
                     timerDisplay.classList.add("hidden");
