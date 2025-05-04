@@ -58,6 +58,41 @@
         let TimerIsRunning = false;
         let DistanceIsCalculated = false;
 
+
+        const rConverge = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_convergence.riv",
+                canvas: document.getElementById("riveCanvasConverge"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rConverge.stateMachineInputs("State Machine 1");
+                    baseToCC = inputs.find(i => i.name === "baseToCC");
+                    baseToCO = inputs.find(i => i.name === "baseToCO");
+                    baseToOO = inputs.find(i => i.name === "baseToOO");
+                    baseToOC = inputs.find(i => i.name === "baseToOC");
+
+                    rConverge.resizeDrawingSurfaceToCanvas();
+                }
+            });
+
+            // Load divergence Rive
+            const rDiverge = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_divergence.riv",
+                canvas: document.getElementById("riveCanvasDiverge"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rDiverge.stateMachineInputs("State Machine 1");
+                    DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
+                    DIVbaseToCO = inputs.find(i => i.name === "DIVbaseToCO");
+                    DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
+                    DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
+
+                    rDiverge.resizeDrawingSurfaceToCanvas();
+                }
+            });
+
+            
         async function startGestureRecognition() {
 
             const handCanvas = document.getElementById("handCanvas");
@@ -91,38 +126,7 @@
             // const canvasDiverge = document.getElementById("riveCanvasDiverge");
 
             // Load convergence Rive
-            const rConverge = new rive.Rive({
-                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_convergence.riv",
-                canvas: document.getElementById("riveCanvasConverge"),
-                autoplay: true,
-                stateMachines: "State Machine 1",
-                onLoad: () => {
-                    const inputs = rConverge.stateMachineInputs("State Machine 1");
-                    baseToCC = inputs.find(i => i.name === "baseToCC");
-                    baseToCO = inputs.find(i => i.name === "baseToCO");
-                    baseToOO = inputs.find(i => i.name === "baseToOO");
-                    baseToOC = inputs.find(i => i.name === "baseToOC");
-
-                    rConverge.resizeDrawingSurfaceToCanvas();
-                }
-            });
-
-            // Load divergence Rive
-            const rDiverge = new rive.Rive({
-                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_divergence.riv",
-                canvas: document.getElementById("riveCanvasDiverge"),
-                autoplay: true,
-                stateMachines: "State Machine 1",
-                onLoad: () => {
-                    const inputs = rDiverge.stateMachineInputs("State Machine 1");
-                    DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
-                    DIVbaseToCO = inputs.find(i => i.name === "DIVbaseToCO");
-                    DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
-                    DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
-
-                    rDiverge.resizeDrawingSurfaceToCanvas();
-                }
-            });
+          
        
             // Set canvas size to match video size exactly
             canvas.width = video.videoWidth;
@@ -209,8 +213,6 @@
 
 
                 if (results.multiHandLandmarks.length > 0) {
-                    console.log(rConverge);
-                    console.log(rDiverge);
                     results.multiHandLandmarks.forEach((handLandmarks, i) => {
                         drawHand(handLandmarks);
 
