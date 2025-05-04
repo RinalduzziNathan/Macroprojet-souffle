@@ -14,101 +14,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300&display=swap" rel="stylesheet">
 
-    <style>
-       body {
-            background-image: url('interface/etoile.png'), url('interface/quadrillage.png');
-            background-size: 130%, cover; 
-            background-position: -150px -350px, center;
-            background-repeat: no-repeat;
-            height: 100vh;
-        }
+</style>
+<link rel="stylesheet" href="../css_global/style.css">
+<link rel="stylesheet" href="../css_global/style_boutons.css">
+<link rel="stylesheet" href="style_pangee.css">
+   
 
-    
-        video { display: none; } 
-        #status { 
-            position: absolute;
-            top: 15%;
-            left: 65%; 
-            font-family: "Bricolage Grotesque", sans-serif;
-            font-optical-sizing: auto;
-            font-weight: 300;
-            font-style: normal;
-            font-variation-settings:"wdth" 100;
-            font-size: 24px;
-            color: black;
-        }
-
-        #temps { 
-            position: absolute;
-            top: 10%; /* 10% from the top */
-            left: 65%; /* 50% from the left */
-            font-family: "Bricolage Grotesque", sans-serif;
-            font-optical-sizing: auto;
-            font-weight: 700;
-            font-style: normal;
-            font-variation-settings:"wdth" 100;
-            font-size: 24px;
-            color: black;
-        }
-
-        #imageContainer {
-            position: relative;
-            width: 100%; /* full width */
-            height: 100vh; /* full height */
-        }
-
-        #sequenceImage1, #sequenceImage2 {
-            position: absolute;
-            top: 55%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 1000px;
-            height: auto;
-            transition: opacity 0.5s ease; /* Smooth fade */
-        }
-
-        #clickZoneLunettes {
-            position: absolute;
-            top: 5px; /* même top que ton lunettes.png */
-            left: 5px; /* même left que ton lunettes.png */
-            width: 150px; /* taille à ajuster selon la taille de l'image */
-            height: 100px; /* taille à ajuster aussi */
-            cursor: pointer;
-            background-color: rgba(255, 255, 255, 0); /* transparent */
-            z-index: 10; /* au-dessus du background */
-        }
-
-        #expandingCircle {
-            position: absolute;
-            top: 0px; /* Position where you want it */
-            left: 0px; /* Position where you want it */
-            width: 250px;  /* Initial small size */
-            height: 250px; /* Initial small size */
-            border-radius: 50%; /* Make it a circle */
-            background-color: white; /* White fill */
-            border: 2.5px solid black; /* Black border */
-            z-index: 1;  /* Make sure it's above other elements */
-            transition: all 1s ease;  /* Smooth animation */
-        }
-
-        #lunettesImage {
-            position: absolute;
-            top: 55px; /* Or wherever you want */
-            left: 35px; /* Or wherever you want */
-            z-index: 10; /* Make sure it is in front of the circle */
-            width: 170px; /* taille à ajuster selon la taille de l'image */
-            height: 150px;
-        }
-
-    </style>
 </head>
-<body>
 
+<body>
+    <div class="background-grid"></div>
     <video id="video" autoplay hidden></video>
     <div id="status"></div>
     <div id="temps">Il y a <span id="tempsValeur">250</span> millions d'années</div>
     <div id="clickZoneLunettes">
-        <img id="lunettesImage" src="interface/lunettes.png" alt="Lunettes" />
+        <img id="lunettesImage" src="../interface/lunettes.png" alt="Lunettes" />
         <div id="expandingCircle"></div>  <!-- Circle behind the lunettes image -->
     </div>
 

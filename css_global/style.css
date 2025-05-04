@@ -43,6 +43,7 @@ canvas {
     height: auto;
     display: block;
     transform: translate(-50%, -50%) scaleX(-1);
+    z-index: 13;
 
 }
 
@@ -54,42 +55,26 @@ canvas {
 
 
 body {
-    background-image: url('interface/quadrillage.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     height: 100vh;
     transition: background 0.5s;
 }
-
-#info {
+.background-grid {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    background: rgba(255, 255, 255, 0.7);
-    padding: 10px 15px;
-    border-radius: 10px;
-    font-size: 18px;
-    font-family: sans-serif;
-    z-index: 12;
-}
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(to right, #e0e0e0 1px, transparent 1px),
+      linear-gradient(to bottom, #e0e0e0 1px, transparent 1px);
+    background-size: 20px 20px;
+    z-index: -1;
+  }
 
-#clickZoneGant {
-    position: absolute;
-    top: 5px;
-    /* même top que ton lunettes.png */
-    left: 5px;
-    /* même left que ton lunettes.png */
-    width: 150px;
-    /* taille à ajuster selon la taille de l'image */
-    height: 100px;
-    /* taille à ajuster aussi */
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0);
-    /* transparent */
-    z-index: 10;
-    /* au-dessus du background */
-}
+
 
 #expandingCircle {
     position: absolute;
@@ -113,125 +98,8 @@ body {
     /* Smooth animation */
 }
 
-#gantImage {
-    position: absolute;
-    top: 30px;
-    left: 75px;
-    z-index: 10;
-    width: 90px;
-    height: 205px;
-    rotate: 30deg;
-}
 
-#contidroite {
-    z-index: 10;
-    width: 230px;
-    height: auto;
-    /* Optional, makes it responsive */
-}
 
-#contigauche {
-    z-index: 10;
-    width: 230px;
-    height: auto;
-    /* Optional, makes it responsive */
-}
-
-#oceandroite {
-    z-index: 10;
-    width: 230px;
-    height: auto;
-    /* Optional, makes it responsive */
-}
-
-#oceangauche {
-    z-index: 10;
-    width: 230px;
-    height: auto;
-    /* Optional, makes it responsive */
-}
-
-#bigcontidroite {
-    z-index: 10;
-    width: 300px;
-    height: auto;
-    /* Optional, makes it responsive */
-    display: none;
-}
-
-#bigcontigauche {
-    z-index: 10;
-    width: 300px;
-    height: auto;
-    /* Optional, makes it responsive */
-    display: none;
-}
-
-#bigoceandroite {
-    z-index: 10;
-    width: 300px;
-    height: auto;
-    /* Optional, makes it responsive */
-    display: none;
-}
-
-#bigoceangauche {
-    z-index: 10;
-    width: 300px;
-    height: auto;
-    /* Optional, makes it responsive */
-    display: none;
-}
-
-.showButton {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 10px 40px;
-    background-color: white;
-    color: rgb(0, 0, 0);
-    border: 3px, solid black;
-    border-radius: 50px;
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 700;
-    font-style: normal;
-    font-variation-settings: "wdth" 100;
-    font-size: 24px;
-    color: black;
-    cursor: pointer;
-    z-index: 20;
-
-}
-
-.showButton:hover {
-    background-color: red;
-}
-
-.startBouton {
-
-    background-color: white;
-    display: inline-block;
-    padding: 40px 100px;
-    visibility: hidden;
-    background-color: white;
-    color: rgb(0, 0, 0);
-    border: 3px, solid black;
-    border-radius: 100px;
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 700;
-    font-style: normal;
-    font-variation-settings: "wdth" 100;
-    font-size: 90px;
-    color: black;
-    cursor: pointer;
-    z-index: 20;
-}
-
-.startBouton:hover {
-    background-color: red;
-}
 
 .verticalCenter {
     margin: 0;
@@ -333,3 +201,5 @@ body {
 .bounce {
     animation: bounce 0.4s ease;
 }
+
+

@@ -1,0 +1,49 @@
+.showButton {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 40px;
+    background-color: white;
+    color: rgb(0, 0, 0);
+    border: 3px, solid black;
+    border-radius: 50px;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+    font-size: 24px;
+    color: black;
+    cursor: pointer;
+    z-index: 20;
+
+}
+
+.showButton:hover {
+    background-color: red;
+}
+
+.startBouton {
+
+    background-color: white;
+    display: inline-block;
+    padding: 40px 100px;
+    visibility: hidden;
+    background-color: white;
+    color: rgb(0, 0, 0);
+    border: 3px, solid black;
+    border-radius: 100px;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+    font-size: 90px;
+    color: black;
+    cursor: pointer;
+    z-index: 20;
+}
+
+.startBouton:hover {
+    background-color: red;
+}

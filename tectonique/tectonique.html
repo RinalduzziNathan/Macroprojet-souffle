@@ -8,13 +8,24 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300&display=swap"
+        rel="stylesheet">
     <script src="https://unpkg.com/@rive-app/canvas"></script>
 
     </style>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../css_global/style.css">
+    <link rel="stylesheet" href="../css_global/style_boutons.css">
+    <link rel="stylesheet" href="style_tectonique.css">
 </head>
 
 <body>
+    <div class="background-grid"></div>
     <video id="video" autoplay playsinline></video>
     <canvas id="riveCanvas"></canvas>
     <canvas id="handCanvas"></canvas>
@@ -23,7 +34,7 @@
     <canvas id="riveCanvasDiverge"></canvas>
     <div id="info">Détection en cours...</div>
     <div id="clickZoneGant">
-        <img id="gantImage" src="interface/gant.png" alt="Pompe" />
+        <img id="gantImage" src="../interface/gant.png" alt="Pompe" />
 
         <div id="expandingCircle"></div> <!-- Circle behind the lunettes image -->
     </div>
@@ -31,14 +42,15 @@
     <button id="startBouton" class="startBouton centerTop">prêt ?</button>
     <div id="timerDisplay" class="timer centerTop hidden">0.0s</div>
     <button id="boutonRestart" class="startBouton centerTop">recommencer</button>
-    <img id="contidroite" src="interface/conti.png" class="topRight" alt="contidroite" />
-    <img id="contigauche" src="interface/conti.png" class="bottomLeft" alt="contigauche" />
-    <img id="oceandroite" src="interface/ocean.png" class="bottomRight" alt="oceandroite" />
-    <img id="oceangauche" src="interface/ocean.png" class="topLeft" alt="oceangauche" />
-    <img id="bigcontidroite" src="interface/conti.png" class="centerRight" alt="bigcontidroite" />
-    <img id="bigcontigauche" src="interface/conti.png" class="centerLeft" alt="bigcontigauche" />
-    <img id="bigoceandroite" src="interface/ocean.png" class="centerRight" alt="bigoceandroite" />
-    <img id="bigoceangauche" src="interface/ocean.png" class="centerLeft" alt="bigoceangauche" />
+    <img id="contidroite" src="../interface/conti.png" class="topRight" alt="contidroite" />
+    <img id="contigauche" src="../interface/conti.png" class="bottomLeft" alt="contigauche" />
+    <img id="oceandroite" src="../interface/ocean.png" class="bottomRight" alt="oceandroite" />
+    <img id="oceangauche" src="../interface/ocean.png" class="topLeft" alt="oceangauche" />
+    <img id="bigcontidroite" src="../interface/conti.png" class="centerRight" alt="bigcontidroite" />
+    <img id="bigcontigauche" src="../interface/conti.png" class="centerLeft" alt="bigcontigauche" />
+    <img id="bigoceandroite" src="../interface/ocean.png" class="centerRight" alt="bigoceandroite" />
+    <img id="bigoceangauche" src="../interface/ocean.png" class="centerLeft" alt="bigoceangauche" />
+  
 
     <script>
         let TimerStarted = false;

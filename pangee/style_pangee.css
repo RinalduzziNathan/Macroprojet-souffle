@@ -1,0 +1,62 @@
+#status { 
+    position: absolute;
+    top: 15%;
+    left: 65%; 
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings:"wdth" 100;
+    font-size: 24px;
+    color: black;
+}
+
+#temps { 
+    position: absolute;
+    top: 10%; /* 10% from the top */
+    left: 65%; /* 50% from the left */
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-variation-settings:"wdth" 100;
+    font-size: 24px;
+    color: black;
+}
+
+#imageContainer {
+    position: relative;
+    width: 100%; /* full width */
+    height: 100vh; /* full height */
+}
+
+#sequenceImage1, #sequenceImage2 {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1000px;
+    height: auto;
+    transition: opacity 0.5s ease; /* Smooth fade */
+}
+
+#clickZoneLunettes {
+    position: absolute;
+    top: 5px; /* même top que ton lunettes.png */
+    left: 5px; /* même left que ton lunettes.png */
+    width: 150px; /* taille à ajuster selon la taille de l'image */
+    height: 100px; /* taille à ajuster aussi */
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0); /* transparent */
+    z-index: 15; /* au-dessus du background */
+}
+
+
+#lunettesImage {
+    position: absolute;
+    top: 55px; /* Or wherever you want */
+    left: 35px; /* Or wherever you want */
+    z-index: 10; /* Make sure it is in front of the circle */
+    width: 170px; /* taille à ajuster selon la taille de l'image */
+    height: 150px;
+}

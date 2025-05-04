@@ -1,0 +1,96 @@
+
+#clickZoneVentilator {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 150px;
+    height: 100px;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0);
+    z-index: 15;
+}
+
+
+#ventilatorImage {
+    position: absolute;
+    top: 55px;
+    left: 75px;
+    z-index: 7;
+    width: 100px;
+    height: 150px;
+    rotate: 10deg;
+}
+
+#volcanImage {
+    position: absolute;
+    top: 10%;
+    left: 22%;
+    z-index: 4;
+    width: 800px;
+    height: 675px;
+}
+
+/* New Rectangle */
+#soundRectangle {
+    position: absolute;
+    top: 80%;
+    left: 49%;
+    transform: translateX(-50%);
+    width: 300px;
+    background-color: red;
+    height: 100px;
+    z-index: 3;
+    visibility: visible;
+    /* Ensure the rectangle is visible */
+    transition: height 0.1s ease-out, top 0.1s ease-out;
+    /* Smooth transition for both height and top */
+}
+
+
+/* CSS classes for different heights */
+.height-100 {
+    height: 400px;
+}
+
+.height-150 {
+    height: 500px;
+}
+
+.height-200 {
+    height: 700px;
+}
+
+.height-250 {
+    height: 900px;
+}
+
+.height-300 {
+    height: 1000px;
+}
+
+.height-350 {
+    height: 1100px;
+}
+
+
+#volcanCircle {
+    position: absolute;
+    top: 79%;
+    /* Position where you want it */
+    left: 50%;
+    /* Position where you want it */
+    width: 1050px;
+    /* Initial small size */
+    height: 1050px;
+    /* Initial small size */
+    border-radius: 50%;
+    /* Make it a circle */
+    background-color: white;
+    /* White fill */
+    border: 2.5px solid black;
+    /* Black border */
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    /* Make sure it's above other elements */
+
+}
