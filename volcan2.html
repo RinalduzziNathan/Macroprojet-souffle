@@ -26,6 +26,7 @@
 <body>
     <canvas id="riveCanvas"></canvas>
     <div class="background-grid"></div>
+    <div id="volcanCircle"></div>
     <button id="startBouton" class="startBouton centerTop">prêt ?</button>
     <button id="boutonRestart" class="startBouton centerTop">recommencer</button>
     <div id="timer" class="timer verticalCenter"></div>
@@ -36,6 +37,7 @@
     <img id="volcanImage" src="interface/volcanintro.png" alt="volcanintro" />
     <div id="soundRectangle"></div>
     <button id="showAnimationButton" class="showButton"> >>></button>
+
     
 
 
@@ -45,6 +47,8 @@
             const boutonRestart = document.getElementById("boutonRestart");
             const timerDisplay = document.getElementById("timer");
             const riveCanvas = document.getElementById("riveCanvas");
+            const volcanCircle = document.getElementById("volcanCircle");
+            volcanCircle.style.visibility = "visible";
             riveCanvas.style.visibility = "hidden";
             boutonRestart.style.visibility = "hidden";
             var remplirTableau = false;
@@ -62,7 +66,7 @@
                 autoplay: true,
                 stateMachines: "State Machine 1",
                 onLoad: () => {
-                    //r.resizeDrawingSurfaceToCanvas();
+                    r.resizeDrawingSurfaceToCanvas();
                     // Récupère les inputs (dont les triggers)
                     const inputs = r.stateMachineInputs('State Machine 1');
                     baseToEffu = inputs.find(i => i.name === 'baseToEffu');
@@ -93,6 +97,9 @@
             const showAnimationButton = document.getElementById('showAnimationButton');
 
             showAnimationButton.addEventListener('click', () => {
+
+                volcanCircle.style.visibility = "hidden";
+
                
                 riveCanvas.style.visibility = "visible";
                 const volcanImage = document.getElementById('volcanImage');

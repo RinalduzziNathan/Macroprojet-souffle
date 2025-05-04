@@ -72,3 +72,25 @@
     height: 1100px;
 }
 
+
+#volcanCircle {
+    position: absolute;
+    top: 79%;
+    /* Position where you want it */
+    left: 50%;
+    /* Position where you want it */
+    width: 1050px;
+    /* Initial small size */
+    height: 1050px;
+    /* Initial small size */
+    border-radius: 50%;
+    /* Make it a circle */
+    background-color: white;
+    /* White fill */
+    border: 2.5px solid black;
+    /* Black border */
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    /* Make sure it's above other elements */
+
+}
