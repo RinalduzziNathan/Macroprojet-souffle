@@ -25,6 +25,7 @@
 
 <body>
     <canvas id="riveCanvas"></canvas>
+    <canvas id="visqueuseCanvas"></canvas>
     <div class="background-grid"></div>
     <div id="volcanCircle"></div>
     <button id="startBouton" class="startBouton centerTop">prêt ?</button>
@@ -37,6 +38,7 @@
     <img id="volcanImage" src="../interface/volcanintro.png" alt="volcanintro" />
     <div id="soundRectangle"></div>
     <button id="showAnimationButton" class="showButton"> >>></button>
+    <button id="showSouffleTest" class="showButton"> >>></button>
 
     
 
@@ -47,9 +49,15 @@
             const boutonRestart = document.getElementById("boutonRestart");
             const timerDisplay = document.getElementById("timer");
             const riveCanvas = document.getElementById("riveCanvas");
+            const visqueuseCanvas = document.getElementById("visqueuseCanvas");
             const volcanCircle = document.getElementById("volcanCircle");
-            volcanCircle.style.visibility = "visible";
+            const volcanImage = document.getElementById("volcanImage");
+            const soundRectangle = document.getElementById("soundRectangle");
+
+            volcanCircle.style.visibility = "hidden";
             riveCanvas.style.visibility = "hidden";
+            volcanImage.style.visibility = "hidden";
+            soundRectangle.style.visibility = "hidden";
             boutonRestart.style.visibility = "hidden";
             var remplirTableau = false;
             var finTableau = false;
@@ -76,12 +84,9 @@
 
 
                 },
-                onStop: () => {
-                    console.log("L'animation est terminée !");
-                    // Tu peux faire une autre action ici
-                    alert("Animation terminée !");
-                }
             });
+
+            
 
             r.on(rive.EventType.RiveEvent, (event) => {
                 const data = event.data;
@@ -93,8 +98,41 @@
             });
 
 
+            let baseToAnim;
+    
+            let visqueuseToBase;
+
+            const rvisqueux = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/visqueuse.riv",
+                canvas: document.getElementById("visqueuseCanvas"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    rvisqueux.resizeDrawingSurfaceToCanvas();
+                    // Récupère les inputs (dont les triggers)
+                    const inputs = rvisqueux.stateMachineInputs('State Machine 1');
+                    baseToAnim = inputs.find(i => i.name === 'baseToAnim');
+                    visqueuseToBase = inputs.find(i => i.name === 'visqueuseToBase');
+                    
+
+
+                },
+            });
+
+
 
             const showAnimationButton = document.getElementById('showAnimationButton');
+            showAnimationButton.style.visibility = "hidden"
+            const showSouffleTest = document.getElementById('showSouffleTest');
+            showSouffleTest.addEventListener('click',()=>{
+
+                showSouffleTest.style.visibility = "hidden";
+                visqueuseCanvas.style.visibility = "hidden";
+                volcanImage.style.visibility = "visible";
+                soundRectangle.style.visibility = "visible";
+                volcanCircle.style.visibility = "visible";
+                showAnimationButton.style.visibility = "visible"
+            })
 
             showAnimationButton.addEventListener('click', () => {
 
@@ -116,6 +154,15 @@
 
 
             });
+            
+            function intensite(intensity) {
+                console.log(intensity)
+                if (intensity > 10) {
+                    if (baseToAnim) baseToAnim.fire();
+                } else {
+                    if (visqueuseToBase) visqueuseToBase.fire();
+                }
+            }
 
 
             function startTimer() {
@@ -194,7 +241,9 @@
                         if (remplirTableau == true) {
                             let addIntensity = intensityArray.push(intensity)
                         }
-
+                        if (intensity != null && !isNaN(intensity)) {
+                            intensite(intensity);
+                        }
 
                         //intensityText.textContent = intensity.toFixed(2);
                         //ctx.clearRect(0, 0, canvas.width, canvas.height);
