@@ -10,174 +10,28 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300&display=swap"
+        rel="stylesheet">
     <script src="https://unpkg.com/@rive-app/canvas"></script>
 
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            background-image: url('interface/quadrillage.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
-            transition: background 0.5s;
-        }
-
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: auto;
-        }
-
-        #riveCanvas {
-            width: 1366;
-            height: 768;
-            z-index: 1;
-        }
-
-        #handCanvas {
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        #video {
-            display: none;
-        }
-
-        #clickZonePompe {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            width: 150px;
-            height: 100px;
-            cursor: pointer;
-            background-color: rgba(255, 255, 255, 0);
-            z-index: 3;
-        }
-
-        #expandingCircle {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 250px;
-            height: 250px;
-            border-radius: 50%;
-            background-color: white;
-            border: 2.5px solid black;
-            z-index: 1;
-            transition: all 1s ease;
-        }
-
-        #pompeImage {
-            position: absolute;
-            top: 30px;
-            left: 75px;
-            z-index: 10;
-            width: 90px;
-            height: 205px;
-            rotate: 10deg;
-        }
-
-        .showButton {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 10px 40px;
-            background-color: white;
-            color: rgb(0, 0, 0);
-            border: 3px, solid black;
-            border-radius: 50px;
-            font-family: "Bricolage Grotesque", sans-serif;
-            font-optical-sizing: auto;
-            font-weight: 700;
-            font-style: normal;
-            font-variation-settings: "wdth" 100;
-            font-size: 24px;
-            color: black;
-            cursor: pointer;
-            z-index: 20;
-
-        }
-
-        .showButton:hover {
-            background-color: red;
-        }
-
-        .startBouton {
-
-            background-color: white;
-            display: inline-block;
-            padding: 40px 100px;
-            visibility: hidden;
-            background-color: white;
-            color: rgb(0, 0, 0);
-            border: 3px, solid black;
-            border-radius: 100px;
-            font-family: "Bricolage Grotesque", sans-serif;
-            font-optical-sizing: auto;
-            font-weight: 700;
-            font-style: normal;
-            font-variation-settings: "wdth" 100;
-            font-size: 90px;
-            color: black;
-            cursor: pointer;
-            z-index: 20;
-        }
-
-        .startBouton:hover {
-            background-color: red;
-        }
-
-        .verticalCenter {
-            margin: 0;
-            position: absolute;
-            left: 48%;
-            transform: translateY(-50%);
-        }
-
-        .center {
-            margin: 0;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .centerTop {
-            margin: 0;
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .timer {
-            margin-top: 70px;
-            color: black;
-            font-family: "Bricolage Grotesque", sans-serif;
-            font-optical-sizing: auto;
-            font-weight: 700;
-            font-style: normal;
-            font-variation-settings: "wdth" 100;
-            font-size: 90px;
-            color: black;
-            z-index: 10;
-
-        }
-
-        .hidden {
-            display: none;
-        }
-    </style>
+</style>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style_boutons.css">
+<link rel="stylesheet" href="style_seisme.css">
 </head>
 
 <body>
+    <div class="background-grid"></div>
     <video id="video" autoplay playsinline></video>
     <canvas id="riveCanvas"></canvas>
     <canvas id="handCanvas"></canvas>
+    <canvas id="output_canvas"></canvas>
 
     <div id="clickZonePompe">
         <img id="pompeImage" src="interface/pompe.png" alt="Pompe" />
@@ -187,6 +41,7 @@
     <button id="startBouton" class="startBouton centerTop">prêt ?</button>
     <div id="timerDisplay" class="timer centerTop hidden">0.0s</div>
     <button id="boutonRestart" class="startBouton centerTop">recommencer</button>
+ 
 
 
     <script>
@@ -195,9 +50,11 @@
             let touchDistance = 0;
             let proximityDistance = 0;
             const handCanvas = document.getElementById("handCanvas");
-            const ctx = handCanvas.getContext("2d");
+            //const ctx = handCanvas.getContext("2d");
             const startBouton = document.getElementById("startBouton");
             const boutonRestart = document.getElementById("boutonRestart")
+            const canvas = document.getElementById("output_canvas");
+            const ctx = canvas.getContext("2d");
             boutonRestart.style.visibility = "hidden";;
             let isTouching = false;
 
@@ -254,8 +111,23 @@
                 minTrackingConfidence: 0.9
             });
 
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            window.addEventListener("resize", () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+
+            video.addEventListener("loadedmetadata", () => {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+            });
+
             hands.onResults((results) => {
                 ctx.clearRect(0, 0, handCanvas.width, handCanvas.height);
+                handCanvas.width = video.videoWidth;
+                handCanvas.height = video.videoHeight;
 
                 if (!results.multiHandLandmarks || results.multiHandLandmarks.length === 0 && isTouching == false) {
                     if (toBase) toBase.fire(); 
