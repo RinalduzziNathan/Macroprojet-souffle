@@ -123,7 +123,7 @@
                     rDiverge.resizeDrawingSurfaceToCanvas();
                 }
             });
-
+       
             // Set canvas size to match video size exactly
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
@@ -209,6 +209,8 @@
 
 
                 if (results.multiHandLandmarks.length > 0) {
+                    console.log(rConverge);
+                    console.log(rDiverge);
                     results.multiHandLandmarks.forEach((handLandmarks, i) => {
                         drawHand(handLandmarks);
 
