@@ -1,0 +1,16 @@
+.font {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-variation-settings: "wght" 100;
+    animation: animPoids 3s infinite alternate ease-in;
+    color: black;
+    font-size: 180px;
+    margin: 0;
+    line-height: 0.8;
+    display: inline-block;
+    text-align: left;
+  }
+
+  @keyframes animPoids {
+    from { font-variation-settings: "wght" 100; }
+    to   { font-variation-settings: "wght" 900; }
+  }

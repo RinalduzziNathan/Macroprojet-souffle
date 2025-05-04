@@ -1,10 +1,6 @@
-@keyframes smoothWeight {
-  0% {
-    font-variation-settings: "wght" 200;
-  }
-  100% {
-    font-variation-settings: "wght" 800 ;
-  }
+@keyframes animPoids {
+  from { font-variation-settings: "wght" 200; }
+  to   { font-variation-settings: "wght" 800; }
 }
 
 
@@ -50,7 +46,7 @@ body {
     font-family: "Bricolage Grotesque", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
-    animation: smoothWeight 2s ease-in-out infinite alternate;
+    animation: animPoid 4s infinite alternate ease-in-out;
     color: black;
     font-size: 180px;
     margin: 0;
