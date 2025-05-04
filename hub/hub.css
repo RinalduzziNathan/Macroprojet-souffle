@@ -1,4 +1,13 @@
-/* Applique une grille de fond quadrillée */
+@keyframes smoothWeight {
+  0% {
+    font-variation-settings: "wght" 200;
+  }
+  100% {
+    font-variation-settings: "wght" 800 ;
+  }
+}
+
+
 body {
     margin: 0;
     padding: 0;
@@ -9,6 +18,9 @@ body {
     height: 100vh;
   }
   
+
+
+
   /* Grille quadrillée */
   .background-grid {
     position: absolute;
@@ -35,10 +47,14 @@ body {
   }
   
   .titre {
-    font-size: 110px;
-    font-weight: 900;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    animation: smoothWeight 2s ease-in-out infinite alternate;
+    color: black;
+    font-size: 180px;
     margin: 0;
-    line-height: 1.1;
+    line-height: 0.8;
     display: inline-block;
     text-align: left;
   }
