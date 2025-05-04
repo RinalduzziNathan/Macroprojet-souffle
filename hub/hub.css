@@ -34,11 +34,90 @@ body {
     text-align: center;
   }
   
-  /* Titre */
   .titre {
-    font-size: 4rem;
+    font-size: 110px;
     font-weight: 900;
     margin: 0;
     line-height: 1.1;
+    display: inline-block;
+    text-align: left;
   }
+  
+  .circle {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    z-index: 1;
+    opacity: 0.8;
+  }
+  
+
+  .ligne {
+    display: block;
+  }
+  
+  /* Première ligne normale */
+  .ligne1 {
+    transform: translateX(-110px); /* décale vers la gauche */
+  }
+  
+  /* Deuxième ligne un peu vers la droite */
+  .ligne2 {
+    transform: translateX(80px);  /* décale vers la droite */
+  }
+  
+  /* Le lien agit comme le cercle positionné */
+.circle-link {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    z-index: 1;
+    text-decoration: none;
+  }
+  .circle {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    opacity: 0.8;
+    display: block;
+    z-index: 1;
+    text-decoration: none;
+    transition: transform 0.2s;
+  }
+  
+  /* Couleurs */
+  .circle-gants { background-color: #e74c3c; }
+  .circle-globe { background-color: #f39c12; }
+  .circle-ventilateur { background-color: #5dade2; }
+  .circle-pompe { background-color: #27ae60; }
+  
+  /* Positionnement */
+  .circle-gants {
+    top: 10%;
+    left: 20%;
+  }
+  
+  .circle-globe {
+    top: 10%;
+    right: 20%;
+  }
+  
+  .circle-ventilateur {
+    bottom: 10%;
+    left: 5%;
+  }
+  
+  .circle-pompe {
+    bottom: 5%;
+    right: 30%;
+  }
+  
+  /* Optionnel : effet au survol */
+  .circle:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+  }
+  
   
