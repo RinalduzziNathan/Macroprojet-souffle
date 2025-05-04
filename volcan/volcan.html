@@ -61,6 +61,7 @@
             boutonRestart.style.visibility = "hidden";
             var remplirTableau = false;
             var finTableau = false;
+            
            
 
             let baseToEffu;
@@ -101,6 +102,8 @@
             let baseToAnim;
     
             let visqueuseToBase;
+            let slowFast;
+            var artBoard;
 
             const rvisqueux = new rive.Rive({
                 src: "https://rinalduzzinathan.github.io/file-stash/rive/visqueuse.riv",
@@ -110,11 +113,14 @@
                 onLoad: () => {
                     rvisqueux.resizeDrawingSurfaceToCanvas();
                     // Récupère les inputs (dont les triggers)
+                    console.log(rvisqueux);
                     const inputs = rvisqueux.stateMachineInputs('State Machine 1');
                     baseToAnim = inputs.find(i => i.name === 'baseToAnim');
                     visqueuseToBase = inputs.find(i => i.name === 'visqueuseToBase');
-                    
-
+                   
+                    slowFast = inputs.find(i => i.name === 'slowFast');
+                    console.log(inputs);
+            
 
                 },
             });
@@ -156,9 +162,13 @@
             });
             
             function intensite(intensity) {
-                console.log(intensity)
+                //console.log(intensity)
                 if (intensity > 10) {
                     if (baseToAnim) baseToAnim.fire();
+                if (intensity >15) {
+                  
+                    if (slowFast) slowFast.value=true;             
+                }
                 } else {
                     if (visqueuseToBase) visqueuseToBase.fire();
                 }
