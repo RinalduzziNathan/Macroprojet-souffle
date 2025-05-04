@@ -16,10 +16,10 @@
 
 <body>
     <video id="video" autoplay playsinline></video>
-    <canvas id="riveCanvas" ></canvas>
+    <canvas id="riveCanvas"></canvas>
     <canvas id="handCanvas"></canvas>
     <canvas id="output_canvas"></canvas>
-    <canvas id="riveCanvasConverge" ></canvas>
+    <canvas id="riveCanvasConverge"></canvas>
     <canvas id="riveCanvasDiverge"></canvas>
     <div id="info">Détection en cours...</div>
     <div id="clickZoneGant">
@@ -75,8 +75,8 @@
 
             // Get both canvases
             //const canvasConverge = document.getElementById("riveCanvasConverge");
-           
-           // const canvasDiverge = document.getElementById("riveCanvasDiverge");
+
+            // const canvasDiverge = document.getElementById("riveCanvasDiverge");
 
             // Load convergence Rive
             const rConverge = new rive.Rive({
@@ -101,8 +101,8 @@
                 canvas: document.getElementById("riveCanvasDiverge"),
                 autoplay: true,
                 stateMachines: "State Machine 1",
-               onLoad: () => {
-                   const inputs = rDiverge.stateMachineInputs("State Machine 1");
+                onLoad: () => {
+                    const inputs = rDiverge.stateMachineInputs("State Machine 1");
                     DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
                     DIVbaseToCO = inputs.find(i => i.name === "DIVbaseToCO");
                     DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
@@ -239,6 +239,18 @@
                         distances.push(dist);
                     }
 
+                    results.multiHandLandmarks.forEach((landmarks, i) => {
+                        const isFistPose = isFist(landmarks);
+                        const handedness = results.multiHandedness[i].label;
+
+                        if (handedness === "Right") {
+                            rightHandStates.push(isFistPose ? "fist" : "open");
+                        } else if (handedness === "Left") {
+                            leftHandStates.push(isFistPose ? "fist" : "open");
+                        }
+                    });
+
+
 
 
 
@@ -256,21 +268,34 @@
                         //   previousDistance = dist;
                     }
                 }
+
+
+
                 if (TimerOver && !DistanceIsCalculated) {
                     DistanceIsCalculated = true;
                     console.log(distances);
+                    const dominantRight = mostFrequentState(rightHandStates);
+                    const dominantLeft = mostFrequentState(leftHandStates);
+                   
+
+
                     analyzeDistanceChange();
-                    
+
                     bigcontidroite.style.visibility = "hidden";
                     bigcontigauche.style.visibility = "hidden";
                     bigoceandroite.style.visibility = "hidden";
                     bigoceangauche.style.visibility = "hidden";
-                    
 
+                    function mostFrequentState(arr) {
+                        const counts = { fist: 0, open: 0 };
+                        arr.forEach(state => counts[state]++);
+                        return counts.fist > counts.open ? "fist" : "open";
+                    }
 
-
+                   
                     function analyzeDistanceChange() {
                         const len = distances.length;
+
                         if (len < 4) return; // pas assez de données
 
                         const firstHalf = distances.slice(0, len / 2);
@@ -279,22 +304,27 @@
                         const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
                         const startAvg = avg(firstHalf);
                         const endAvg = avg(secondHalf);
-
+                        const postureKey = `${dominantLeft}_${dominantRight}`; // e.g. "open_fist"
                         if (endAvg > startAvg + 0.01) {
-                            //riveCanvas.style.display = "block";
-                            //canvasDiverge.style.display = "none";
+                            // divergence
                             riveCanvasDiverge.style.visibility = "visible";
-                            console.log("Les mains s'éloignent → divergence");
-                            DIVbaseToOO.fire(); // exemple
+                            switch (postureKey) {
+                                case "fist_fist": DIVbaseToCC.fire(); break;
+                                case "fist_open": DIVbaseToOC.fire(); break;
+                                case "open_fist": DIVbaseToCO.fire(); break;
+                                case "open_open": DIVbaseToOO.fire(); break;
+                            }
                         } else if (endAvg < startAvg - 0.01) {
-                            //canvasDiverge.style.display = "block";
-                            //riveCanvas.style.display = "block";
+                            // convergence
                             riveCanvasConverge.style.visibility = "visible";
-                            console.log("Les mains se rapprochent → convergence");
-                            baseToCC.fire(); // exemple
-                        } else {
-                            console.log("Pas de changement significatif");
+                            switch (postureKey) {
+                                case "fist_fist": baseToCC.fire(); break;
+                                case "fist_open": baseToOC.fire(); break;
+                                case "open_fist": baseToCO.fire(); break;
+                                case "open_open": baseToOO.fire(); break;
+                            }
                         }
+
                     }
                 }
                 ;
@@ -336,6 +366,12 @@
 
         const startBouton = document.getElementById("startBouton");
         const timerDisplay = document.getElementById("timerDisplay");
+        let rightHandStates = []; // "open" or "fist"
+        let leftHandStates = [];
+        rightHandStates = [];
+        leftHandStates = [];
+        distances = [];
+        DistanceIsCalculated = false;
 
         startBouton.addEventListener("click", () => {
             startBouton.style.visibility = "hidden";
