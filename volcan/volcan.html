@@ -106,7 +106,7 @@
             var artBoard;
 
             const rvisqueux = new rive.Rive({
-                src: "https://rinalduzzinathan.github.io/file-stash/rive/visqueuse.riv",
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/visqueuseFix.riv",
                 canvas: document.getElementById("visqueuseCanvas"),
                 autoplay: true,
                 stateMachines: "State Machine 1",
@@ -165,12 +165,14 @@
                 //console.log(intensity)
                 if (intensity > 10) {
                     if (baseToAnim) baseToAnim.fire();
-                if (intensity >15) {
+                    if (slowFast) slowFast.value=false;     
+                if (intensity >30) {
                   
                     if (slowFast) slowFast.value=true;             
                 }
                 } else {
                     if (visqueuseToBase) visqueuseToBase.fire();
+                    if (slowFast) slowFast.value=false;     
                 }
             }
 
