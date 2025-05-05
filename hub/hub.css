@@ -99,33 +99,50 @@ body {
     transition: transform 0.2s;
   }
   
-  /* Couleurs */
-  .circle-gants { background-color: #e74c3c; }
-  .circle-globe { background-color: #f39c12; }
-  .circle-ventilateur { background-color: #5dade2; }
-  .circle-pompe { background-color: #27ae60; }
+  /* images */
+  .image-gants { 
+    content: url('imagesHub/tectonique.png');
+    position: absolute;
+    width: 30%;
+    height: 30%;
+    z-index: 100;
+    top: 0%;
+    left: 15%;
   
-  /* Positionnement */
-  .circle-gants {
-    top: 10%;
-    left: 20%;
   }
+
+  .image-globe { 
+    content: url('imagesHub/pangee.png');
+    position: absolute;
+    width: 20%;
+    height: auto;
+    z-index: 100;
+    top: 5%;
+    left: 70%;
   
-  .circle-globe {
-    top: 10%;
-    right: 20%;
   }
-  
-  .circle-ventilateur {
-    bottom: 10%;
+  .image-ventilateur { 
+    content: url('imagesHub/volcan.png');
+    position: absolute;
+    width: 22%;
+    height: auto;
+    z-index: 100;
+    top: 50%;
     left: 5%;
-  }
   
-  .circle-pompe {
-    bottom: 5%;
-    right: 30%;
   }
+
+  .image-pompe { 
+    content: url('imagesHub/seisme.png');
+    position: absolute;
+    width: 25%;
+    height: auto;
+    z-index: 100;
+    top: 50.5%;
+    left: 64%;
   
+  }
+
   /* Optionnel : effet au survol */
   .circle:hover {
     transform: scale(1.1);
