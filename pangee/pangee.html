@@ -48,19 +48,7 @@
 
         let activeImage = 1; // Start with sequenceImage1
 
-        function changeImageCrossfade(nextImageSrc) {
-            if (activeImage === 1) {
-                sequenceImage2.src = nextImageSrc;
-                sequenceImage2.style.opacity = 1; // Fade in image 2
-                sequenceImage1.style.opacity = 0; // Fade out image 1
-                activeImage = 2;
-            } else {
-                sequenceImage1.src = nextImageSrc;
-                sequenceImage1.style.opacity = 1; // Fade in image 1
-                sequenceImage2.style.opacity = 0; // Fade out image 2
-                activeImage = 1;
-            }
-        }
+       
 
 
         let blinkThreshold = 0.0015;
@@ -93,10 +81,25 @@
             "image/pangee23.png",
             "image/pangee24.png",
             "image/pangee25.png",
-            "image/pangee26.png",];
+            "image/pangee26.png",
+            "image/pangee27.png",];
             
             let currentImageIndex = 0;
         let startYear = 250;
+
+        function changeImageCrossfade(nextImageSrc) {
+            if (activeImage === 1) {
+                sequenceImage2.src = nextImageSrc;
+                sequenceImage2.style.opacity = 1; // Fade in image 2
+                sequenceImage1.style.opacity = 0; // Fade out image 1
+                activeImage = 2;
+            } else {
+                sequenceImage1.src = nextImageSrc;
+                sequenceImage1.style.opacity = 1; // Fade in image 1
+                sequenceImage2.style.opacity = 0; // Fade out image 2
+                activeImage = 1;
+            }
+        }
 
         async function detectBlink() {
             const faceMesh = new FaceMesh({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}` });
@@ -117,10 +120,15 @@
                                 changeImageCrossfade(imageSequence[currentImageIndex]);
                                 if (currentImageIndex === imageSequence.length - 2) {
                                     tempsValeur.textContent = startYear - (currentImageIndex - 1) * 10 - 5;
-                                } else {
+                                } 
+                                else if (currentImageIndex === imageSequence.length-1) {
+                                    tempsValeur.textContent = 0;
+                                } 
+                                
+                                else {
                                     tempsValeur.textContent = startYear - currentImageIndex * 10;
                                 }
-                                sequenceImage.style.opacity = 1; // Fade in
+                                sequenceImage1.style.opacity = 1; // Fade in
                             }, 300);
                         }
                         statusElement.textContent = 'Clignement détecté !';
