@@ -172,6 +172,8 @@
                 },
             });
 
+        
+
 
 
             const showAnimationButton = document.getElementById('showAnimationButton');
@@ -379,6 +381,8 @@
                                 return slope; // Si > 0, tendance à la hausse
                             }
 
+                            
+
                             // Utilisation :
                             let windowSize = 10; // Ajuste la taille du lissage selon ton besoin
                             let smoothedArray = movingAverage(finalArray, windowSize);
@@ -417,6 +421,28 @@
         
         });
 
+        function shakeCanvas() {
+            const canvas = document.getElementById('visqueuseCanvas');
+            if (canvas) {
+                canvas.classList.remove('shake'); // Supprime la classe si déjà là
+                void canvas.offsetWidth;          // Force le reflow
+                canvas.classList.add('shake');    // Ajoute la classe pour l’animation
+                setTimeout(() => {
+                    canvas.classList.remove('shake'); // Nettoie après l’anim
+                }, 300);
+            }
+        }
+
+            function bouncePage() {
+                const canvas = document.getElementById('visqueuseCanvas');
+                if (canvas) {
+                    canvas.classList.add('bounce');
+                    setTimeout(() => {
+                        canvas.classList.remove('bounce');
+                    }, 600); // Durée de l'animation
+                }
+            }
+
         const draggables = document.querySelectorAll(".draggable");
         const dropTargets = document.querySelectorAll(".dropTarget");
         const resultMessage = document.getElementById("resultMessage");
@@ -452,9 +478,11 @@
                 if (target.id === draggedTarget) {
                     resultMessage.textContent = "Vrai !";
                     resultMessage.style.color = "black";
+                    bouncePage()
                 } else {
                     resultMessage.textContent = "Faux.";
                     resultMessage.style.color = "black";
+                    shakeCanvas();
                 }
 
                 // Optionnel : reset message après quelques secondes

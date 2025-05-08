@@ -30,17 +30,16 @@
     <div class="background-grid"></div>
     <video id="video" autoplay playsinline></video>
     <canvas id="riveCanvas"></canvas>
+    <canvas id="riveCanvasMains"></canvas>
     <canvas id="handCanvas"></canvas>
     <canvas id="output_canvas"></canvas>
-
-    <div id="clickZonePompe">
-        <img id="pompeImage" src="../interface/pompe.png" alt="Pompe" />
-        <div id="expandingCircle"></div>
-    </div>
     <button id="showAnimationButton" class="showButton"> >>></button>
     <button id="startBouton" class="startBouton centerTop">prêt ?</button>
     <div id="timerDisplay" class="timer centerTop hidden">0.0s</div>
     <button id="boutonRestart" class="startBouton centerTop">recommencer</button>
+    <div id="titre" class="titre "> Ressentons ensemble la pression accumulée sous nos pieds</div>
+    <button id="showNext" class="showButton"> >>> </button>
+    <button id="showNext2" class="showButton"> >>> </button>
  
 
 
@@ -49,14 +48,40 @@
             const video = document.getElementById("video");
             let touchDistance = 0;
             let proximityDistance = 0;
+            const titre = document.getElementById("titre")
             const handCanvas = document.getElementById("handCanvas");
             //const ctx = handCanvas.getContext("2d");
             const startBouton = document.getElementById("startBouton");
             const boutonRestart = document.getElementById("boutonRestart")
             const canvas = document.getElementById("output_canvas");
             const ctx = canvas.getContext("2d");
+            const showNext = document.getElementById('showNext');
+            showNext.style.visibility = "visible"
+            const showNext2 = document.getElementById('showNext2');
+            showNext2.style.visibility = "hidden"
+            const riveCanvas = document.getElementById("riveCanvas");
+            riveCanvas.style.visibility = "hidden";
+            const riveCanvasMains = document.getElementById("riveCanvasMains");
+            riveCanvasMains.style.visibility = "hidden";
+
             boutonRestart.style.visibility = "hidden";;
             let isTouching = false;
+
+            let TOmains;
+
+            const rMains = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/seismeMains2.riv",
+                canvas: document.getElementById("riveCanvasMains"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rMains.stateMachineInputs("State Machine 1");
+                    TOmains = inputs.find(i => i.name === "TOmains");
+                    rMains.resizeDrawingSurfaceToCanvas();
+                }
+                
+
+            });
 
             let baseToVib, CompToDes, compToPasDes, toBase, baseToCompress;
 
@@ -76,6 +101,7 @@
 
                     r.resizeDrawingSurfaceToCanvas();
                 }
+                
 
             });
 
@@ -88,6 +114,26 @@
                     if (toBase) toBase.fire();
                 }
             });
+
+            showNext.addEventListener('click',()=>{
+
+                titre.style.visibility = "hidden";
+                riveCanvas.style.visibility = "hidden";
+                riveCanvasMains.style.visibility = "visible";
+                if (TOmains) TOmains.fire();
+                showNext.style.visibility= "hidden"
+                showNext2.style.visibility= "visible"
+            })
+
+            showNext2.addEventListener('click',()=>{
+
+                titre.style.visibility = "hidden";
+                riveCanvas.style.visibility = "visible";
+                riveCanvasMains.style.visibility = "hidden";
+                showNext.style.visibility= "hidden"
+                showNext2.style.visibility= "hidden"
+
+            })
 
 
             await tf.setBackend("webgl");
@@ -280,25 +326,7 @@
 
         startGestureRecognition();
 
-        const pompeImage = document.getElementById('pompeImage');
-        const expandingCircle = document.getElementById('expandingCircle');
-        let isCircleExpanded = false;
-
-        pompeImage.addEventListener('click', () => {
-            pompeImage.style.display = 'none';
-            expandingCircle.style.width = '650px';
-            expandingCircle.style.height = '650px';
-            isCircleExpanded = true;
-        });
-
-        expandingCircle.addEventListener('click', () => {
-            if (isCircleExpanded) {
-                expandingCircle.style.width = '250px';
-                expandingCircle.style.height = '250px';
-                pompeImage.style.display = 'block';
-                isCircleExpanded = false;
-            }
-        });
+        
     </script>
 </body>
 

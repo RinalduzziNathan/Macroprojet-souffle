@@ -1,3 +1,7 @@
+#VisqueuseCanvas {
+    width: 1366;
+    height: 768;
+}
 
 #clickZoneVentilator {
     position: absolute;
@@ -272,4 +276,33 @@
     text-align: left;
     word-wrap: break-word;
     z-index: 12;
+}
+
+@keyframes shake {
+    0% { transform: translate(0px, 0px); }
+    20% { transform: translate(-10px, 0px); }  /* plus loin */
+    40% { transform: translate(10px, 0px); }   /* plus loin */
+    60% { transform: translate(-10px, 0px); }  /* plus loin */
+    80% { transform: translate(10px, 0px); }   /* plus loin */
+    100% { transform: translate(0px, 0px); }
+  }
+  
+  .shake {
+    animation: shake 0.5s;
+  }
+
+
+
+  @keyframes bounce {
+    0% { transform: translateY(0); }
+    20% { transform: translateY(-30px); }
+    40% { transform: translateY(0); }
+    60% { transform: translateY(-10px); }
+    80% { transform: translateY(0); }
+    100% { transform: translateY(-6px); } /* Petite variation pour donner un effet de réduction de rebond */
+  }
+  
+  #visqueuseCanvas {
+    display: block; /* ou flex/inline-block selon le contexte */
+    transition: transform 0.2s ease;
 }
