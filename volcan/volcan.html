@@ -38,9 +38,19 @@
     <button id="showAnimationButton" class="showButton"> >>></button>
     <button id="showRiveCircles" class="showButton"> >>> </button>
     <button id="showSouffleTest" class="showButton"> >>></button>
-
+    <div id="dragDropContainer" style="display: none;">
+        <div id="draggables">
+            <div class="draggable" draggable="true" data-target="circle1">Lave fluide</div>
+            <div class="draggable" draggable="true" data-target="circle2">Lave visqueuse</div>
+        </div>
     
-
+        <div id="dropTargets">
+            <div id="circle1" class="dropTarget">Cercle 1</div>
+            <div id="circle2" class="dropTarget">Cercle 2</div>
+        </div>
+    
+        <div id="resultMessage" class="resultMessage"></div>
+    </div>
 
     <script>
         window.addEventListener('DOMContentLoaded', (event) => {
@@ -140,6 +150,7 @@
 
             showRiveCircles.addEventListener('click',()=>{
 
+            document.getElementById("dragDropContainer").style.display = "block";
             showSouffleTest.style.visibility = "visible";
             showRiveCircles.style.visibility = "hidden";
             titre.style.visibility = "hidden";
@@ -153,6 +164,7 @@
 
             showSouffleTest.addEventListener('click',()=>{
 
+                document.getElementById("dragDropContainer").style.display = "none"; // 👈 masquer les éléments
                 showSouffleTest.style.visibility = "hidden";
                 visqueuseCanvas.style.visibility = "hidden";
                 volcanImage.style.visibility = "visible";
@@ -352,6 +364,53 @@
             
         
         });
+
+        const draggables = document.querySelectorAll(".draggable");
+        const dropTargets = document.querySelectorAll(".dropTarget");
+        const resultMessage = document.getElementById("resultMessage");
+
+        draggables.forEach(draggable => {
+            draggable.addEventListener("dragstart", (e) => {
+                e.dataTransfer.setData("text/plain", draggable.dataset.target);
+                draggable.classList.add("dragging");
+            });
+
+            draggable.addEventListener("dragend", () => {
+                draggable.classList.remove("dragging");
+            });
+        });
+
+        dropTargets.forEach(target => {
+            target.addEventListener("dragover", (e) => {
+                e.preventDefault();
+                target.classList.add("drag-over");
+            });
+
+            target.addEventListener("dragleave", () => {
+                target.classList.remove("drag-over");
+            });
+        
+
+            target.addEventListener("drop", (e) => {
+                e.preventDefault();
+                target.classList.remove("drag-over");
+
+                const draggedTarget = e.dataTransfer.getData("text/plain");
+
+                if (target.id === draggedTarget) {
+                    resultMessage.textContent = "Vrai !";
+                    resultMessage.style.color = "black";
+                } else {
+                    resultMessage.textContent = "Faux.";
+                    resultMessage.style.color = "black";
+                }
+
+                // Optionnel : reset message après quelques secondes
+                setTimeout(() => resultMessage.textContent = "", 2000);
+            });
+
+        });
+        
 
     </script>
 </body>
