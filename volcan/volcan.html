@@ -28,8 +28,8 @@
     <canvas id="visqueuseCanvas"></canvas>
     <div class="background-grid"></div>
     <div id="volcanCircle"></div>
-    <button id="startBouton" class="startBouton centerTop">prêt ?</button>
-    <button id="boutonRestart" class="startBouton centerTop">recommencer</button>
+    <button id="startBouton" class="startBouton centerTop">GO</button>
+    <button id="boutonRestart" class="startBouton centerTop">GO</button>
     <div id="timer" class="timer verticalCenter"></div>
     <div id="titre" class="titre "> Le souffle de la Terre dépend de la nature de sa lave</div>
     <div id="explication" class="explication "> 2 possibilités</div>
@@ -62,6 +62,16 @@
         <div id="rectangle2"></div>
     </div>
 
+    <div id="texteEruption" class="texteEruption">votre souffle va déterminer <br />
+        le type d’éruption</div>
+    <div id="texteEruptionEffusive" class="texteEruption">une lave fluide permet <br /> 
+        aux gaz de s’échapper calmement, <br />
+        les éruptions sont lentes et régulières.</div>
+
+    <div id="texteEruptionExplosive" class="texteEruption">une lave visqueuse piège <br /> 
+        les gaz. La pression monte <br /> 
+        jusqu’à provoquer une éruption brutale.
+
 
     <script>
         window.addEventListener('DOMContentLoaded', (event) => {
@@ -80,6 +90,12 @@
             const souffle2 = document.getElementById("souffle2");
             souffle1.style.visibility = "hidden";
             souffle2.style.visibility = "hidden";
+            const texteEruption = document.getElementById("texteEruption");
+            texteEruption.style.visibility = "hidden";
+            const texteEruptionEffusive = document.getElementById("texteEruptionEffusive");
+            texteEruptionEffusive.style.visibility = "hidden";
+            const texteEruptionExplosive = document.getElementById("texteEruptionExplosive");
+            texteEruptionExplosive.style.visibility = "hidden";
 
 
 
@@ -124,6 +140,8 @@
                     console.log("Event reçu : " + data.name);
                     boutonRestart.style.visibility = "visible";
                     if (toBase) toBase.fire();
+                    texteEruptionExplosive.style.visibility = "hidden";
+                    texteEruptionEffusive.style.visibility = "hidden";
                 }
             });
 
@@ -163,6 +181,7 @@
             const showRiveCircles = document.getElementById('showRiveCircles');
             showRiveCircles.style.visibility = "visible"
             visqueuseCanvas.style.visibility = "hidden";
+        
             
 
 
@@ -203,6 +222,8 @@
                 explication.style.visibility = "hidden";
                 souffle1.style.visibility = "hidden";
                 souffle2.style.visibility = "hidden";
+                texteEruption.style.visibility = "visible";
+
 
                
                 riveCanvas.style.visibility = "visible";
@@ -255,6 +276,8 @@
 
             startBouton.addEventListener("click", function () {
                 console.log("startBouton clicked");
+                texteEruption.style.visibility = "hidden";
+
                 if (toBase) toBase.fire();
                 startTimer();
                 startBouton.style.visibility = "hidden";
@@ -366,9 +389,11 @@
 
                             if (trend > 0.09) {
                                 if (baseToExplo) baseToExplo.fire();
+                                texteEruptionExplosive.style.visibility = "visible";
                             }
                             if (trend < 0.09 && trend > -0.09) {
                                 if (baseToEffu) baseToEffu.fire();
+                                texteEruptionEffusive.style.visibility = "visible";
                             }
 
 

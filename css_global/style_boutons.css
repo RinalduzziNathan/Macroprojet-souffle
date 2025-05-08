@@ -24,10 +24,14 @@
 }
 
 .startBouton {
+    position: absolute;
 
     background-color: white;
+    top: 20%;
+    left: center;
+
     display: inline-block;
-    padding: 40px 100px;
+    padding: 30px 80px;
     visibility: hidden;
     background-color: white;
     color: rgb(0, 0, 0);
