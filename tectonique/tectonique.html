@@ -27,12 +27,12 @@
 <body>
     <div class="background-grid"></div>
     <video id="video" autoplay playsinline></video>
+    <div id="tectoRectangle"></div>
     <canvas id="riveCanvas"></canvas>
     <canvas id="handCanvas"></canvas>
     <canvas id="output_canvas"></canvas>
     <canvas id="riveCanvasConverge"></canvas>
     <canvas id="riveCanvasDiverge"></canvas>
-    <div id="info">Détection en cours...</div>
     <div id="clickZoneGant">
         <img id="gantImage" src="../interface/gant.png" alt="Pompe" />
 
@@ -92,6 +92,23 @@
                 }
             });
 
+            rConverge.on(rive.EventType.RiveEvent, (event) => {
+                const data = event.data;
+                if (data.type === rive.RiveEventType.General) {
+                    boutonRestart.style.visibility = "visible";
+                    
+
+                }
+            });
+            
+            rDiverge.on(rive.EventType.RiveEvent, (event) => {
+                const data = event.data;
+                if (data.type === rive.RiveEventType.General) {
+                    boutonRestart.style.visibility = "visible";
+                    
+                }
+            });
+
             
         async function startGestureRecognition() {
 
@@ -117,6 +134,7 @@
             riveCanvas.style.visibility = "hidden";
             riveCanvasConverge.style.visibility = "hidden";
             riveCanvasDiverge.style.visibility = "hidden";
+
 
             let previousDistance = null;
 
@@ -235,7 +253,6 @@
                 }
 
                 //document.body.style.background = color;
-                info.innerText = messages.join("\n");
 
                 function triggerBounce(id) {
                     const el = document.getElementById(id);
@@ -391,6 +408,29 @@
 
         startBouton.addEventListener("click", () => {
             startBouton.style.visibility = "hidden";
+            timerDisplay.classList.remove("hidden");
+
+            let startTime = Date.now();
+
+            TimerStarted = true;
+            TimerOver = false;
+            TimerIsRunning = true;
+            const interval = setInterval(() => {
+                const elapsed = (Date.now() - startTime) / 1000;
+                timerDisplay.innerText = `${elapsed.toFixed(1)}s`;
+
+                if (elapsed >= 5) {
+                    TimerIsRunning = false;
+                    TimerOver = true;
+                    clearInterval(interval);
+                    timerDisplay.classList.add("hidden");
+                    hideAllPlaques(); // Optionally hide plaques after timer
+                }
+            }, 100);
+        });
+
+        boutonRestart.addEventListener("click", () => {
+            boutonRestart.style.visibility = "hidden";
             timerDisplay.classList.remove("hidden");
 
             let startTime = Date.now();

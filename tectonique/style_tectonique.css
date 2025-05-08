@@ -101,3 +101,24 @@
     /* Optional, makes it responsive */
     display: none;
 }
+
+
+#tectoRectangle {
+    position: absolute;
+    top: 90%;
+    /* Position where you want it */
+    left: 25%;
+    /* Position where you want it */
+    width: 1050px;
+    /* Initial small size */
+    height: 1050px;
+    background-color: white;
+    /* White fill */
+    border: 2.5px solid black;
+    /* Black border */
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    /* Make sure it's above other elements */
+    rotate: 30deg;
+
+}

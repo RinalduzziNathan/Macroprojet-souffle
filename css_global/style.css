@@ -203,3 +203,13 @@ body {
 }
 
 
+.titre {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-variation-settings: "wght" 100;
+    color: black;
+    font-size: 165px;
+    margin: 0;
+    line-height: 0.8;
+    display: inline-block;
+    text-align: left;
+  }

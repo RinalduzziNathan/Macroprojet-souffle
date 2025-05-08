@@ -31,13 +31,12 @@
     <button id="startBouton" class="startBouton centerTop">prêt ?</button>
     <button id="boutonRestart" class="startBouton centerTop">recommencer</button>
     <div id="timer" class="timer verticalCenter"></div>
-    <div id="clickZoneVentilator">
-        <img id="ventilatorImage" src="../interface/ventilateur.png" alt="ventilator" />
-        <div id="expandingCircle"></div>
-    </div>
+    <div id="titre" class="titre "> Le souffle de la Terre dépend de la nature de sa lave</div>
+
     <img id="volcanImage" src="../interface/volcanintro.png" alt="volcanintro" />
     <div id="soundRectangle"></div>
     <button id="showAnimationButton" class="showButton"> >>></button>
+    <button id="showRiveCircles" class="showButton"> >>> </button>
     <button id="showSouffleTest" class="showButton"> >>></button>
 
     
@@ -53,6 +52,8 @@
             const volcanCircle = document.getElementById("volcanCircle");
             const volcanImage = document.getElementById("volcanImage");
             const soundRectangle = document.getElementById("soundRectangle");
+            const titre = document.getElementById("titre");
+
 
             volcanCircle.style.visibility = "hidden";
             riveCanvas.style.visibility = "hidden";
@@ -130,6 +131,26 @@
             const showAnimationButton = document.getElementById('showAnimationButton');
             showAnimationButton.style.visibility = "hidden"
             const showSouffleTest = document.getElementById('showSouffleTest');
+            showSouffleTest.style.visibility = "hidden"
+            const showRiveCircles = document.getElementById('showRiveCircles');
+            showRiveCircles.style.visibility = "visible"
+            visqueuseCanvas.style.visibility = "hidden";
+
+
+
+            showRiveCircles.addEventListener('click',()=>{
+
+            showSouffleTest.style.visibility = "visible";
+            showRiveCircles.style.visibility = "hidden";
+            titre.style.visibility = "hidden";
+
+            visqueuseCanvas.style.visibility = "visible";
+            volcanImage.style.visibility = "hidden";
+            soundRectangle.style.visibility = "hidden";
+            volcanCircle.style.visibility = "hidden";
+            showAnimationButton.style.visibility = "hidden"
+            })
+
             showSouffleTest.addEventListener('click',()=>{
 
                 showSouffleTest.style.visibility = "hidden";
@@ -328,26 +349,8 @@
                 .catch(err => console.error("Microphone access error: ", err));
 
 
-            const ventilatorImage = document.getElementById('ventilatorImage');
-            const expandingCircle = document.getElementById('expandingCircle');
-
-            let isCircleExpanded = false;
-
-            ventilatorImage.addEventListener('click', () => {
-                ventilatorImage.style.display = 'none';
-                expandingCircle.style.width = '650px';
-                expandingCircle.style.height = '650px';
-                isCircleExpanded = true;
-            });
-
-            expandingCircle.addEventListener('click', () => {
-                if (isCircleExpanded) {
-                    expandingCircle.style.width = '250px';
-                    expandingCircle.style.height = '250px';
-                    ventilatorImage.style.display = 'block';
-                    isCircleExpanded = false;
-                }
-            });
+            
+        
         });
 
     </script>
