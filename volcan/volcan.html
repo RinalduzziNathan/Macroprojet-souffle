@@ -32,6 +32,8 @@
     <button id="boutonRestart" class="startBouton centerTop">recommencer</button>
     <div id="timer" class="timer verticalCenter"></div>
     <div id="titre" class="titre "> Le souffle de la Terre dépend de la nature de sa lave</div>
+    <div id="explication" class="explication "> 2 possibilités</div>
+
 
     <img id="volcanImage" src="../interface/volcanintro.png" alt="volcanintro" />
     <div id="soundRectangle"></div>
@@ -51,6 +53,15 @@
     
         <div id="resultMessage" class="resultMessage"></div>
     </div>
+    <div id="souffle1">
+        <img id="souffleImage1" src="../interface/souffle1.png" alt="souffleImage1" />
+        <div id="rectangle1"></div>
+    </div>
+    <div id="souffle2">
+        <img id="souffleImage2" src="../interface/souffle2.png" alt="souffleImage2" />
+        <div id="rectangle2"></div>
+    </div>
+
 
     <script>
         window.addEventListener('DOMContentLoaded', (event) => {
@@ -63,6 +74,13 @@
             const volcanImage = document.getElementById("volcanImage");
             const soundRectangle = document.getElementById("soundRectangle");
             const titre = document.getElementById("titre");
+            const explication = document.getElementById("explication");
+            explication.style.visibility = "hidden";
+            const souffle1 = document.getElementById("souffle1");
+            const souffle2 = document.getElementById("souffle2");
+            souffle1.style.visibility = "hidden";
+            souffle2.style.visibility = "hidden";
+
 
 
             volcanCircle.style.visibility = "hidden";
@@ -145,6 +163,7 @@
             const showRiveCircles = document.getElementById('showRiveCircles');
             showRiveCircles.style.visibility = "visible"
             visqueuseCanvas.style.visibility = "hidden";
+            
 
 
 
@@ -154,6 +173,7 @@
             showSouffleTest.style.visibility = "visible";
             showRiveCircles.style.visibility = "hidden";
             titre.style.visibility = "hidden";
+            explication.style.visibility = "hidden";
 
             visqueuseCanvas.style.visibility = "visible";
             volcanImage.style.visibility = "hidden";
@@ -165,17 +185,24 @@
             showSouffleTest.addEventListener('click',()=>{
 
                 document.getElementById("dragDropContainer").style.display = "none"; // 👈 masquer les éléments
+                explication.style.visibility = "visible";
                 showSouffleTest.style.visibility = "hidden";
                 visqueuseCanvas.style.visibility = "hidden";
                 volcanImage.style.visibility = "visible";
                 soundRectangle.style.visibility = "visible";
                 volcanCircle.style.visibility = "visible";
                 showAnimationButton.style.visibility = "visible"
+                souffle1.style.visibility = "visible";
+                souffle2.style.visibility = "visible";
+
             })
 
             showAnimationButton.addEventListener('click', () => {
 
                 volcanCircle.style.visibility = "hidden";
+                explication.style.visibility = "hidden";
+                souffle1.style.visibility = "hidden";
+                souffle2.style.visibility = "hidden";
 
                
                 riveCanvas.style.visibility = "visible";

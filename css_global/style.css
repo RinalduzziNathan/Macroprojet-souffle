@@ -225,3 +225,14 @@ body {
     font-family: sans-serif;
     z-index: 12;
 }
+
+.explication {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-variation-settings: "wght" 100;
+    color: black;
+    font-size: 165px;
+    line-height: 0.8;
+    display: inline-block;
+    text-align: left;
+    z-index: 12;
+  }

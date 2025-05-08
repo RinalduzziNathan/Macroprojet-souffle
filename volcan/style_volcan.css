@@ -164,3 +164,91 @@
     font-variation-settings: "wdth" 100;
     z-index: 12;
 }
+
+.explication {
+    position: absolute;
+    top: 5%;
+    left: 3%;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+    color: black;
+    font-size: 130px;
+    line-height: 0.8;
+    display: inline-block;
+    text-align: left;
+    cursor: pointer;
+    z-index: 12;
+  }
+
+ #souffleImage1{
+    position: absolute;
+    top: 20%;
+    left: 40%;
+    z-index: 7;
+    width: 150%;
+    height: auto;
+}
+
+#rectangle1 {
+    position: absolute;
+
+    padding: 70px 180px;
+    background-color: white;
+    color: rgb(0, 0, 0);
+    border: 2px, solid black;
+    border-radius: 70px;
+    z-index: 1;
+    /* Make sure it's above other elements */
+    transition: all 1s ease;
+    /* Smooth animation */
+}
+
+#souffle1 {
+    position: absolute;
+    top: 3%;
+    left: 60%;
+    width: 150px;
+    height: 100px;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0);
+    z-index: 15;
+}
+
+
+#souffleImage2{
+    position: absolute;
+    top: 20%;
+    left: 40%;
+    z-index: 7;
+    width: 150%;
+    height: auto;
+}
+
+#rectangle2 {
+    position: absolute;
+
+    padding: 70px 180px;
+    background-color: white;
+    color: rgb(0, 0, 0);
+    border: 2px, solid black;
+    border-radius: 70px;
+    z-index: 1;
+    /* Make sure it's above other elements */
+    transition: all 1s ease;
+    /* Smooth animation */
+}
+
+#souffle2 {
+    position: absolute;
+    top: 25%;
+    left: 68%;
+    width: 150px;
+    height: 100px;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0);
+    z-index: 15;
+}
+
