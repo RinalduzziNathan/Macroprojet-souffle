@@ -34,12 +34,15 @@
     <canvas id="handCanvas"></canvas>
     <canvas id="output_canvas"></canvas>
     <button id="showAnimationButton" class="showButton"> >>></button>
-    <button id="startBouton" class="startBouton centerTop">prêt ?</button>
+    <button id="startBouton" class="startBouton centerTop">créer un séisme</button>
     <div id="timerDisplay" class="timer centerTop hidden">0.0s</div>
-    <button id="boutonRestart" class="startBouton centerTop">recommencer</button>
+    <button id="boutonRestart" class="startBouton centerTop">GO</button>
     <div id="titre" class="titre "> Ressentons ensemble la pression accumulée sous nos pieds</div>
     <button id="showNext" class="showButton"> >>> </button>
     <button id="showNext2" class="showButton"> >>> </button>
+    <div id="messagePression" class="resultMessage hidden">Pression détectée</div>
+    <div id="messageResultat" class="resultMessage hidden"></div>
+
  
 
 
@@ -63,6 +66,7 @@
             riveCanvas.style.visibility = "hidden";
             const riveCanvasMains = document.getElementById("riveCanvasMains");
             riveCanvasMains.style.visibility = "hidden";
+            let showNextClicked = false;
 
             boutonRestart.style.visibility = "hidden";;
             let isTouching = false;
@@ -110,13 +114,14 @@
                 if (data.type === rive.RiveEventType.General) {
                     console.log("Event reçu : " + data.name);
                     boutonRestart.style.visibility = "visible";
+                    messageResultat.style.visibility = "hidden";
 
                     if (toBase) toBase.fire();
                 }
             });
 
             showNext.addEventListener('click',()=>{
-
+                showNextClicked = true;
                 titre.style.visibility = "hidden";
                 riveCanvas.style.visibility = "hidden";
                 riveCanvasMains.style.visibility = "visible";
@@ -126,7 +131,7 @@
             })
 
             showNext2.addEventListener('click',()=>{
-
+                showNextClicked = false;
                 titre.style.visibility = "hidden";
                 riveCanvas.style.visibility = "visible";
                 riveCanvasMains.style.visibility = "hidden";
@@ -215,6 +220,13 @@
 
                     } else if (close) {
                         if (baseToVib) baseToVib.fire();
+                        if (showNextClicked) {
+                            document.getElementById("messagePression").classList.remove("hidden");
+
+                            setTimeout(() => {
+                                document.getElementById("messagePression").classList.add("hidden");
+                            }, 2000); // Cache le message après 2 secondes
+                        }
                     } else if (timerRunning) {
                         if (baseToCompress) baseToCompress.fire();
                     } else {
@@ -267,7 +279,23 @@
             function stopTimer() {
                 clearInterval(timerInterval);
                 timerRunning = false;
+
+                const messageDiv = document.getElementById("messageResultat");
+                const seconds = (timer / 10).toFixed(1);
+
+                if (timer / 10 >= 10) {
+                    messageDiv.textContent = `Vous avez mis ${seconds} secondes à rapprocher vos mains.\nLa tension accumulée est suffisante. Le séisme s’est déclenché.`;
+                } else {
+                    messageDiv.textContent = `Vous avez mis ${seconds} secondes à rapprocher vos mains.\nLa tension accumulée n’est pas suffisante. Le séisme ne s’est pas déclenché.`;
+                }
+
+                messageDiv.classList.remove("hidden");
+
+                setTimeout(() => {
+                    messageDiv.classList.add("hidden");
+                }, 6000); // cache le message après 6 secondes
             }
+
 
             startBouton.addEventListener("click", function () {
                 startTimer();
