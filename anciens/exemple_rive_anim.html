@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Test Rive Animation</title>
-  
+
   <style>
-    
     body {
       margin: 0;
       display: flex;
@@ -15,19 +15,23 @@
       font-family: sans-serif;
       background-color: #f0f0f0;
     }
+
     #controls {
       margin: 20px;
     }
+
     button {
       margin: 0 10px;
       padding: 10px 20px;
       font-size: 16px;
     }
+
     canvas {
       border: 1px solid #ccc;
     }
   </style>
 </head>
+
 <body>
 
   <div id="controls">
@@ -40,35 +44,64 @@
   <canvas id="canvas" width="600" height="600"></canvas>
 
   <script src="https://unpkg.com/@rive-app/canvas"></script>
-    <script>
+  <script>
 
     let trigger1, trigger2;
 
-      const r = new rive.Rive({
-        src: "https://rinalduzzinathan.github.io/file-stash/rive/seisme.riv",
+    let r = new rive.Rive({
+      src: "https://rinalduzzinathan.github.io/file-stash/rive/seisme4.riv",
+      canvas: document.getElementById("canvas"),
+      autoplay: true,
+      stateMachines: "State Machine 1",
+      onLoad: () => {
+
+        // Récupère les inputs (dont les triggers)
+        const inputs = r.stateMachineInputs('State Machine 1');
+        console.log(inputs);
+        trigger1 = inputs.find(i => i.name === 'baseToCompress');
+        trigger2 = inputs.find(i => i.name === 'compToDes');
+        trigger3 = inputs.find(i => i.name === 'baseToVib');
+        trigger4 = inputs.find(i => i.name === 'toBase');
+
+
+      },
+
+    });
+
+    function cleanRiveAnimation() {
+      if (r) {
+        // Détruit l'ancienne instance
+        r.cleanup();
+
+
+      }
+
+      r = new rive.Rive({
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/seisme4.riv",
         canvas: document.getElementById("canvas"),
         autoplay: true,
         stateMachines: "State Machine 1",
         onLoad: () => {
-        
-        // Récupère les inputs (dont les triggers)
-        const inputs = r.stateMachineInputs('State Machine 1');
-        trigger1 = inputs.find(i => i.name === 'baseToOK');
-        trigger2 = inputs.find(i => i.name === 'baseToPasOK');
-        trigger3 = inputs.find(i => i.name === 'baseToVib');
-        trigger4 = inputs.find(i => i.name === 'toBase');
-     
-        
-      },
+          const inputs = r.stateMachineInputs('State Machine 1');
+          trigger1 = inputs.find(i => i.name === 'baseToCompress');
+          trigger2 = inputs.find(i => i.name === 'compToDes');
+          trigger3 = inputs.find(i => i.name === 'baseToVib');
+          trigger4 = inputs.find(i => i.name === 'toBase');
 
-    });
-    r.on(rive.EventType.RiveEvent, (event) => {
-    const data = event.data;
-    if (data.type === rive.RiveEventType.General) {
-      alert("Event reçu : " + data.name);
+          //r.resizeDrawingSurfaceToCanvas();
+
+        }
+      });
+
     }
-  });
-      document.getElementById('trigger1').addEventListener('click', () => {
+
+    r.on(rive.EventType.RiveEvent, (event) => {
+      const data = event.data;
+      if (data.type === rive.RiveEventType.General) {
+        alert("Event reçu : " + data.name);
+      }
+    });
+    document.getElementById('trigger1').addEventListener('click', () => {
       if (trigger1) trigger1.fire();
     });
 
@@ -80,13 +113,14 @@
       if (trigger3) trigger3.fire();
     });
     document.getElementById('trigger4').addEventListener('click', () => {
-      if (trigger4) trigger4.fire();
+      cleanRiveAnimation();
     });
-   
-    
-    
-    </script>
- 
+
+
+
+  </script>
+
 
 </body>
+
 </html>
