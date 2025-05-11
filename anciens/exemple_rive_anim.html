@@ -49,7 +49,7 @@
     let trigger1, trigger2;
 
     let r = new rive.Rive({
-      src: "https://rinalduzzinathan.github.io/file-stash/rive/seisme4.riv",
+      src: "https://rinalduzzinathan.github.io/file-stash/rive/yeuxfermes1.riv",
       canvas: document.getElementById("canvas"),
       autoplay: true,
       stateMachines: "State Machine 1",
@@ -58,10 +58,8 @@
         // Récupère les inputs (dont les triggers)
         const inputs = r.stateMachineInputs('State Machine 1');
         console.log(inputs);
-        trigger1 = inputs.find(i => i.name === 'baseToCompress');
-        trigger2 = inputs.find(i => i.name === 'compToDes');
-        trigger3 = inputs.find(i => i.name === 'baseToVib');
-        trigger4 = inputs.find(i => i.name === 'toBase');
+        trigger1 = inputs.find(i => i.name === 'toFermes');
+      
 
 
       },
@@ -77,16 +75,14 @@
       }
 
       r = new rive.Rive({
-        src: "https://rinalduzzinathan.github.io/file-stash/rive/seisme4.riv",
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/yeuxfermes.riv",
         canvas: document.getElementById("canvas"),
         autoplay: true,
         stateMachines: "State Machine 1",
         onLoad: () => {
           const inputs = r.stateMachineInputs('State Machine 1');
-          trigger1 = inputs.find(i => i.name === 'baseToCompress');
-          trigger2 = inputs.find(i => i.name === 'compToDes');
-          trigger3 = inputs.find(i => i.name === 'baseToVib');
-          trigger4 = inputs.find(i => i.name === 'toBase');
+          trigger1 = inputs.find(i => i.name === 'toFermes');
+
 
           //r.resizeDrawingSurfaceToCanvas();
 
@@ -105,16 +101,7 @@
       if (trigger1) trigger1.fire();
     });
 
-    document.getElementById('trigger2').addEventListener('click', () => {
-      if (trigger2) trigger2.fire();
-    });
 
-    document.getElementById('trigger3').addEventListener('click', () => {
-      if (trigger3) trigger3.fire();
-    });
-    document.getElementById('trigger4').addEventListener('click', () => {
-      cleanRiveAnimation();
-    });
 
 
 

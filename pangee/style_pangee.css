@@ -1,3 +1,12 @@
+#riveCanvasPangee {
+    position: absolute;
+    top: 8%;
+    left: 6%;
+    width: 88%;
+    height: auto;
+    z-index: 13;
+}
+
 #status { 
     position: absolute;
     top: 15%;

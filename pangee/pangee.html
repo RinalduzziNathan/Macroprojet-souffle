@@ -33,6 +33,7 @@
         En un clin d’oeil</div>
     <button id="showNext" class="showButton"> >>> </button>
     <button id="showNext2" class="showButton"> >>> </button>
+    <canvas id="riveCanvasPangee"></canvas>
 
 
     <!-- Conteneur de l'image -->
@@ -59,9 +60,31 @@
         showNext2.style.visibility = "hidden";
         const riveCanvasMains = document.getElementById("riveCanvasMains");
         riveCanvasMains.style.visibility = "hidden";
+        const riveCanvasPangee = document.getElementById("riveCanvasPangee");
+        riveCanvasPangee.style.visibility = "hidden";
 
         let activeImage = 1; // Start with sequenceImage1
         let showNext2Clicked = false;
+        let showNext1Clicked = false;
+
+        let toFermes;
+
+        const r = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/yeuxfermes1.riv",
+                canvas: document.getElementById("riveCanvasPangee"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = r.stateMachineInputs("State Machine 1");
+                    toFermes = inputs.find(i => i.name === "toFermes");
+
+                    r.resizeDrawingSurfaceToCanvas();
+                }
+                
+
+        });
+
+
         let toYeux;
 
         const rYeux = new rive.Rive({
@@ -79,6 +102,7 @@
             });
 
        showNext.addEventListener('click',()=>{
+                showNext1Clicked = true;
                 showNext2Clicked = false;
                 titre.style.visibility = "hidden";
                 riveCanvasMains.style.visibility = "visible";
@@ -88,6 +112,8 @@
             })
 
         showNext2.addEventListener('click',()=>{
+                showNext1Clicked = false;
+
                 showNext2Clicked = true;
                 titre.style.visibility = "hidden";
                 riveCanvasMains.style.visibility = "hidden";
@@ -136,7 +162,7 @@
             "image/pangee26.png",
             "image/pangee27.png",];
             
-            let currentImageIndex = 0;
+        let currentImageIndex = 0;
         let startYear = 250;
 
         function changeImageCrossfade(nextImageSrc) {
@@ -175,6 +201,16 @@
                                         tempsValeur.textContent = startYear - (currentImageIndex - 1) * 10 - 5;
                                     } else if (currentImageIndex === imageSequence.length - 1) {
                                         tempsValeur.textContent = 0;
+
+                                        setTimeout(() => {
+                                            sequenceImage1.style.visibility = "hidden";
+                                            sequenceImage2.style.visibility = "hidden";
+                                            temps.style.visibility = "hidden";
+                                            tempsValeur.style.visibility = "hidden";
+                                            riveCanvasPangee.style.visibility = "visible";
+                                            if (toFermes) toFermes.fire();
+                                            
+                                        }, 1000);
                                     } else {
                                         tempsValeur.textContent = startYear - currentImageIndex * 10;
                                     }
@@ -182,7 +218,7 @@
                                     sequenceImage1.style.opacity = 1;
                                 }, 300);
                             }
-                        } else {
+                        } else if (showNext1Clicked){
                             // Si le deuxième bouton n’a PAS encore été cliqué, afficher juste le message
                             resultMessage.textContent = 'Clignement détecté';
                             setTimeout(() => {
