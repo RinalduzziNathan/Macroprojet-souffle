@@ -50,7 +50,7 @@
     <img id="bigcontigauche" src="../interface/conti.png" class="centerLeft" alt="bigcontigauche" />
     <img id="bigoceandroite" src="../interface/ocean.png" class="centerRight" alt="bigoceandroite" />
     <img id="bigoceangauche" src="../interface/ocean.png" class="centerLeft" alt="bigoceangauche" />
-  
+
 
     <script>
         let TimerStarted = false;
@@ -59,57 +59,122 @@
         let DistanceIsCalculated = false;
 
 
-        const rConverge = new rive.Rive({
-                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_convergence.riv",
-                canvas: document.getElementById("riveCanvasConverge"),
-                autoplay: true,
-                stateMachines: "State Machine 1",
-                onLoad: () => {
-                    const inputs = rConverge.stateMachineInputs("State Machine 1");
-                    baseToCC = inputs.find(i => i.name === "baseToCC");
-                    baseToCO = inputs.find(i => i.name === "baseToCO");
-                    baseToOO = inputs.find(i => i.name === "baseToOO");
-                    baseToOC = inputs.find(i => i.name === "baseToOC");
+        let rConverge = new rive.Rive({
+            src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_convergence.riv",
+            canvas: document.getElementById("riveCanvasConverge"),
+            autoplay: true,
+            stateMachines: "State Machine 1",
+            onLoad: () => {
+                const inputs = rConverge.stateMachineInputs("State Machine 1");
+                baseToCC = inputs.find(i => i.name === "baseToCC");
+                baseToCO = inputs.find(i => i.name === "baseToCO");
+                baseToOO = inputs.find(i => i.name === "baseToOO");
+                baseToOC = inputs.find(i => i.name === "baseToOC");
 
-                    rConverge.resizeDrawingSurfaceToCanvas();
-                }
-            });
+                rConverge.resizeDrawingSurfaceToCanvas();
+            }
+        });
 
-            // Load divergence Rive
-            const rDiverge = new rive.Rive({
-                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_divergence.riv",
-                canvas: document.getElementById("riveCanvasDiverge"),
-                autoplay: true,
-                stateMachines: "State Machine 1",
-                onLoad: () => {
-                    const inputs = rDiverge.stateMachineInputs("State Machine 1");
-                    DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
-                    DIVbaseToCO = inputs.find(i => i.name === "DIVbaseToCO");
-                    DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
-                    DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
+        // Load divergence Rive
+        let rDiverge = new rive.Rive({
+            src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_divergence.riv",
+            canvas: document.getElementById("riveCanvasDiverge"),
+            autoplay: true,
+            stateMachines: "State Machine 1",
+            onLoad: () => {
+                const inputs = rDiverge.stateMachineInputs("State Machine 1");
+                DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
+                DIVbaseToCO = inputs.find(i => i.name === "DIVbaseToCO");
+                DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
+                DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
 
-                    rDiverge.resizeDrawingSurfaceToCanvas();
-                }
-            });
+                rDiverge.resizeDrawingSurfaceToCanvas();
+            }
+        });
 
-            rConverge.on(rive.EventType.RiveEvent, (event) => {
-                const data = event.data;
-                if (data.type === rive.RiveEventType.General) {
-                    boutonRestart.style.visibility = "visible";
-                    
+        rConverge.on(rive.EventType.RiveEvent, (event) => {
+            const data = event.data;
+            if (data.type === rive.RiveEventType.General) {
+                boutonRestart.style.visibility = "visible";
 
-                }
-            });
-            
-            rDiverge.on(rive.EventType.RiveEvent, (event) => {
-                const data = event.data;
-                if (data.type === rive.RiveEventType.General) {
-                    boutonRestart.style.visibility = "visible";
-                    
-                }
-            });
 
-            
+            }
+        });
+
+        rDiverge.on(rive.EventType.RiveEvent, (event) => {
+            const data = event.data;
+            if (data.type === rive.RiveEventType.General) {
+                boutonRestart.style.visibility = "visible";
+
+            }
+        });
+
+     
+
+        function cleanRiveAnimation() {
+            if (rDiverge && rConverge) {
+
+
+                riveCanvasDiverge.style.visibility = "hidden";
+                riveCanvasConverge.style.visibility = "hidden";
+                console.log("Cleaning up Rive instances");
+                // Détruit l'ancienne instance
+                rDiverge.cleanup();
+                rConverge.cleanup();
+
+                rConverge = new rive.Rive({
+                    src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_convergence.riv",
+                    canvas: document.getElementById("riveCanvasConverge"),
+                    autoplay: true,
+                    stateMachines: "State Machine 1",
+                    onLoad: () => {
+                        const inputs = rConverge.stateMachineInputs("State Machine 1");
+                        baseToCC = inputs.find(i => i.name === "baseToCC");
+                        baseToCO = inputs.find(i => i.name === "baseToCO");
+                        baseToOO = inputs.find(i => i.name === "baseToOO");
+                        baseToOC = inputs.find(i => i.name === "baseToOC");
+
+
+                    }
+
+                });
+                rDiverge = new rive.Rive({
+                    src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_divergence.riv",
+                    canvas: document.getElementById("riveCanvasDiverge"),
+                    autoplay: true,
+                    stateMachines: "State Machine 1",
+                    onLoad: () => {
+                        const inputs = rDiverge.stateMachineInputs("State Machine 1");
+                        DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
+                        DIVbaseToCO = inputs.find(i => i.name === "DIVbaseToCO");
+                        DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
+                        DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
+
+                    }
+                });
+                rConverge.on(rive.EventType.RiveEvent, (event) => {
+                    const data = event.data;
+                    if (data.type === rive.RiveEventType.General) {
+                        boutonRestart.style.visibility = "visible";
+
+
+                    }
+                });
+
+                rDiverge.on(rive.EventType.RiveEvent, (event) => {
+                    const data = event.data;
+                    if (data.type === rive.RiveEventType.General) {
+                        boutonRestart.style.visibility = "visible";
+
+                    }
+                });
+
+
+            }
+
+        }
+
+
         async function startGestureRecognition() {
 
             const handCanvas = document.getElementById("handCanvas");
@@ -144,8 +209,8 @@
             // const canvasDiverge = document.getElementById("riveCanvasDiverge");
 
             // Load convergence Rive
-          
-       
+
+
             // Set canvas size to match video size exactly
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
@@ -236,9 +301,8 @@
 
                         const isFistPose = isFist(handLandmarks);
                         const handedness = results.multiHandedness[i].label;
-
-                        if (TimerStarted) {
-
+                        ;
+                        if (TimerIsRunning) {
                             if (handedness === "Right" && !isFistPose) {
                                 document.getElementById("bigoceangauche").style.display = "block";
                             } else if (handedness === "Left" && isFistPose) {
@@ -306,18 +370,15 @@
 
                 if (TimerOver && !DistanceIsCalculated) {
                     DistanceIsCalculated = true;
-                    console.log(distances);
+                    console.log(distances.length);
                     const dominantRight = mostFrequentState(rightHandStates);
                     const dominantLeft = mostFrequentState(leftHandStates);
-                   
+
 
 
                     analyzeDistanceChange();
 
-                    bigcontidroite.style.visibility = "hidden";
-                    bigcontigauche.style.visibility = "hidden";
-                    bigoceandroite.style.visibility = "hidden";
-                    bigoceangauche.style.visibility = "hidden";
+                 
 
                     function mostFrequentState(arr) {
                         const counts = { fist: 0, open: 0 };
@@ -325,15 +386,15 @@
                         return counts.fist > counts.open ? "fist" : "open";
                     }
 
-                   
+
                     function analyzeDistanceChange() {
                         const len = distances.length;
 
-                        if (len < 4) return; // pas assez de données
+                        if (len < 4) console.log("pas assez donnes"); // pas assez de données
 
                         const firstHalf = distances.slice(0, len / 2);
                         const secondHalf = distances.slice(len / 2);
-
+                        distances = []; // reset distances for next calculation
                         const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
                         const startAvg = avg(firstHalf);
                         const endAvg = avg(secondHalf);
@@ -341,20 +402,24 @@
                         if (endAvg > startAvg + 0.01) {
                             // divergence
                             riveCanvasDiverge.style.visibility = "visible";
+                            console.log(postureKey+ " divergence");
                             switch (postureKey) {
                                 case "fist_fist": DIVbaseToCC.fire(); break;
                                 case "fist_open": DIVbaseToOC.fire(); break;
                                 case "open_fist": DIVbaseToCO.fire(); break;
                                 case "open_open": DIVbaseToOO.fire(); break;
+                                default: console.log("Unknown posture key:", postureKey); break;
                             }
                         } else if (endAvg < startAvg - 0.01) {
                             // convergence
+                            console.log(postureKey+ " convergence");
                             riveCanvasConverge.style.visibility = "visible";
                             switch (postureKey) {
                                 case "fist_fist": baseToCC.fire(); break;
                                 case "fist_open": baseToOC.fire(); break;
                                 case "open_fist": baseToCO.fire(); break;
                                 case "open_open": baseToOO.fire(); break;
+                                default: console.log("Unknown posture key:", postureKey); break;
                             }
                         }
 
@@ -406,7 +471,7 @@
         distances = [];
         DistanceIsCalculated = false;
 
-        startBouton.addEventListener("click", () => {
+        function startBoutonAction() {
             startBouton.style.visibility = "hidden";
             timerDisplay.classList.remove("hidden");
 
@@ -427,29 +492,31 @@
                     hideAllPlaques(); // Optionally hide plaques after timer
                 }
             }, 100);
+        }
+
+        startBouton.addEventListener("click", () => {
+            startBoutonAction();
         });
 
         boutonRestart.addEventListener("click", () => {
+            console.log("Restarting...");
+            document.getElementById("bigcontidroite").style.display = "none";
+                document.getElementById("bigoceandroite").style.display = "none";
+                document.getElementById("bigcontigauche").style.display = "none";
+                document.getElementById("bigoceangauche").style.display = "none";
+            //resetAnim();
+            cleanRiveAnimation();
+            DistanceIsCalculated = false;
+            rightHandStates = []; // "open" or "fist"
+            leftHandStates = [];
+            rightHandStates = [];
+            leftHandStates = [];
+            distances = [];
+            //cleanRiveAnimation();
+
             boutonRestart.style.visibility = "hidden";
             timerDisplay.classList.remove("hidden");
-
-            let startTime = Date.now();
-
-            TimerStarted = true;
-            TimerOver = false;
-            TimerIsRunning = true;
-            const interval = setInterval(() => {
-                const elapsed = (Date.now() - startTime) / 1000;
-                timerDisplay.innerText = `${elapsed.toFixed(1)}s`;
-
-                if (elapsed >= 5) {
-                    TimerIsRunning = false;
-                    TimerOver = true;
-                    clearInterval(interval);
-                    timerDisplay.classList.add("hidden");
-                    hideAllPlaques(); // Optionally hide plaques after timer
-                }
-            }, 100);
+            startBoutonAction();
         });
 
         const gantImage = document.getElementById('gantImage');
