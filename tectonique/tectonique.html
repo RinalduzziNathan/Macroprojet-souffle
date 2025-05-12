@@ -30,14 +30,12 @@
     <div id="tectoRectangle"></div>
     <canvas id="riveCanvas"></canvas>
     <canvas id="handCanvas"></canvas>
+    <canvas id="riveCanvasTecto"></canvas>
+    <canvas id="riveCanvasTectoFleches"></canvas>
+
     <canvas id="output_canvas"></canvas>
     <canvas id="riveCanvasConverge"></canvas>
     <canvas id="riveCanvasDiverge"></canvas>
-    <div id="clickZoneGant">
-        <img id="gantImage" src="../interface/gant.png" alt="Pompe" />
-
-        <div id="expandingCircle"></div> <!-- Circle behind the lunettes image -->
-    </div>
     <button id="showAnimationButton" class="showButton"> >>></button>
     <button id="startBouton" class="startBouton centerTop">prêt ?</button>
     <div id="timerDisplay" class="timer centerTop hidden">0.0s</div>
@@ -50,6 +48,9 @@
     <img id="bigcontigauche" src="../interface/conti.png" class="centerLeft" alt="bigcontigauche" />
     <img id="bigoceandroite" src="../interface/ocean.png" class="centerRight" alt="bigoceandroite" />
     <img id="bigoceangauche" src="../interface/ocean.png" class="centerLeft" alt="bigoceangauche" />
+    <div id="titre" class="titre "> Explorons ensemble les plaques tectoniques et leurs mouvements</div>
+    <button id="showNext" class="showButton"> >>> </button>
+    <button id="showNext2" class="showButton"> >>> </button>
   
 
     <script>
@@ -109,10 +110,46 @@
                 }
             });
 
+            let poingsMains;
+
+            const rMains = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectomains.riv",
+                canvas: document.getElementById("riveCanvasTecto"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rMains.stateMachineInputs("State Machine 1");
+                    poingsMains = inputs.find(i => i.name === "poingsMains");
+                    rMains.resizeDrawingSurfaceToCanvas();
+                }
+                
+
+            });
+
+            let toFleches;
+
+            const rFleches = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectofleches.riv",
+                canvas: document.getElementById("riveCanvasTectoFleches"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rFleches.stateMachineInputs("State Machine 1");
+                    toFleches = inputs.find(i => i.name === "toFleches");
+                    rFleches.resizeDrawingSurfaceToCanvas();
+                }
+                
+
+            });
+
             
         async function startGestureRecognition() {
 
             const handCanvas = document.getElementById("handCanvas");
+            const riveCanvasTecto = document.getElementById("riveCanvasTecto");
+            riveCanvasTecto.style.visibility = "hidden";
+            const riveCanvasTectoFleches = document.getElementById("riveCanvasTectoFleches");
+            riveCanvasTectoFleches.style.visibility = "hidden";
             const riveCanvasDiverge = document.getElementById("riveCanvasDiverge");
             const riveCanvasConverge = document.getElementById("riveCanvasConverge");
             const riveCanvas = document.getElementById("riveCanvas");
@@ -123,17 +160,31 @@
             const contigauche = document.getElementById('contigauche');
             const oceandroite = document.getElementById('oceandroite');
             const oceangauche = document.getElementById('oceangauche');
+            contidroite.style.visibility = "hidden";
+            contigauche.style.visibility = "hidden";
+            oceandroite.style.visibility = "hidden";
+            oceangauche.style.visibility = "hidden";
+
             const bigcontidroite = document.getElementById('bigcontidroite');
             const bigcontigauche = document.getElementById('bigcontigauche');
             const bigoceandroite = document.getElementById('bigoceandroite');
             const bigoceangauche = document.getElementById('bigoceangauche');
+            const tectoRectangle = document.getElementById('tectoRectangle');
+            tectoRectangle.style.visibility = "hidden";
             const video = document.getElementById("video");
             const canvas = document.getElementById("output_canvas");
+            canvas.style.visibility = "hidden"
             const ctx = canvas.getContext("2d");
             let distances = [];
             riveCanvas.style.visibility = "hidden";
             riveCanvasConverge.style.visibility = "hidden";
             riveCanvasDiverge.style.visibility = "hidden";
+            const titre = document.getElementById("titre")
+            const showNext = document.getElementById('showNext');
+            showNext.style.visibility = "visible"
+            const showNext2 = document.getElementById('showNext2');
+            showNext2.style.visibility = "hidden"
+            let showNextClicked = false;
 
 
             let previousDistance = null;
@@ -164,6 +215,30 @@
 
 
             await tf.setBackend("webgl");
+
+            showNext.addEventListener('click',()=>{
+                showNextClicked = true;
+                titre.style.visibility = "hidden";
+                showNext2.style.visibility= "visible"
+                canvas.style.visibility = "visible"
+                riveCanvasTecto.style.visibility = "visible";
+                if (poingsMains) poingsMains.fire();
+
+            })
+
+            showNext2.addEventListener('click',()=>{
+                showNextClicked = false;
+                tectoRectangle.style.visibility = "hidden";
+                titre.style.visibility = "hidden";
+                showNext.style.visibility= "hidden"
+                showNext2.style.visibility= "hidden"
+                contidroite.style.visibility = "visible";
+                contigauche.style.visibility = "visible";
+                oceandroite.style.visibility = "visible";
+                oceangauche.style.visibility = "visible";
+                riveCanvasTecto.style.visibility = "hidden";
+
+            })
 
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             video.srcObject = stream;
@@ -409,6 +484,8 @@
         startBouton.addEventListener("click", () => {
             startBouton.style.visibility = "hidden";
             timerDisplay.classList.remove("hidden");
+            riveCanvasTectoFleches.style.visibility = "hidden";
+
 
             let startTime = Date.now();
 
@@ -452,39 +529,21 @@
             }, 100);
         });
 
-        const gantImage = document.getElementById('gantImage');
-        const expandingCircle = document.getElementById('expandingCircle');
-
-        // Track the state of the circle (expanded or normal)
-        let isCircleExpanded = false;
-
-        gantImage.addEventListener('click', () => {
-            // Hide the lunettes image and expand the circle when clicked
-            gantImage.style.display = 'none';
-            expandingCircle.style.width = '650px';  // Final expanded size
-            expandingCircle.style.height = '650px'; // Final expanded size
-            isCircleExpanded = true; // Set state to expanded
-        });
-
-        expandingCircle.addEventListener('click', () => {
-            if (isCircleExpanded) {
-                // Reset the circle back to normal size and show the lunettes image again
-                expandingCircle.style.width = '250px';  // Original size
-                expandingCircle.style.height = '250px'; // Original size
-                gantImage.style.display = 'block'; // Show the lunettes image again
-                isCircleExpanded = false; // Set state to normal
-            }
-        });
-
         document.getElementById("showAnimationButton").addEventListener("click", () => {
             document.getElementById("contidroite").style.display = "none";
             document.getElementById("contigauche").style.display = "none";
             document.getElementById("oceandroite").style.display = "none";
             document.getElementById("oceangauche").style.display = "none";
 
+
             document.getElementById("showAnimationButton").style.display = "none";
 
             document.getElementById("startBouton").style.visibility = "visible";
+            riveCanvasTectoFleches.style.visibility = "visible";
+            if (toFleches) toFleches.fire();
+
+
+
         });
 
     </script>

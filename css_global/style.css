@@ -19,6 +19,12 @@ canvas {
     z-index: 1;
 }
 
+#riveCanvasTecto {
+    width: 1366;
+    height: 768;
+    z-index: 1;
+}
+
 #riveCanvasConverge{
     width: 1366;
     height: 768;
@@ -235,7 +241,11 @@ body {
     padding: 10px 15px;
     border-radius: 10px;
     font-size: 18px;
-    font-family: sans-serif;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
     z-index: 12;
 }
 
