@@ -20,10 +20,10 @@
         rel="stylesheet">
     <script src="https://unpkg.com/@rive-app/canvas"></script>
 
-</style>
-<link rel="stylesheet" href="../css_global/style.css">
-<link rel="stylesheet" href="../css_global/style_boutons.css">
-<link rel="stylesheet" href="style_seisme.css">
+    </style>
+    <link rel="stylesheet" href="../css_global/style.css">
+    <link rel="stylesheet" href="../css_global/style_boutons.css">
+    <link rel="stylesheet" href="style_seismenvx.css">
 </head>
 
 <body>
@@ -33,7 +33,6 @@
     <canvas id="riveCanvasMains"></canvas>
     <canvas id="handCanvas"></canvas>
     <canvas id="output_canvas"></canvas>
-    <button id="showAnimationButton" class="showButton"> >>></button>
     <button id="startBouton" class="startBouton centerTop">créer un séisme</button>
     <div id="timerDisplay" class="timer centerTop hidden">0.0s</div>
     <button id="boutonRestart" class="startBouton centerTop">GO</button>
@@ -43,7 +42,7 @@
     <div id="messagePression" class="resultMessage hidden">Pression détectée</div>
     <div id="messageResultat" class="resultMessage hidden"></div>
 
- 
+
 
 
     <script>
@@ -70,6 +69,14 @@
 
             boutonRestart.style.visibility = "hidden";;
             let isTouching = false;
+            let TimerStarted = false;
+            let TimerOver = false;
+            let TimerIsRunning = false;
+            let DistanceIsCalculated = false;
+            let animationEnCours = false;
+            let lastLeftHand = null;
+            let lastRightHand = null;
+
 
             let TOmains;
 
@@ -83,7 +90,7 @@
                     TOmains = inputs.find(i => i.name === "TOmains");
                     rMains.resizeDrawingSurfaceToCanvas();
                 }
-                
+
 
             });
 
@@ -107,9 +114,21 @@
 
                     r.resizeDrawingSurfaceToCanvas();
                 }
-                
+
 
             });
+
+            r.on(rive.EventType.RiveEvent, (event) => {
+                const data = event.data;
+                if (data.type === rive.RiveEventType.General) {
+                    boutonRestart.style.visibility = "visible";
+                }
+                setTimeout(() => {
+                    animationEnCours = false;
+                }, 4000); // ajuster selon la durée de l'animation
+            });
+
+
 
             r.on(rive.EventType.RiveEvent, (event) => {
                 const data = event.data;
@@ -122,23 +141,27 @@
                 }
             });
 
-            showNext.addEventListener('click',()=>{
+            showNext.addEventListener('click', () => {
                 showNextClicked = true;
                 titre.style.visibility = "hidden";
                 riveCanvas.style.visibility = "hidden";
                 riveCanvasMains.style.visibility = "visible";
                 if (TOmains) TOmains.fire();
-                showNext.style.visibility= "hidden"
-                showNext2.style.visibility= "visible"
+                showNext.style.visibility = "hidden"
+                showNext2.style.visibility = "visible"
             })
 
-            showNext2.addEventListener('click',()=>{
+            showNext2.addEventListener('click', () => {
                 showNextClicked = false;
                 titre.style.visibility = "hidden";
                 riveCanvas.style.visibility = "visible";
                 riveCanvasMains.style.visibility = "hidden";
-                showNext.style.visibility= "hidden"
-                showNext2.style.visibility= "hidden"
+
+                showNext.style.visibility = "hidden"
+                showNext2.style.visibility = "hidden"
+                // Show the Start button
+                const startBouton = document.getElementById('startBouton');
+                startBouton.style.visibility = 'visible';
 
             })
 
@@ -177,15 +200,20 @@
                 canvas.height = video.videoHeight;
             });
 
+            let distances = [];
+            let lastDistance = null;
+
             hands.onResults((results) => {
                 ctx.clearRect(0, 0, handCanvas.width, handCanvas.height);
                 handCanvas.width = video.videoWidth;
                 handCanvas.height = video.videoHeight;
 
-                if (!results.multiHandLandmarks || results.multiHandLandmarks.length === 0 && isTouching == false) {
-                    if (toBase) toBase.fire(); 
-                    return; 
+                if ((!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) && !animationEnCours) {
+                    if (toBase) toBase.fire();
+                    return;
                 }
+
+
 
                 if (results.multiHandLandmarks.length === 2) {
                     const hand1 = results.multiHandLandmarks[0];
@@ -194,45 +222,62 @@
                     drawHand(hand1);
                     drawHand(hand2);
 
-                    let close = false;
-                    let touching = false;
+                    let close = areHandsClose(hand1, hand2);
+                    let touching = areHandsTouching(hand1, hand2);
+                    lastLeftHand = hand1[8];
+                    lastRightHand = hand2[8];
 
-                    if (results.multiHandLandmarks.length === 2) {
-                        const hand1 = results.multiHandLandmarks[0];
-                        const hand2 = results.multiHandLandmarks[1];
-
-                        drawHand(hand1);
-                        drawHand(hand2);
-
-                        close = areHandsClose(hand1, hand2);
-                        touching = areHandsTouching(hand1, hand2);
-                    }
-
-                    if (touching && timerRunning) {
-                        isTouching = true;
-                        stopTimer();
-
-                        if (timer / 10 >= 10) {
-                            if (compToInverse) compToInverse.fire();
-                        } else {
-                            if (compToOFF) compToOFF.fire();
-                        }
-
-                    } else if (close) {
+                    // Partie 1 : juste afficher le message
+                    if (close && showNextClicked) {
                         if (baseToVib) baseToVib.fire();
-                        if (showNextClicked) {
-                            document.getElementById("messagePression").classList.remove("hidden");
-
-                            setTimeout(() => {
-                                document.getElementById("messagePression").classList.add("hidden");
-                            }, 2000); // Cache le message après 2 secondes
-                        }
-                    } else if (timerRunning) {
-                        if (baseToCompress) baseToCompress.fire();
-                    } else {
-                        if (toBase) toBase.fire();
+                        document.getElementById("messagePression").classList.remove("hidden");
+                        setTimeout(() => {
+                            document.getElementById("messagePression").classList.add("hidden");
+                        }, 2000);
                     }
+
+                    // Partie 2 : pendant le timer, enregistrer les distances
+                    if (TimerIsRunning) {
+                        onHandsDetected(hand1[8], hand2[8]);
+                        if (baseToCompress) baseToCompress.fire();
+                    }
+
+                    // Fin du timer
+                    if (TimerOver && !DistanceIsCalculated) {
+                        DistanceIsCalculated = true;
+                        console.log(distances.length);
+
+                        function analyzeDistanceChange() {
+                            const len = distances.length;
+                            if (len < 4) {
+                                console.log("Pas assez de données");
+                                return;
+                            }
+
+                            const firstHalf = distances.slice(0, len / 2);
+                            const secondHalf = distances.slice(len / 2);
+                            const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+                            const startAvg = avg(firstHalf);
+                            const endAvg = avg(secondHalf);
+
+                            // ✅ Vérifie si les mains sont toujours là, sinon utilise les dernières positions
+                            if (!lastLeftHand || !lastRightHand) {
+                                console.log("Mains absentes, on utilise les données enregistrées");
+                            }
+
+                            if (endAvg > startAvg + 0.01) {
+                                if (compToInverse) compToInverse.fire(); // éloignement
+                            } else if (endAvg < startAvg - 0.01) {
+                                if (compToNormale) compToNormale.fire(); // rapprochement
+                            }
+                        }
+
+                        analyzeDistanceChange();
+                    }
+
                 }
+
+
 
 
 
@@ -260,6 +305,40 @@
             let timerInterval;
             let timerRunning = false;
 
+            let previousDistance = null;
+            let crossedDetected = false;
+            let movementTrend = null; // "rapprochement", "eloignement"
+            let rightHandStates = []; // "open" or "fist"
+            let leftHandStates = [];
+            rightHandStates = [];
+            leftHandStates = [];
+            distances = [];
+            DistanceIsCalculated = false;
+
+            function startBoutonAction() {
+                startBouton.style.visibility = "hidden";
+                timerDisplay.classList.remove("hidden");
+                let startTime = Date.now();
+
+                TimerStarted = true;
+                TimerOver = false;
+                TimerIsRunning = true;
+                distances = [];
+
+                const interval = setInterval(() => {
+                    const elapsed = (Date.now() - startTime) / 1000;
+                    timerDisplay.innerText = `${elapsed.toFixed(1)}s`;
+
+                    if (elapsed >= 5) {
+                        TimerIsRunning = false;
+                        TimerOver = true;
+                        clearInterval(interval);
+                        timerDisplay.classList.add("hidden");
+                    }
+                }, 100);
+            }
+
+
             function updateTimerDisplay() {
                 const display = document.getElementById("timerDisplay");
                 display.textContent = (timer / 10).toFixed(1) + "s";
@@ -274,6 +353,10 @@
                     timer++;
                     updateTimerDisplay();
                 }, 100); // every 100ms = 0.1s
+                previousDistance = null;
+                movementTrend = null;
+                crossedDetected = false;
+
             }
 
             function stopTimer() {
@@ -290,35 +373,67 @@
                 }
 
                 messageDiv.classList.remove("hidden");
-
                 setTimeout(() => {
                     messageDiv.classList.add("hidden");
-                }, 6000); // cache le message après 6 secondes
+                }, 6000);
+
+                // Analyse du mouvement
+                if (distances.length >= 4) {
+                    const halfway = Math.floor(distances.length / 2);
+                    const firstHalf = distances.slice(0, halfway);
+                    const secondHalf = distances.slice(halfway);
+                    const avg = arr => arr.reduce((sum, val) => sum + val, 0) / arr.length;
+                    const avgFirst = avg(firstHalf);
+                    const avgSecond = avg(secondHalf);
+                    const diff = avgSecond - avgFirst;
+
+                    if (diff < -0.01) {
+                        movementTrend = "rapprochement";
+                        if (compToInverse) compToInverse.fire();
+                    } else if (diff > 0.01) {
+                        movementTrend = "eloignement";
+                        if (compToNormale) compToNormale.fire();
+                    }
+                }
+
+                // Décalage
+                if (crossedDetected && compToDecalage) {
+                    compToDecalage.fire();
+                }
             }
 
 
+
             startBouton.addEventListener("click", function () {
-                startTimer();
-                startBouton.style.visibility = "hidden";
+                startBoutonAction();
             });
 
             boutonRestart.addEventListener("click", function () {
-                startTimer();
+
+                DistanceIsCalculated = false;
+                rightHandStates = []; // "open" or "fist"
+                leftHandStates = [];
+                rightHandStates = [];
+                leftHandStates = [];
+                distances = [];
+                lastLeftHand = null;
+                lastRightHand = null;
+
                 boutonRestart.style.visibility = "hidden";
+                timerDisplay.classList.remove("hidden");
+                startBoutonAction();
             });
 
 
-            const showAnimationButton = document.getElementById('showAnimationButton');
 
-            showAnimationButton.addEventListener('click', () => {
-
-                // Show the Start button
-                const startBouton = document.getElementById('startBouton');
-                startBouton.style.visibility = 'visible';
-                showAnimationButton.hidden = true;
-
-
-            });
+           
+            function onHandsDetected(hand1, hand2) {
+                const dist = Math.sqrt(
+                    Math.pow(hand1.x - hand2.x, 2) +
+                    Math.pow(hand1.y - hand2.y, 2)
+                );
+                distances.push(dist);
+            }
 
 
 
@@ -354,7 +469,7 @@
 
         startGestureRecognition();
 
-        
+
     </script>
 </body>
 
