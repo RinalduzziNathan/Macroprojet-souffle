@@ -76,6 +76,8 @@
             let animationEnCours = false;
             let lastLeftHand = null;
             let lastRightHand = null;
+            let lastDetectionTime = Date.now();
+
 
 
             let TOmains;
@@ -123,9 +125,7 @@
                 if (data.type === rive.RiveEventType.General) {
                     boutonRestart.style.visibility = "visible";
                 }
-                setTimeout(() => {
-                    animationEnCours = false;
-                }, 4000); // ajuster selon la durée de l'animation
+                animationEnCours = false;
             });
 
 
@@ -210,6 +210,7 @@
 
                 if ((!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) && !animationEnCours) {
                     if (toBase) toBase.fire();
+                    animationEnCours = false;
                     return;
                 }
 
@@ -229,7 +230,6 @@
 
                     // Partie 1 : juste afficher le message
                     if (close && showNextClicked) {
-                        if (baseToVib) baseToVib.fire();
                         document.getElementById("messagePression").classList.remove("hidden");
                         setTimeout(() => {
                             document.getElementById("messagePression").classList.add("hidden");
@@ -240,11 +240,15 @@
                     if (TimerIsRunning) {
                         onHandsDetected(hand1[8], hand2[8]);
                         if (baseToCompress) baseToCompress.fire();
+                        animationEnCours = false;
+
                     }
 
                     // Fin du timer
                     if (TimerOver && !DistanceIsCalculated) {
                         DistanceIsCalculated = true;
+                        animationEnCours = true;
+
                         console.log(distances.length);
 
                         function analyzeDistanceChange() {
