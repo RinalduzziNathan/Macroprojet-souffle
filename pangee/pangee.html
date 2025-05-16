@@ -31,9 +31,10 @@
     <canvas id="riveCanvasMains"></canvas>
     <div id="titre" class="titre "> Explorons 250 millions d’années d’histoire de la Terre...
         En un clin d’oeil</div>
-    <button id="showNext" class="showButton"> >>> </button>
-    <button id="showNext2" class="showButton"> >>> </button>
+    <button id="showNext" class="showButton"> tutoriel </button>
+    <button id="showNext2" class="showButton"> lancement </button>
     <canvas id="riveCanvasPangee"></canvas>
+    <canvas id="riveCanvasDino"></canvas>
 
 
     <!-- Conteneur de l'image -->
@@ -62,6 +63,8 @@
         riveCanvasMains.style.visibility = "hidden";
         const riveCanvasPangee = document.getElementById("riveCanvasPangee");
         riveCanvasPangee.style.visibility = "hidden";
+        const riveCanvasDino = document.getElementById("riveCanvasDino");
+        riveCanvasDino.style.visibility = "hidden";
 
         let activeImage = 1; // Start with sequenceImage1
         let showNext2Clicked = false;
@@ -79,6 +82,25 @@
                     toFermes = inputs.find(i => i.name === "toFermes");
 
                     r.resizeDrawingSurfaceToCanvas();
+                }
+                
+
+        });
+
+        let toMorts, toDino;
+
+
+        const rDino = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/dinosaures.riv",
+                canvas: document.getElementById("riveCanvasDino"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rDino.stateMachineInputs("State Machine 1");
+                    toMorts = inputs.find(i => i.name === "toMorts");
+                    toDino = inputs.find(i => i.name === "toDino");
+
+                    rDino.resizeDrawingSurfaceToCanvas();
                 }
                 
 
@@ -197,8 +219,19 @@
                                     currentImageIndex++;
                                     changeImageCrossfade(imageSequence[currentImageIndex]);
 
+                                    if (tempsValeur.textContent == "250") {
+                                        riveCanvasDino.style.visibility = "visible";
+                                        if (toDino) toDino.fire();
+                                    }
+
+                                    if (tempsValeur.textContent == "80") {
+                                        riveCanvasDino.style.visibility = "visible";
+                                        if (toMorts) toMorts.fire();
+                                    }
+
                                     if (currentImageIndex === imageSequence.length - 2) {
                                         tempsValeur.textContent = startYear - (currentImageIndex - 1) * 10 - 5;
+                                   
                                     } else if (currentImageIndex === imageSequence.length - 1) {
                                         tempsValeur.textContent = 0;
 

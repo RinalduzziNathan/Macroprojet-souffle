@@ -25,6 +25,13 @@ canvas {
     z-index: 1;
 }
 
+#riveCanvasDino {
+    left:-3%;
+    width: 105%;
+    height: auto;
+    z-index: -1;
+}
+
 #riveCanvasConverge{
     width: 1366;
     height: 768;

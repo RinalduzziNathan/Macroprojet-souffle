@@ -28,6 +28,12 @@
     <div class="background-grid"></div>
     <video id="video" autoplay playsinline></video>
     <div id="tectoRectangle"></div>
+    <div id="legendeLithoConti"></div>
+    <div id="legendeLithoOce"></div>
+    <div id="legendeAstheno"></div>
+    <div id="textLithoConti">lithosphère continentale</div>
+    <div id="textLithoOce"> lithosphère océanique</div>
+    <div id="textAstheno"> asthénosphère</div>
     <canvas id="riveCanvas"></canvas>
     <canvas id="handCanvas"></canvas>
     <canvas id="riveCanvasTecto"></canvas>
@@ -237,6 +243,22 @@
             const bigoceandroite = document.getElementById('bigoceandroite');
             const bigoceangauche = document.getElementById('bigoceangauche');
             const tectoRectangle = document.getElementById('tectoRectangle');
+
+            const legendeLithoConti = document.getElementById ('legendeLithoConti')
+            const legendeLithoOce = document.getElementById ('legendeLithoOce')
+            const legendeAstheno = document.getElementById ('legendeAstheno')
+            const textLithoConti = document.getElementById ('textLithoConti')
+            const textLithoOce = document.getElementById ('textLithoOce')
+            const textAstheno = document.getElementById ('textAstheno')
+
+            legendeLithoConti.style.visibility = "hidden";
+            legendeLithoOce.style.visibility = "hidden";
+            legendeAstheno.style.visibility = "hidden";
+            textLithoConti.style.visibility = "hidden";
+            textLithoOce.style.visibility = "hidden";
+            textAstheno.style.visibility = "hidden";
+
+
             tectoRectangle.style.visibility = "hidden";
             const video = document.getElementById("video");
             const canvas = document.getElementById("output_canvas");
@@ -405,6 +427,13 @@
 
 
                 if (TimerIsRunning) {
+
+                    legendeLithoConti.style.visibility = "visible";
+                    legendeLithoOce.style.visibility = "visible";
+                    legendeAstheno.style.visibility = "visible";
+                    textLithoConti.style.visibility = "visible";
+                    textLithoOce.style.visibility = "visible";
+                    textAstheno.style.visibility = "visible";
 
                     function onHandsDetected(hand1, hand2) {
                         const dist = Math.sqrt(

@@ -1,36 +1,4 @@
 
-#gantImage {
-    position: absolute;
-    top: 30px;
-    left: 75px;
-    z-index: 10;
-    width: 90px;
-    height: 205px;
-    rotate: 30deg;
-}
-
-#clickZoneGant {
-    position: absolute;
-    top: 5px;
-    /* même top que ton lunettes.png */
-    left: 5px;
-    /* même left que ton lunettes.png */
-    width: 150px;
-    /* taille à ajuster selon la taille de l'image */
-    height: 100px;
-    /* taille à ajuster aussi */
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0);
-    /* transparent */
-    z-index: 15;
-    /* au-dessus du background */
-}
-
-
-
-
-
-
 
 #contidroite {
     z-index: 10;
@@ -111,4 +79,85 @@
     /* Make sure it's above other elements */
     rotate: 30deg;
 
+}
+
+#legendeLithoConti {
+    position: absolute;
+    top: 82%;
+    left: 5%;
+    width: 80px;
+    height: 30px;
+    background-color: #CD6A5C;
+    border: 2.5px solid black;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+
+}
+
+#legendeLithoOce {
+    position: absolute;
+    top: 88%;
+    left: 5%;
+    width: 80px;
+    height: 30px;
+    background-color: #BDCCD4;
+    border: 2.5px solid black;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+
+}
+
+#legendeAstheno {
+    position: absolute;
+    top: 94%;
+    left: 5%;
+    width: 80px;
+    height: 30px;
+    background-color: #A5614E;
+    border: 2.5px solid black;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+
+}
+
+#textLithoConti {
+
+    position: absolute;
+    top: 80%;
+    left: 9%;
+    font-size: 20px;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+    z-index: 20;    
+}
+
+#textLithoOce {
+
+    position: absolute;
+    top: 86%;
+    left: 9%;
+    font-size: 20px;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+    z-index: 20;    
+}
+
+#textAstheno {
+
+    position: absolute;
+    top: 92%;
+    left: 9%;
+    font-size: 20px;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+    z-index: 20;    
 }
