@@ -30,6 +30,10 @@
     <canvas id="riveCanvas"></canvas>
     <canvas id="visqueuseCanvas"></canvas>
     <div class="background-grid"></div>
+    <video id="feu" muted playsinline>
+        <source src="feu.webm" type="video/webm">
+        Votre navigateur ne supporte pas la vidéo HTML5.
+    </video>
     <div id="volcanCircle"></div>
     <button id="startBouton" class="startBouton centerTop">GO</button>
     <button id="boutonRestart" class="startBouton centerTop">GO</button>
@@ -99,7 +103,8 @@
             texteEruptionEffusive.style.visibility = "hidden";
             const texteEruptionExplosive = document.getElementById("texteEruptionExplosive");
             texteEruptionExplosive.style.visibility = "hidden";
-
+            const videoFeu = document.getElementById('feu');
+            videoFeu.style.display = "hidden";
 
 
             volcanCircle.style.visibility = "hidden";
@@ -194,6 +199,13 @@
             showRiveCircles.addEventListener('click',()=>{
 
             document.getElementById("dragDropContainer").style.display = "block";
+            videoFeu.style.display = "block";
+            videoFeu.currentTime = 0; // Revenir au début si rejouée
+            videoFeu.play(); // ✅ Lancement manuel
+            videoFeu.addEventListener('ended', () => {
+                videoFeu.style.display = "none";  
+            });
+
             showSouffleTest.style.visibility = "visible";
             showRiveCircles.style.visibility = "hidden";
             titre.style.visibility = "hidden";

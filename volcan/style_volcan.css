@@ -305,3 +305,15 @@
     display: block; /* ou flex/inline-block selon le contexte */
     transition: transform 0.2s ease;
 }
+
+
+#feu {
+    position: absolute;
+    top:0%;
+    left: 0%;
+    width: 1500px;       /* largeur personnalisée */
+    height: auto;       /* hauteur automatique selon le ratio */
+    display: none;
+    z-index: 50;
+
+  }
