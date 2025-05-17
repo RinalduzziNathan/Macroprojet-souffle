@@ -123,7 +123,7 @@ body {
 .verticalCenter {
     margin: 0;
     position: absolute;
-    left: 48%;
+    left: 43%;
     transform: translateY(-50%);
 }
 
@@ -195,11 +195,10 @@ body {
 .timer {
     margin-top: 70px;
     color: black;
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 700;
+    font-family: "ZCOOL QingKe HuangYou", sans-serif;
+    font-weight: 400;
     font-style: normal;
-    font-variation-settings: "wdth" 100;
+   
     font-size: 90px;
     color: black;
     z-index: 10;

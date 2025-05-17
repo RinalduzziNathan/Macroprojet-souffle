@@ -7,6 +7,9 @@
     <title>Volcan et Micro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&display=swap"
         rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -261,19 +264,30 @@
 
 
             function startTimer() {
-                let timeLeft = 5;
+                let timeLeft = 5000; // 5 secondes en millisecondes
                 remplirTableau = true;
+
                 const intervalId = setInterval(() => {
-                    timerDisplay.textContent = `${timeLeft}`;
-                    timeLeft--;
+                    let seconds = Math.floor(timeLeft / 1000);
+                    let milliseconds = Math.floor((timeLeft % 1000) / 10); // centièmes de seconde (MSMS)
+
+                    // Formater les valeurs avec deux chiffres
+                    seconds = String(seconds).padStart(2, '0');
+                    milliseconds = String(milliseconds).padStart(2, '0');
+
+                    timerDisplay.textContent = `${seconds}.${milliseconds}`;
+
+                    timeLeft -= 100;
+
                     if (timeLeft < 0) {
                         timerDisplay.textContent = "";
                         clearInterval(intervalId);
                         remplirTableau = false;
                         finTableau = true;
                     }
-                }, 1000);
+                }, 100); // mise à jour toutes les 100 ms
             }
+
 
 
             startBouton.addEventListener("click", function () {
