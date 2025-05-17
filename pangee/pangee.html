@@ -35,6 +35,9 @@
     <button id="showNext2" class="showButton"> lancement </button>
     <canvas id="riveCanvasPangee"></canvas>
     <canvas id="riveCanvasDino"></canvas>
+    <canvas id="riveCanvasMontagne"></canvas>
+    <canvas id="riveCanvasOcean"></canvas>
+    <canvas id="riveCanvasVolcan"></canvas>
 
 
     <!-- Conteneur de l'image -->
@@ -65,6 +68,12 @@
         riveCanvasPangee.style.visibility = "hidden";
         const riveCanvasDino = document.getElementById("riveCanvasDino");
         riveCanvasDino.style.visibility = "hidden";
+        const riveCanvasMontagne = document.getElementById("riveCanvasMontagne");
+        riveCanvasMontagne.style.visibility = "hidden";
+        const riveCanvasOcean = document.getElementById("riveCanvasOcean");
+        riveCanvasOcean.style.visibility = "hidden";
+        const riveCanvasVolcan = document.getElementById("riveCanvasVolcan");
+        riveCanvasVolcan.style.visibility = "hidden";
 
         let activeImage = 1; // Start with sequenceImage1
         let showNext2Clicked = false;
@@ -86,6 +95,56 @@
                 
 
         });
+
+        let baseToCC;
+
+        const rMontagne = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_convergence.riv",
+                canvas: document.getElementById("riveCanvasMontagne"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rMontagne.stateMachineInputs("State Machine 1");
+                    baseToCC = inputs.find(i => i.name === "baseToCC");
+
+                    rMontagne.resizeDrawingSurfaceToCanvas();
+                }
+                
+
+        });
+        rMontagne.on(rive.EventType.RiveEvent, (event) => {
+                    const data = event.data;
+                    if (data.type === rive.RiveEventType.General) {
+                        riveCanvasMontagne.style.visibility = "hidden";
+
+                    }
+        });
+
+
+        let DIVbaseToCC;
+
+        const rOcean = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_divergence.riv",
+                canvas: document.getElementById("riveCanvasOcean"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rOcean.stateMachineInputs("State Machine 1");
+                    DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
+
+                    rOcean.resizeDrawingSurfaceToCanvas();
+                }
+                
+
+        });
+        rOcean.on(rive.EventType.RiveEvent, (event) => {
+                    const data = event.data;
+                    if (data.type === rive.RiveEventType.General) {
+                        riveCanvasOcean.style.visibility = "hidden";
+
+                    }
+        });
+
 
         let toMorts, toDino;
 
@@ -222,6 +281,16 @@
                                     if (tempsValeur.textContent == "250") {
                                         riveCanvasDino.style.visibility = "visible";
                                         if (toDino) toDino.fire();
+                                    }
+
+                                    if (tempsValeur.textContent == "50") {
+                                        riveCanvasMontagne.style.visibility = "visible";
+                                        if (baseToCC) baseToCC.fire();
+                                    }
+
+                                    if (tempsValeur.textContent == "190") {
+                                        riveCanvasOcean.style.visibility = "visible";
+                                        if (DIVbaseToCC) DIVbaseToCC.fire();
                                     }
 
                                     if (tempsValeur.textContent == "80") {
