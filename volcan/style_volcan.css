@@ -317,3 +317,11 @@
     z-index: 50;
 
   }
+
+  .mon-gif {
+    position: absolute; /* ou fixed selon ton besoin */
+    top: 0;
+    left: 0;
+    width: 1500px;
+    pointer-events: none; /* pour laisser les clics passer à travers */
+  }
