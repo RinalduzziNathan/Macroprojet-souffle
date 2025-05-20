@@ -35,10 +35,9 @@
 <body>
 
   <div id="controls">
-    <button id="trigger1">Déclencher baseToOK </button>
-    <button id="trigger2">Déclencher baseToPasOK</button>
-    <button id="trigger3">Déclencher baseToVib</button>
-    <button id="trigger4">Déclencher toBase</button>
+    <button id="trigger1">Déclencher compToDecalage </button>
+    <button id="trigger2">Déclencher toBase</button>
+    <button id="trigger3">Déclencher baseToCompress</button>
   </div>
 
   <canvas id="canvas" width="600" height="600"></canvas>
@@ -46,10 +45,10 @@
   <script src="https://unpkg.com/@rive-app/canvas"></script>
   <script>
 
-    let trigger1, trigger2;
+    let trigger1, trigger2, trigger3;
 
     let r = new rive.Rive({
-      src: "https://rinalduzzinathan.github.io/file-stash/rive/yeuxfermes1.riv",
+      src: "https://rinalduzzinathan.github.io/file-stash/rive/seismenv.riv",
       canvas: document.getElementById("canvas"),
       autoplay: true,
       stateMachines: "State Machine 1",
@@ -58,8 +57,10 @@
         // Récupère les inputs (dont les triggers)
         const inputs = r.stateMachineInputs('State Machine 1');
         console.log(inputs);
-        trigger1 = inputs.find(i => i.name === 'toFermes');
-      
+        trigger1 = inputs.find(i => i.name === 'compToDecalage');
+        trigger2 = inputs.find(i => i.name === 'toBase');
+        trigger3 = inputs.find(i => i.name === 'baseToCompress');
+
 
 
       },
@@ -75,13 +76,17 @@
       }
 
       r = new rive.Rive({
-        src: "https://rinalduzzinathan.github.io/file-stash/rive/yeuxfermes.riv",
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/seismenv.riv",
         canvas: document.getElementById("canvas"),
         autoplay: true,
         stateMachines: "State Machine 1",
         onLoad: () => {
           const inputs = r.stateMachineInputs('State Machine 1');
-          trigger1 = inputs.find(i => i.name === 'toFermes');
+          trigger1 = inputs.find(i => i.name === 'compToDecalage');
+          trigger2 = inputs.find(i => i.name === 'toBase');
+          trigger3 = inputs.find(i => i.name === 'baseToCompress');
+
+
 
 
           //r.resizeDrawingSurfaceToCanvas();
@@ -99,6 +104,8 @@
     });
     document.getElementById('trigger1').addEventListener('click', () => {
       if (trigger1) trigger1.fire();
+      if (trigger2) trigger2.fire();
+      if (trigger3) trigger3.fire();
     });
 
 

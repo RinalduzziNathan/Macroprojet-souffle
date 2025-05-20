@@ -33,6 +33,7 @@
     <div class="background-grid"></div>
     <video id="video" autoplay playsinline></video>
     <canvas id="riveCanvas"></canvas>
+    <canvas id="riveCanvasCube"></canvas>
     <canvas id="riveCanvasMains"></canvas>
     <canvas id="handCanvas"></canvas>
     <canvas id="output_canvas"></canvas>
@@ -66,6 +67,8 @@
             showNext2.style.visibility = "hidden"
             const riveCanvas = document.getElementById("riveCanvas");
             riveCanvas.style.visibility = "hidden";
+            const riveCanvasCube = document.getElementById("riveCanvasCube");
+            riveCanvasCube.style.visibility = "hidden";
             const riveCanvasMains = document.getElementById("riveCanvasMains");
             riveCanvasMains.style.visibility = "hidden";
             let showNextClicked = false;
@@ -95,6 +98,23 @@
                     const inputs = rMains.stateMachineInputs("State Machine 1");
                     TOmains = inputs.find(i => i.name === "TOmains");
                     rMains.resizeDrawingSurfaceToCanvas();
+                }
+
+
+            });
+
+            let toSecousse, toBloc;
+
+            const rCube = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/blocs.riv",
+                canvas: document.getElementById("riveCanvasCube"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rCube.stateMachineInputs("State Machine 1");
+                    toSecousse = inputs.find(i => i.name === "toSecousse");
+                    toBloc = inputs.find(i => i.name === "toBloc");
+                    rCube.resizeDrawingSurfaceToCanvas();
                 }
 
 
@@ -159,6 +179,9 @@
                 showNextClicked = false;
                 titre.style.visibility = "hidden";
                 riveCanvas.style.visibility = "visible";
+                riveCanvasCube.style.visibility = "visible";
+                if (toBloc) toBloc.fire(); 
+
                 riveCanvasMains.style.visibility = "hidden";
 
                 showNext.style.visibility = "hidden"
@@ -168,6 +191,18 @@
                 startBouton.style.visibility = 'visible';
 
             })
+
+            function detecterCroisementDepuisOrdre() {
+                if (ordreMains.length < 2) return false;
+                let precedent = ordreMains[0];
+                for (let i = 1; i < ordreMains.length; i++) {
+                    if (ordreMains[i] !== precedent) {
+                        return true;
+                    }
+                    precedent = ordreMains[i];
+                }
+                return false;
+            }
 
             function analyzeDistanceChange() {
                 const len = distances.length;
@@ -189,11 +224,15 @@
 
                 if (endAvg > startAvg + 0.01) {
                     if (compToInverse) compToInverse.fire(); // éloignement
+                    if (toSecousse) toSecousse.fire(); 
+
                 } else if (endAvg < startAvg - 0.01) {
                     if (compToNormale) compToNormale.fire(); // rapprochement
+                    if (toSecousse) toSecousse.fire(); 
                 }
                 if (detecterCroisementDepuisOrdre()) {
                    if(compToDecalage) compToDecalage.fire();
+                   if (toSecousse) toSecousse.fire(); 
                 }
             }
 
@@ -517,17 +556,7 @@
                 return proximityDistance < 130;
             }
 
-            function detecterCroisementDepuisOrdre() {
-                let precedent = ordreMains[0];
-                for (let i = 1; i < ordreMains.length; i++) {
-                    if (ordreMains[i] !== precedent) {
-                        return true; // Un croisement a eu lieu
-                    }
-                    precedent = ordreMains[i];
-                }
-                return false; // Pas de croisement
-            }
-
+            
 
 
         }

@@ -115,6 +115,9 @@
                 
 
         });
+
+        rMontagne.pause();
+
         rMontagne.on(rive.EventType.RiveEvent, (event) => {
                     const data = event.data;
                     if (data.type === rive.RiveEventType.General) {
@@ -140,6 +143,10 @@
                 
 
         });
+
+        rOcean.pause();
+
+        
         rOcean.on(rive.EventType.RiveEvent, (event) => {
                     const data = event.data;
                     if (data.type === rive.RiveEventType.General) {
@@ -167,6 +174,9 @@
                 
 
         });
+
+        rDino.pause();
+
 
 
         let toYeux;
@@ -213,7 +223,7 @@
             })
 
 
-        let blinkThreshold = 0.0015;
+        let blinkThreshold = 0.0035;
         let previousEyeOpen = 1;
         
         // Liste des images de la séquence
@@ -283,16 +293,19 @@
 
                                     if (tempsValeur.textContent == "250") {
                                         riveCanvasDino.style.visibility = "visible";
+                                        rDino.play();
                                         if (toDino) toDino.fire();
                                     }
 
                                     if (tempsValeur.textContent == "50") {
                                         riveCanvasMontagne.style.visibility = "visible";
+                                        rMontagne.play();
                                         if (baseToCC) baseToCC.fire();
                                     }
 
                                     if (tempsValeur.textContent == "190") {
                                         riveCanvasOcean.style.visibility = "visible";
+                                        rOcean.play();
                                         if (DIVbaseToCC) DIVbaseToCC.fire();
                                     }
 

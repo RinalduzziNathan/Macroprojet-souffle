@@ -28,10 +28,11 @@
 
 <body>
     <canvas id="riveCanvas"></canvas>
+    <canvas id="riveCanvasPlay"></canvas>
     <canvas id="visqueuseCanvas"></canvas>
     <div class="background-grid"></div>
     <video id="feu" muted playsinline>
-        <source src="feu2.webm" type="video/webm">
+        <source src="feurouge.webm" type="video/webm">
         Votre navigateur ne supporte pas la vidéo HTML5.
     </video>
     <img src="cendres.gif" alt="Animation" class="mon-gif">
@@ -46,9 +47,9 @@
 
     <img id="volcanImage" src="../interface/volcanintro.png" alt="volcanintro" />
     <div id="soundRectangle"></div>
-    <button id="showAnimationButton" class="showButton"> >>></button>
+    <button id="showAnimationButton" class="showButton">2/2</button>
     <button id="showRiveCircles" class="showButton"> >>> </button>
-    <button id="showSouffleTest" class="showButton"> >>></button>
+    <button id="showSouffleTest" class="showButton"> 1/2</button>
     <div id="dragDropContainer" style="display: none;">
         <div id="draggables">
             <div class="draggable" draggable="true" data-target="circle1">Lave fluide</div>
@@ -83,6 +84,10 @@
 
 
     <script>
+        const souffle1 = document.getElementById("souffle1");
+        const souffle2 = document.getElementById("souffle2");
+        souffle1.style.visibility = "hidden";
+        souffle2.style.visibility = "hidden";
         window.addEventListener('DOMContentLoaded', (event) => {
             const startBouton = document.getElementById("startBouton");
             const boutonRestart = document.getElementById("boutonRestart");
@@ -95,10 +100,7 @@
             const titre = document.getElementById("titre");
             const explication = document.getElementById("explication");
             explication.style.visibility = "hidden";
-            const souffle1 = document.getElementById("souffle1");
-            const souffle2 = document.getElementById("souffle2");
-            souffle1.style.visibility = "hidden";
-            souffle2.style.visibility = "hidden";
+            
             const texteEruption = document.getElementById("texteEruption");
             texteEruption.style.visibility = "hidden";
             const texteEruptionEffusive = document.getElementById("texteEruptionEffusive");
@@ -107,6 +109,8 @@
             texteEruptionExplosive.style.visibility = "hidden";
             const videoFeu = document.getElementById('feu');
             videoFeu.style.display = "hidden";
+            const riveCanvasPlay = document.getElementById("riveCanvasPlay");
+            riveCanvasPlay.style.visibility = "hidden";
 
 
             volcanCircle.style.visibility = "hidden";
@@ -182,6 +186,26 @@
                 },
             });
 
+
+            let toPlaymobiles, toEscape, toPhoto;
+         
+
+            const rPlay = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/playmobil.riv",
+                canvas: document.getElementById("riveCanvasPlay"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    rPlay.resizeDrawingSurfaceToCanvas();
+                    // Récupère les inputs (dont les triggers)
+                    const inputs = rPlay.stateMachineInputs('State Machine 1');
+                    toEscape = inputs.find(i => i.name === 'toEscape');
+                    toPlaymobiles = inputs.find(i => i.name === 'toPlaymobiles');
+                    toPhoto = inputs.find(i => i.name === 'toPhoto');
+                  
+                },
+            });
+
         
 
 
@@ -242,6 +266,9 @@
                 souffle1.style.visibility = "hidden";
                 souffle2.style.visibility = "hidden";
                 texteEruption.style.visibility = "visible";
+                riveCanvasPlay.style.visibility = "visible";
+                if (toPlaymobiles) toPlaymobiles.fire();
+
 
 
                
@@ -316,6 +343,7 @@
             boutonRestart.addEventListener("click", function () {
                 console.log("REstartBouton clicked");
                 if (toBase) toBase.fire();
+                if (toPlaymobiles) toPlaymobiles.fire();
                 startTimer(); 
                 boutonRestart.style.visibility = "hidden";
               
@@ -421,11 +449,14 @@
 
                             if (trend > 0.09) {
                                 if (baseToExplo) baseToExplo.fire();
+                                if (toEscape) toEscape.fire();
                                 texteEruptionExplosive.style.visibility = "visible";
                             }
                             if (trend < 0.09 && trend > -0.09) {
                                 if (baseToEffu) baseToEffu.fire();
                                 texteEruptionEffusive.style.visibility = "visible";
+                                if (toPhoto) toPhoto.fire();
+
                             }
 
 

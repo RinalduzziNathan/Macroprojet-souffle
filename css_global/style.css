@@ -26,10 +26,26 @@ canvas {
 }
 
 #riveCanvasDino {
+   
     left:-3%;
     width: 105%;
     height: auto;
     z-index: -1;
+}
+
+#riveCanvasCube {
+    top: -10%;
+    left:-7%;
+    width: 115%;
+    height: auto;
+    z-index: -1;
+}
+
+#riveCanvasPlay {
+    left:-3%;
+    width: 105%;
+    height: auto;
+    z-index: 20;
 }
 
 #riveCanvasConverge{
