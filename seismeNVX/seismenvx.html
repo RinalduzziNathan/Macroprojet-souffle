@@ -179,8 +179,8 @@
                 showNextClicked = false;
                 titre.style.visibility = "hidden";
                 riveCanvas.style.visibility = "visible";
-                riveCanvasCube.style.visibility = "visible";
-                if (toBloc) toBloc.fire(); 
+                //riveCanvasCube.style.visibility = "visible";
+                //if (toBloc) toBloc.fire(); 
 
                 riveCanvasMains.style.visibility = "hidden";
 
@@ -224,15 +224,15 @@
 
                 if (endAvg > startAvg + 0.01) {
                     if (compToInverse) compToInverse.fire(); // éloignement
-                    if (toSecousse) toSecousse.fire(); 
+                    //if (toSecousse) toSecousse.fire(); 
 
                 } else if (endAvg < startAvg - 0.01) {
                     if (compToNormale) compToNormale.fire(); // rapprochement
-                    if (toSecousse) toSecousse.fire(); 
+                    //if (toSecousse) toSecousse.fire(); 
                 }
                 if (detecterCroisementDepuisOrdre()) {
                    if(compToDecalage) compToDecalage.fire();
-                   if (toSecousse) toSecousse.fire(); 
+                   //if (toSecousse) toSecousse.fire(); 
                 }
             }
 

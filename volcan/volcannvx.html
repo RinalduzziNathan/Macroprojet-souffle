@@ -9,6 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&display=swap"
         rel="stylesheet">
@@ -35,7 +38,6 @@
         <source src="feurouge.webm" type="video/webm">
         Votre navigateur ne supporte pas la vidéo HTML5.
     </video>
-    <img src="cendres.gif" alt="Animation" class="mon-gif">
 
     <div id="volcanCircle"></div>
     <button id="startBouton" class="startBouton centerTop">GO</button>
@@ -47,9 +49,15 @@
 
     <img id="volcanImage" src="../interface/volcanintro.png" alt="volcanintro" />
     <div id="soundRectangle"></div>
+
+   
+    <div id="RectangleJaune">
+        <p id="consignes">1. Fluide ou visqueux ?</p>
+    </div>
+    
     <button id="showAnimationButton" class="showButton">2/2</button>
-    <button id="showRiveCircles" class="showButton"> >>> </button>
-    <button id="showSouffleTest" class="showButton"> 1/2</button>
+    <button id="showRiveCircles" class="showButton"> tutoriel </button>
+    <button id="showSouffleTest" class="showButton"> suite</button>
     <div id="dragDropContainer" style="display: none;">
         <div id="draggables">
             <div class="draggable" draggable="true" data-target="circle1">Lave fluide</div>
@@ -120,6 +128,9 @@
             boutonRestart.style.visibility = "hidden";
             var remplirTableau = false;
             var finTableau = false;
+
+            const RectangleJaune = document.getElementById("RectangleJaune");
+            RectangleJaune.style.visibility = "hidden";
             
            
 
@@ -231,8 +242,8 @@
             //videoFeu.addEventListener('ended', () => {
            //     videoFeu.style.display = "none";  
            // });
+            RectangleJaune.style.visibility = "visible";
 
-            showSouffleTest.style.visibility = "visible";
             showRiveCircles.style.visibility = "hidden";
             titre.style.visibility = "hidden";
             explication.style.visibility = "hidden";
@@ -247,6 +258,7 @@
             showSouffleTest.addEventListener('click',()=>{
 
                 document.getElementById("dragDropContainer").style.display = "none"; // 👈 masquer les éléments
+
                 explication.style.visibility = "visible";
                 showSouffleTest.style.visibility = "hidden";
                 visqueuseCanvas.style.visibility = "hidden";
@@ -538,10 +550,13 @@
                     resultMessage.textContent = "Vrai !";
                     resultMessage.style.color = "black";
                     bouncePage()
+                    showSouffleTest.style.visibility = "visible";
+
                 } else {
                     resultMessage.textContent = "Faux.";
                     resultMessage.style.color = "black";
                     shakeCanvas();
+
                 }
 
                 // Optionnel : reset message après quelques secondes

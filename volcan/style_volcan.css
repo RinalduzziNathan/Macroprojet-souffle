@@ -304,3 +304,46 @@
     width: 1500px;
     pointer-events: none; /* pour laisser les clics passer à travers */
   }
+
+
+  #RectangleJaune {
+    position: absolute;
+    top: 33%;
+    left: 100%; /* Commence en dehors de l'écran, à droite */
+    transform: translateX(0);
+    width: auto; /* S’adapte à la taille du texte */
+    background-color: rgb(255, 255, 0);
+    height: 250px;
+    z-index: 1;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    padding: 0 200px; /* un peu d’espace autour du texte */
+    animation: glissement 15s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+  
+  #consignes {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 200;
+    color: black;
+    font-size: 165px;
+    margin: 0;
+  }
+  
+  @keyframes glissement {
+    0% {
+      transform: translateX(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(-200%);
+      opacity: 0;
+    }
+  }
+  

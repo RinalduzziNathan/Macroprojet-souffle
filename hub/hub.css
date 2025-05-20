@@ -80,7 +80,7 @@ body {
   }
   
   /* Le lien agit comme le cercle positionné */
-.circle-link {
+  .circle-link {
     position: absolute;
     width: 100px;
     height: 100px;
@@ -107,7 +107,7 @@ body {
     height: auto;
     z-index: 100;
     top: 2%;
-    left: 3%;
+    left: 5%;
   
   }
 
@@ -128,7 +128,7 @@ body {
     height: auto;
     z-index: 100;
     top: 55%;
-    left: 5%;
+    left: 12%;
   
   }
 
@@ -138,8 +138,8 @@ body {
     width: 20%;
     height: auto;
     z-index: 100;
-    top: 59%;
-    left: 75%;
+    top: 58%;
+    left: 77%;
   
   }
 
@@ -161,5 +161,19 @@ body {
     animation: weightAnim 5s infinite;
   }
   
+
+  #Rectangle {
+    position: absolute;
+    top: 22%;
+    left: 47%;
+    transform: translateX(-50%);
+    width: 750px;
+    background-color: rgb(255, 255, 0);
+    height: 300px;
+    rotate: -5deg;
+    z-index: -1;
+    visibility: visible;
+
+  }
   
   
