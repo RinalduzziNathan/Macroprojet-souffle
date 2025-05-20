@@ -49,11 +49,23 @@
 
     <img id="volcanImage" src="../interface/volcanintro.png" alt="volcanintro" />
     <div id="soundRectangle"></div>
+    <div id="RectangleBlanc"></div>
+
 
    
     <div id="RectangleJaune">
-        <p id="consignes">1. Fluide ou visqueux ?</p>
+        <p id="consignes">1. Fluide ou visqueuse ?</p>
     </div>
+
+    <div id="RectangleJaune2" style="visibility: hidden;">
+
+        <div id="banniere">
+          <p id="consignes2">2. Souffle pour faire jaillir la lave</p>
+        </div>
+    </div>
+
+
+
     
     <button id="showAnimationButton" class="showButton">2/2</button>
     <button id="showRiveCircles" class="showButton"> tutoriel </button>
@@ -72,8 +84,10 @@
         <div id="resultMessage" class="resultMessage"></div>
     </div>
     <div id="souffle1">
-        <img id="souffleImage1" src="../interface/souffle1.png" alt="souffleImage1" />
-        <div id="rectangle1"></div>
+       
+        <div id="rectangle1">
+            <img id="souffleImage1" src="../interface/souffle1.png" alt="souffleImage1" />
+        </div>
     </div>
     <div id="souffle2">
         <img id="souffleImage2" src="../interface/souffle2.png" alt="souffleImage2" />
@@ -131,6 +145,15 @@
 
             const RectangleJaune = document.getElementById("RectangleJaune");
             RectangleJaune.style.visibility = "hidden";
+
+            const RectangleJaune2 = document.getElementById("RectangleJaune2");
+            RectangleJaune2.style.visibility = "hidden";
+            const consignes2 = document.getElementById("consignes2");
+
+
+
+            const RectangleBlanc = document.getElementById("RectangleBlanc");
+            RectangleBlanc.style.visibility = "hidden";
             
            
 
@@ -243,6 +266,12 @@
            //     videoFeu.style.display = "none";  
            // });
             RectangleJaune.style.visibility = "visible";
+            RectangleBlanc.style.visibility = "visible";
+
+            setTimeout(() => {
+                RectangleBlanc.style.visibility = "hidden";
+            }, 6000);
+
 
             showRiveCircles.style.visibility = "hidden";
             titre.style.visibility = "hidden";
@@ -259,15 +288,24 @@
 
                 document.getElementById("dragDropContainer").style.display = "none"; // 👈 masquer les éléments
 
-                explication.style.visibility = "visible";
+                
                 showSouffleTest.style.visibility = "hidden";
                 visqueuseCanvas.style.visibility = "hidden";
-                volcanImage.style.visibility = "visible";
-                soundRectangle.style.visibility = "visible";
-                volcanCircle.style.visibility = "visible";
+               
                 showAnimationButton.style.visibility = "visible"
                 souffle1.style.visibility = "visible";
                 souffle2.style.visibility = "visible";
+
+                RectangleJaune2.style.visibility = "visible";
+
+                // Supprime et redémarre l'animation proprement
+                consignes2.classList.remove("defilement");
+
+                // Forcer le reflow : indispensable pour relancer proprement l'animation
+                void consignes2.offsetWidth;
+
+                // Puis on la relance
+                consignes2.classList.add("defilement");
 
             })
 
