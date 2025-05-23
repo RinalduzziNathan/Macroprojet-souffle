@@ -222,11 +222,11 @@
                     console.log("Mains absentes, on utilise les données enregistrées");
                 }
 
-                if (endAvg > startAvg + 0.01) {
+                if (endAvg > startAvg + 0.01 && !detecterCroisementDepuisOrdre()) {
                     if (compToInverse) compToInverse.fire(); // éloignement
                     //if (toSecousse) toSecousse.fire(); 
 
-                } else if (endAvg < startAvg - 0.01) {
+                } else if (endAvg < startAvg - 0.01 && !detecterCroisementDepuisOrdre()) {
                     if (compToNormale) compToNormale.fire(); // rapprochement
                     //if (toSecousse) toSecousse.fire(); 
                 }
@@ -293,7 +293,7 @@
 
                     // Comparer la position horizontale (x) des index (ou poignet)
                     // Ici, j’utilise le landmark 0 (poignet), tu peux aussi utiliser 8 (index)
-                    if (hand1[0].x < hand2[0].x) {
+                    if (hand1[8].x < hand2[8].x) {
                         ordreMains.push("gauche-droite");
                     } else {
                         ordreMains.push("droite-gauche");
@@ -347,13 +347,7 @@
 
                     const mainsCroisees = detecterCroisementDepuisOrdre();
 
-                    if (mainsCroisees) {
-                        console.log("Croisement détecté !");
-                        if (compToDecalage) compToDecalage.fire(); // Animation croisement
-                    } else {
-                        console.log("Pas de croisement");
-                    }
-
+                   
                     }
 
                 }
