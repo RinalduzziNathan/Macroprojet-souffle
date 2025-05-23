@@ -33,7 +33,7 @@
     <canvas id="riveCanvasMains"></canvas>
     <canvas id="handCanvas"></canvas>
     <canvas id="output_canvas"></canvas>
-    <button id="startBouton" class="startBouton centerTop">créer un séisme</button>
+    <button id="startBouton" class="startBouton centerTop">créer unMMM séisme</button>
     <div id="timerDisplay" class="timer centerTop hidden">0.0s</div>
     <button id="boutonRestart" class="startBouton centerTop">GO</button>
     <div id="titre" class="titre "> Ressentons ensemble la pression accumulée sous nos pieds</div>
@@ -107,6 +107,7 @@
                 stateMachines: "State Machine 1",
                 onLoad: () => {
                     const inputs = r.stateMachineInputs("State Machine 1");
+                    console.log(inputs)
                     baseToVib = inputs.find(i => i.name === "baseToVib");
                     compToInverse = inputs.find(i => i.name === "compToInverse");
                     compToNormale = inputs.find(i => i.name === "compToNormale");
@@ -184,14 +185,16 @@
                     console.log("Mains absentes, on utilise les données enregistrées");
                 }
 
-                if (endAvg > startAvg + 0.01) {
+                if (detecterCroisementDepuisOrdre()) {
+                    console.log("ici")
+                    if (compToDecalage) compToDecalage.fire();
+                }
+                if (endAvg > startAvg + 0.01 && !detecterCroisementDepuisOrdre()) {
                     if (compToInverse) compToInverse.fire(); // éloignement
-                } else if (endAvg < startAvg - 0.01) {
+                } else if (endAvg < startAvg - 0.01 && !detecterCroisementDepuisOrdre()) {
                     if (compToNormale) compToNormale.fire(); // rapprochement
                 }
-                if (detecterCroisementDepuisOrdre()) {
-                   if(compToDecalage) compToDecalage.fire();
-                }
+
             }
 
 
@@ -251,7 +254,7 @@
 
                     // Comparer la position horizontale (x) des index (ou poignet)
                     // Ici, j’utilise le landmark 0 (poignet), tu peux aussi utiliser 8 (index)
-                    if (hand1[0].x < hand2[0].x) {
+                    if (hand1[8].x < hand2[8].x) {
                         ordreMains.push("gauche-droite");
                     } else {
                         ordreMains.push("droite-gauche");
@@ -292,25 +295,19 @@
                         analyzeDistanceChange();
 
                         function detecterCroisementDepuisOrdre() {
-                        if (ordreMains.length < 2) return false;
-                        let precedent = ordreMains[0];
-                        for (let i = 1; i < ordreMains.length; i++) {
-                            if (ordreMains[i] !== precedent) {
-                                return true;
+                            if (ordreMains.length < 2) return false;
+                            let precedent = ordreMains[0];
+                            for (let i = 1; i < ordreMains.length; i++) {
+                                if (ordreMains[i] !== precedent) {
+                                    return true;
+                                }
+                                precedent = ordreMains[i];
                             }
-                            precedent = ordreMains[i];
+                            return false;
                         }
-                        return false;
-                    }
 
-                    const mainsCroisees = detecterCroisementDepuisOrdre();
+                        const mainsCroisees = detecterCroisementDepuisOrdre();
 
-                    if (mainsCroisees) {
-                        console.log("Croisement détecté !");
-                        if (compToDecalage) compToDecalage.fire(); // Animation croisement
-                    } else {
-                        console.log("Pas de croisement");
-                    }
 
                     }
 
@@ -430,16 +427,16 @@
 
                     if (diff < -0.01) {
                         movementTrend = "rapprochement";
-                        if (compToInverse) compToInverse.fire();
+                        // if (compToInverse) compToInverse.fire();
                     } else if (diff > 0.01) {
                         movementTrend = "eloignement";
-                        if (compToNormale) compToNormale.fire();
+                        //if (compToNormale) compToNormale.fire();
                     }
                 }
 
                 // Décalage
                 if (crossedDetected && compToDecalage) {
-                    compToDecalage.fire();
+                    //  compToDecalage.fire();
                 }
             }
 
@@ -447,7 +444,7 @@
 
             startBouton.addEventListener("click", function () {
                 startBoutonAction();
-               
+
             });
 
             boutonRestart.addEventListener("click", function () {
