@@ -155,7 +155,19 @@
 
             const RectangleBlanc = document.getElementById("RectangleBlanc");
             RectangleBlanc.style.visibility = "hidden";
+            let activeColorChange = false;  // contrôle si la couleur doit changer en live
             
+            function changerCouleurSelonIntensite(intensity) {
+                if (intensity < 20) {
+                    document.body.style.backgroundColor = "white";
+                } else if (intensity < 30) {
+                    document.body.style.backgroundColor = "yellow";
+                } else if (intensity < 50) {
+                    document.body.style.backgroundColor = "orange";
+                } else {
+                    document.body.style.backgroundColor = "red";
+                }
+            }
            
 
             let baseToEffu;
@@ -303,7 +315,7 @@
                 }, 1000); // 2000 ms = 2 secondes
                 setTimeout(() => {
                     document.getElementById('souffle2').classList.add('show');
-                }, 1200); // 2000 ms = 2 secondes
+                }, 1800); // 2000 ms = 2 secondes
 
                 // Supprime et redémarre l'animation proprement
                 consignes2.classList.remove("defilement");
@@ -313,6 +325,8 @@
 
                 // Puis on la relance
                 consignes2.classList.add("defilement");
+
+                activeColorChange = true;
 
             })
 
@@ -325,6 +339,8 @@
                 texteEruption.style.visibility = "visible";
                // riveCanvasPlay.style.visibility = "visible";
                // if (toPlaymobiles) toPlaymobiles.fire();
+                activeColorChange = false;
+
 
 
 
@@ -435,6 +451,10 @@
                         analyser.getByteFrequencyData(dataArray);
                         let volume = dataArray.reduce((a, b) => a + b) / dataArray.length;
                         let intensity = Math.min(volume / 2, 100); // Normalize volume
+
+                        if (activeColorChange) {
+                            changerCouleurSelonIntensite(intensity);
+                        }
 
                         if (intensity !== null && intensity !== undefined && !isNaN(intensity)) {
                             let newHeight = 100 + intensity * 4;

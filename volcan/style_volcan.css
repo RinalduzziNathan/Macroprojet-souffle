@@ -13,6 +13,10 @@
     height: 675px;
 }
 
+body {
+  transition: background-color 0.5s ease;
+}
+
 /* New Rectangle */
 #soundRectangle {
     position: absolute;
@@ -431,7 +435,7 @@
   
   /* Animation déplacée dans une classe à part */
   .defilement {
-    animation: defilement 20s linear infinite;
+    animation: defilement 13s linear infinite;
   }
   
   @keyframes defilement {
