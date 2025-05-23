@@ -90,8 +90,9 @@
         </div>
     </div>
     <div id="souffle2">
-        <img id="souffleImage2" src="../interface/souffle2.png" alt="souffleImage2" />
-        <div id="rectangle2"></div>
+        <div id="rectangle2">
+            <img id="souffleImage2" src="../interface/souffle2.png" alt="souffleImage2" />
+        </div>
     </div>
 
     <div id="texteEruption" class="texteEruption">votre souffle va déterminer <br />
@@ -297,6 +298,12 @@
                 souffle2.style.visibility = "visible";
 
                 RectangleJaune2.style.visibility = "visible";
+                setTimeout(() => {
+                    document.getElementById('souffle1').classList.add('show');
+                }, 1000); // 2000 ms = 2 secondes
+                setTimeout(() => {
+                    document.getElementById('souffle2').classList.add('show');
+                }, 1200); // 2000 ms = 2 secondes
 
                 // Supprime et redémarre l'animation proprement
                 consignes2.classList.remove("defilement");

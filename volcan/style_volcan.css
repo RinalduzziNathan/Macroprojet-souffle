@@ -164,14 +164,18 @@
     text-align: left;
     cursor: pointer;
     z-index: 12;
-  }
+}
 
 #souffle1 {
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
     position: absolute;
-    top: 5%;
-    left: 45%;
-    width: 350px;
-    height: 200px;
+    top: 3%;
+    left: 55%;
+    width: 520px;
+    height: 240px;
     rotate: -10deg;
     cursor: pointer;
     background-color: rgba(255, 255, 255, 0);
@@ -182,11 +186,11 @@
 #rectangle1 {
     width: 100%;
     height: 100%;
-    padding: 20px;
+    padding: 40px;
     background-color: white;
     color: black;
     border: 2px solid black; /* Correction ici (enlève la virgule) */
-    border-radius: 70px;
+    border-radius: 100px;
     z-index: 1;
     box-sizing: border-box;
     position: relative;
@@ -204,40 +208,58 @@
     z-index: 7;
 }
 
-
-
-#souffleImage2{
-    position: absolute;
-    top: 20%;
-    left: 40%;
-    z-index: 7;
-    width: 150%;
-    height: auto;
-}
-
-#rectangle2 {
-    position: absolute;
-
-    padding: 70px 180px;
-    background-color: white;
-    color: rgb(0, 0, 0);
-    border: 2px, solid black;
-    border-radius: 70px;
-    z-index: 1;
-    /* Make sure it's above other elements */
-    transition: all 1s ease;
-    /* Smooth animation */
+#souffle1.show {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
 }
 
 #souffle2 {
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
     position: absolute;
-    top: 25%;
-    left: 68%;
-    width: 150px;
-    height: 100px;
+    top: 58%;
+    left: 10%;
+    width: 520px;
+    height: 240px;
+    rotate: 10deg;
     cursor: pointer;
     background-color: rgba(255, 255, 255, 0);
     z-index: 15;
+}
+
+#souffle2.show {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+/* rectangle1 devient un conteneur flexible */
+#rectangle2 {
+    width: 100%;
+    height: 100%;
+    padding: 40px;
+    background-color: white;
+    color: black;
+    border: 2px solid black; /* Correction ici (enlève la virgule) */
+    border-radius: 100px;
+    z-index: 1;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* L’image est redimensionnée à l’intérieur de rectangle1 */
+#souffleImage2 {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+    width: auto;
+    z-index: 7;
 }
 
 
@@ -409,7 +431,7 @@
   
   /* Animation déplacée dans une classe à part */
   .defilement {
-    animation: defilement 20s cubic-bezier(0.30, -0.05, 0.22, 1.05) forwards;
+    animation: defilement 20s linear infinite;
   }
   
   @keyframes defilement {
