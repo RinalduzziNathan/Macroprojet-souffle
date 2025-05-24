@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détection de Clignement avec MediaPipe</title>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@rive-app/canvas"></script>
+
+</style>
+<link rel="stylesheet" href="../css_global/style.css">
+<link rel="stylesheet" href="../css_global/style_boutons.css">
+<link rel="stylesheet" href="style_pangee.css">
+   
+
+</head>
+
+<body>
+    <div class="background-grid"></div>
+    <video id="video" autoplay hidden></video>
+    <div id="resultMessage" class="resultMessage"></div>
+    <div id="temps">Il y a <span id="tempsValeur">250</span> millions d'années</div>
+    <canvas id="riveCanvasMains"></canvas>
+    <div id="titre" class="titre "> Explorons 250 millions d’années d’histoire de la Terre...
+        En un clin d’oeil</div>
+    <button id="showNext" class="showButton"> tutoriel </button>
+    <button id="showNext2" class="showButton"> lancement </button>
+    <canvas id="riveCanvasPangee"></canvas>
+    <canvas id="riveCanvasDino"></canvas>
+    <canvas id="riveCanvasMontagne"></canvas>
+    <canvas id="riveCanvasOcean"></canvas>
+    <canvas id="riveCanvasVolcan"></canvas>
+
+
+    <!-- Conteneur de l'image -->
+    <div id="imageContainer" class="position">
+        <img id="sequenceImage1" src="image/pangee1.png"  alt="Séquence temporelle">
+        <img id="sequenceImage2" src="image/pangee1.png" alt="Séquence temporelle" style="opacity: 0;">
+    </div>
+
+    <script>
+        const titre = document.getElementById("titre")
+        const videoElement = document.getElementById('video');
+        const resultMessage = document.getElementById('resultMessage');
+        const temps = document.getElementById('temps');
+        temps.style.visibility = "hidden";
+        const tempsValeur = document.getElementById('tempsValeur');
+        tempsValeur.style.visibility = "hidden";
+        const sequenceImage1 = document.getElementById('sequenceImage1');
+        const sequenceImage2 = document.getElementById('sequenceImage2');
+        sequenceImage1.style.visibility="hidden";
+        sequenceImage2.style.visibility="hidden";
+        const showNext = document.getElementById('showNext');
+        showNext.style.visibility = "visible";
+        const showNext2 = document.getElementById('showNext2');
+        showNext2.style.visibility = "hidden";
+        const riveCanvasMains = document.getElementById("riveCanvasMains");
+        riveCanvasMains.style.visibility = "hidden";
+        const riveCanvasPangee = document.getElementById("riveCanvasPangee");
+        riveCanvasPangee.style.visibility = "hidden";
+        const riveCanvasDino = document.getElementById("riveCanvasDino");
+        riveCanvasDino.style.visibility = "hidden";
+        const riveCanvasMontagne = document.getElementById("riveCanvasMontagne");
+        riveCanvasMontagne.style.visibility = "hidden";
+        const riveCanvasOcean = document.getElementById("riveCanvasOcean");
+        riveCanvasOcean.style.visibility = "hidden";
+        const riveCanvasVolcan = document.getElementById("riveCanvasVolcan");
+        riveCanvasVolcan.style.visibility = "hidden";
+
+        let activeImage = 1; // Start with sequenceImage1
+        let showNext2Clicked = false;
+        let showNext1Clicked = false;
+
+        let toFermes;
+
+        const r = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/yeuxfermes1.riv",
+                canvas: document.getElementById("riveCanvasPangee"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = r.stateMachineInputs("State Machine 1");
+                    toFermes = inputs.find(i => i.name === "toFermes");
+
+                    r.resizeDrawingSurfaceToCanvas();
+                }
+                
+
+        });
+
+        let baseToCC;
+
+        const rMontagne = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_convergence.riv",
+                canvas: document.getElementById("riveCanvasMontagne"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rMontagne.stateMachineInputs("State Machine 1");
+                    baseToCC = inputs.find(i => i.name === "baseToCC");
+
+                    rMontagne.resizeDrawingSurfaceToCanvas();
+                }
+                
+
+        });
+
+        rMontagne.pause();
+
+        rMontagne.on(rive.EventType.RiveEvent, (event) => {
+                    const data = event.data;
+                    if (data.type === rive.RiveEventType.General) {
+                        riveCanvasMontagne.style.visibility = "hidden";
+
+                    }
+        });
+
+
+        let DIVbaseToCC;
+
+        const rOcean = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_divergence.riv",
+                canvas: document.getElementById("riveCanvasOcean"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rOcean.stateMachineInputs("State Machine 1");
+                    DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
+
+                    rOcean.resizeDrawingSurfaceToCanvas();
+                }
+                
+
+        });
+
+        rOcean.pause();
+
+        
+        rOcean.on(rive.EventType.RiveEvent, (event) => {
+                    const data = event.data;
+                    if (data.type === rive.RiveEventType.General) {
+                        riveCanvasOcean.style.visibility = "hidden";
+
+                    }
+        });
+
+
+        let toMorts, toDino;
+
+
+        const rDino = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/dinosaures.riv",
+                canvas: document.getElementById("riveCanvasDino"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rDino.stateMachineInputs("State Machine 1");
+                    toMorts = inputs.find(i => i.name === "toMorts");
+                    toDino = inputs.find(i => i.name === "toDino");
+
+                    rDino.resizeDrawingSurfaceToCanvas();
+                }
+                
+
+        });
+
+        rDino.pause();
+
+
+
+        let toYeux;
+
+        const rYeux = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/pangeeyeux.riv",
+                canvas: document.getElementById("riveCanvasMains"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rYeux.stateMachineInputs("State Machine 1");
+                    toYeux = inputs.find(i => i.name === "toYeux");
+                    rYeux.resizeDrawingSurfaceToCanvas();
+                }
+                
+
+            });
+
+       showNext.addEventListener('click',()=>{
+                showNext1Clicked = true;
+                showNext2Clicked = false;
+                titre.style.visibility = "hidden";
+                riveCanvasMains.style.visibility = "visible";
+                if (toYeux) toYeux.fire();
+                showNext.style.visibility= "hidden"
+                showNext2.style.visibility= "visible"
+            })
+
+        showNext2.addEventListener('click',()=>{
+                showNext1Clicked = false;
+
+                showNext2Clicked = true;
+                titre.style.visibility = "hidden";
+                riveCanvasMains.style.visibility = "hidden";
+                showNext.style.visibility= "hidden"
+                showNext2.style.visibility= "hidden"
+                sequenceImage1.style.visibility="visible";
+                sequenceImage2.style.visibility="visible";
+                tempsValeur.style.visibility = "visible";
+                temps.style.visibility = "visible";
+
+
+
+            })
+
+
+        let blinkThreshold = 0.0035;
+        let previousEyeOpen = 1;
+        
+        // Liste des images de la séquence
+        const imageSequence = [
+            "image/pangee1.png",
+            "image/pangee2.png",
+            "image/pangee3.png",
+            "image/pangee4.png",
+            "image/pangee5.png",
+            "image/pangee6.png",
+            "image/pangee7.png",
+            "image/pangee8.png",
+            "image/pangee9.png",
+            "image/pangee10.png",
+            "image/pangee11.png",
+            "image/pangee12.png",
+            "image/pangee13.png",
+            "image/pangee14.png",
+            "image/pangee15.png",
+            "image/pangee16.png",
+            "image/pangee17.png",
+            "image/pangee18.png",
+            "image/pangee19.png",
+            "image/pangee20.png",
+            "image/pangee21.png",
+            "image/pangee22.png",
+            "image/pangee23.png",
+            "image/pangee24.png",
+            "image/pangee25.png",
+            "image/pangee26.png",
+            "image/pangee27.png",];
+            
+        let currentImageIndex = 0;
+        let startYear = 250;
+
+        function changeImageCrossfade(nextImageSrc) {
+            if (activeImage === 1) {
+                sequenceImage2.src = nextImageSrc;
+                sequenceImage2.style.opacity = 1; // Fade in image 2
+                sequenceImage1.style.opacity = 0; // Fade out image 1
+                activeImage = 2;
+            } else {
+                sequenceImage1.src = nextImageSrc;
+                sequenceImage1.style.opacity = 1; // Fade in image 1
+                sequenceImage2.style.opacity = 0; // Fade out image 2
+                activeImage = 1;
+            }
+        }
+
+        async function detectBlink() {
+            const faceMesh = new FaceMesh({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}` });
+            faceMesh.setOptions({ maxNumFaces: 1, refineLandmarks: true, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
+
+            faceMesh.onResults((results) => {
+                if (results.multiFaceLandmarks.length > 0) {
+                    const landmarks = results.multiFaceLandmarks[0];
+                    const eyeTop = landmarks[159];
+                    const eyeBottom = landmarks[145];
+                    const eyeOpen = Math.abs(eyeTop.y - eyeBottom.y);
+
+                    if (eyeOpen < blinkThreshold && previousEyeOpen >= blinkThreshold) {
+                        if (showNext2Clicked) {
+                            if (currentImageIndex < imageSequence.length - 1) {
+                                setTimeout(() => {
+                                    currentImageIndex++;
+                                    changeImageCrossfade(imageSequence[currentImageIndex]);
+
+                                    if (tempsValeur.textContent == "250") {
+                                       // riveCanvasDino.style.visibility = "visible";
+                                        //rDino.play();
+                                       // if (toDino) toDino.fire();
+                                    }
+
+                                    if (tempsValeur.textContent == "50") {
+                                        riveCanvasMontagne.style.visibility = "visible";
+                                        rMontagne.play();
+                                        if (baseToCC) baseToCC.fire();
+                                    }
+
+                                    if (tempsValeur.textContent == "190") {
+                                        riveCanvasOcean.style.visibility = "visible";
+                                        rOcean.play();
+                                        if (DIVbaseToCC) DIVbaseToCC.fire();
+                                    }
+
+                                    if (tempsValeur.textContent == "80") {
+                                        //riveCanvasDino.style.visibility = "visible";
+                                        //if (toMorts) toMorts.fire();
+                                    }
+
+                                    if (currentImageIndex === imageSequence.length - 2) {
+                                        tempsValeur.textContent = startYear - (currentImageIndex - 1) * 10 - 5;
+                                   
+                                    } else if (currentImageIndex === imageSequence.length - 1) {
+                                        tempsValeur.textContent = 0;
+
+                                        setTimeout(() => {
+                                            sequenceImage1.style.visibility = "hidden";
+                                            sequenceImage2.style.visibility = "hidden";
+                                            temps.style.visibility = "hidden";
+                                            tempsValeur.style.visibility = "hidden";
+                                            riveCanvasPangee.style.visibility = "visible";
+                                            if (toFermes) toFermes.fire();
+                                            
+                                        }, 1000);
+                                    } else {
+                                        tempsValeur.textContent = startYear - currentImageIndex * 10;
+                                    }
+
+                                    sequenceImage1.style.opacity = 1;
+                                }, 300);
+                            }
+                        } else if (showNext1Clicked){
+                            // Si le deuxième bouton n’a PAS encore été cliqué, afficher juste le message
+                            resultMessage.textContent = 'Clignement détecté';
+                            setTimeout(() => {
+                                resultMessage.textContent = '';
+                            }, 1000);
+                        }
+                    }
+
+
+                    previousEyeOpen = eyeOpen;
+                }
+            });
+
+            const camera = new Camera(videoElement, {
+                onFrame: async () => {
+                    await faceMesh.send({ image: videoElement });
+                },
+                width: 640,
+                height: 480
+            });
+            camera.start();
+        }
+
+        detectBlink();
+    
+    
+    </script>
+</body>
+</html>
