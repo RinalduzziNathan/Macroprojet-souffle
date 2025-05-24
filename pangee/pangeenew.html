@@ -355,6 +355,39 @@
                                         if (baseToCC) baseToCC.fire();
                                         if (toMontagne) toMontagne.fire();
 
+                                        const pastille2 = document.createElement('div');
+                                        pastille2.style.position = 'absolute';
+                                        pastille2.style.width = '25px';
+                                        pastille2.style.height = '25px';
+                                        pastille2.style.backgroundColor = 'red';
+                                        pastille2.style.borderRadius = '50%';
+                                        pastille2.style.top = '42%';  // ← à ajuster selon ton besoin
+                                        pastille2.style.left = '65%'; // ← à ajuster selon ton besoin
+                                        pastille2.style.zIndex = '9999';
+
+                                        document.body.appendChild(pastille2);
+
+                                        setTimeout(() => {
+                                            pastille2.remove();
+                                        }, 3000);
+
+
+                                        const pastille3 = document.createElement('div');
+                                        pastille3.style.position = 'absolute';
+                                        pastille3.style.width = '25px';
+                                        pastille3.style.height = '25px';
+                                        pastille3.style.backgroundColor = 'red';
+                                        pastille3.style.borderRadius = '50%';
+                                        pastille3.style.top = '35%';  // ← à ajuster selon ton besoin
+                                        pastille3.style.left = '51%'; // ← à ajuster selon ton besoin
+                                        pastille3.style.zIndex = '9999';
+
+                                        document.body.appendChild(pastille3);
+
+                                        setTimeout(() => {
+                                            pastille3.remove();
+                                        }, 3000);
+
                                     }
 
                                     if (tempsValeur.textContent == "190") {
@@ -362,6 +395,22 @@
                                         rOcean.play();
                                         if (DIVbaseToCC) DIVbaseToCC.fire();
                                         if (toWater) toWater.fire();
+
+                                        const pastille = document.createElement('div');
+                                        pastille.style.position = 'absolute';
+                                        pastille.style.width = '25px';
+                                        pastille.style.height = '25px';
+                                        pastille.style.backgroundColor = 'red';
+                                        pastille.style.borderRadius = '50%';
+                                        pastille.style.top = '42%';  // ← à ajuster selon ton besoin
+                                        pastille.style.left = '46%'; // ← à ajuster selon ton besoin
+                                        pastille.style.zIndex = '9999';
+
+                                        document.body.appendChild(pastille);
+
+                                        setTimeout(() => {
+                                            pastille.remove();
+                                        }, 3000);
                                     }
 
                                     if (tempsValeur.textContent == "80") {
