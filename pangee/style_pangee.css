@@ -7,6 +7,15 @@
     z-index: 13;
 }
 
+#riveCanvasEvenement {
+    position: absolute;
+    top: 2%;
+    left: 86%;
+    width: 180px;
+    height: 120px;
+    z-index: 13;
+}
+
 #riveCanvasMontagne {
     position: absolute;
     top: 7%;

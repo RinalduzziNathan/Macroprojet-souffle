@@ -37,6 +37,8 @@
     <button id="showNext" class="showButton"> tutoriel </button>
     <button id="showNext2" class="showButton"> lancement </button>
     <canvas id="riveCanvasPangee"></canvas>
+    <canvas id="riveCanvasEvenement"></canvas>
+
     <canvas id="riveCanvasDino"></canvas>
     <canvas id="riveCanvasMontagne"></canvas>
     <canvas id="riveCanvasOcean"></canvas>
@@ -69,6 +71,9 @@
         // Définit la police et couleur (une fois)
         ctx.font = 'normal 200 30px "Bricolage Grotesque", sans-serif';
         ctx.fillStyle = 'black';
+
+        const riveCanvasEvenement = document.getElementById("riveCanvasEvenement")
+        riveCanvasEvenement.style.visibility = "hidden";
 
         const titre = document.getElementById("titre")
         const videoElement = document.getElementById('video');
@@ -198,6 +203,28 @@
         rDino.pause();
 
 
+        let toDinosaure, toWater, toDinoEnd, toMontagne, toFin;
+
+
+        const rEvenement = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/evenementpangee.riv",
+                canvas: document.getElementById("riveCanvasEvenement"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rEvenement.stateMachineInputs("State Machine 1");
+                    toDinosaure = inputs.find(i => i.name === "toDinosaure");
+                    toWater = inputs.find(i => i.name === "toWater");
+                    toDinoEnd = inputs.find(i => i.name === "toDinoEnd");
+                    toMontagne = inputs.find(i => i.name === "toMontagne");
+                    toFin = inputs.find(i => i.name === "toFin");
+
+                    rEvenement.resizeDrawingSurfaceToCanvas();
+                }
+                
+
+        });
+
 
         let toYeux;
 
@@ -317,23 +344,30 @@
                                        // riveCanvasDino.style.visibility = "visible";
                                         //rDino.play();
                                        // if (toDino) toDino.fire();
+                                    riveCanvasEvenement.style.visibility = "visible";
+
+                                    if (toDinosaure) toDinosaure.fire();
                                     }
 
                                     if (tempsValeur.textContent == "50") {
                                         riveCanvasMontagne.style.visibility = "visible";
                                         rMontagne.play();
                                         if (baseToCC) baseToCC.fire();
+                                        if (toMontagne) toMontagne.fire();
+
                                     }
 
                                     if (tempsValeur.textContent == "190") {
                                         riveCanvasOcean.style.visibility = "visible";
                                         rOcean.play();
                                         if (DIVbaseToCC) DIVbaseToCC.fire();
+                                        if (toWater) toWater.fire();
                                     }
 
                                     if (tempsValeur.textContent == "80") {
                                         //riveCanvasDino.style.visibility = "visible";
                                         //if (toMorts) toMorts.fire();
+                                        if (toDinoEnd) toDinoEnd.fire();
                                     }
 
                                     if (currentImageIndex === imageSequence.length - 2) {
@@ -341,6 +375,7 @@
                                    
                                     } else if (currentImageIndex === imageSequence.length - 1) {
                                         tempsValeur.textContent = 0;
+                                        if (toFin) toFin.fire();
 
                                         setTimeout(() => {
                                             sequenceImage1.style.visibility = "hidden";
