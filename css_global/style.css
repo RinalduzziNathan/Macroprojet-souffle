@@ -7,6 +7,13 @@ canvas {
     height: auto;
 }
 
+#monCanvas {
+    width: 1366;
+    height: 768;
+    z-index: 15;
+}
+
+
 #riveCanvas {
     width: 1366;
     height: 768;

@@ -41,6 +41,7 @@
     <canvas id="riveCanvasMontagne"></canvas>
     <canvas id="riveCanvasOcean"></canvas>
     <canvas id="riveCanvasVolcan"></canvas>
+    <canvas id="monCanvas"></canvas>
 
 
     <!-- Conteneur de l'image -->
@@ -50,6 +51,25 @@
     </div>
 
     <script>
+        const canvas = document.getElementById('monCanvas');
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+
+        // Définit la taille CSS du canvas si besoin
+        canvas.style.width = '1400px';
+        canvas.style.height = '800px';
+
+        // Définit la taille du canvas en pixels réels (multiplié par dpr)
+        canvas.width = 1400 * dpr;
+        canvas.height = 800 * dpr;
+
+        // Applique la mise à l’échelle
+        ctx.scale(dpr, dpr);
+
+        // Définit la police et couleur (une fois)
+        ctx.font = 'normal 200 30px "Bricolage Grotesque", sans-serif';
+        ctx.fillStyle = 'black';
+
         const titre = document.getElementById("titre")
         const videoElement = document.getElementById('video');
         const resultMessage = document.getElementById('resultMessage');
@@ -217,6 +237,8 @@
                 sequenceImage2.style.visibility="visible";
                 tempsValeur.style.visibility = "visible";
                 temps.style.visibility = "visible";
+                ctx.clearRect(0, 0, canvas.width, canvas.height);  // Efface tout le canvas
+
 
 
 
@@ -337,11 +359,18 @@
                                 }, 300);
                             }
                         } else if (showNext1Clicked){
-                            // Si le deuxième bouton n’a PAS encore été cliqué, afficher juste le message
-                            resultMessage.textContent = 'Clignement détecté';
-                            setTimeout(() => {
-                                resultMessage.textContent = '';
-                            }, 1000);
+                            const text = 'Clignement détecté';
+                            const textWidth = ctx.measureText(text).width;
+                            const textHeight = 30; // taille font
+                            
+                            // Taille visible CSS du canvas (doit correspondre au style)
+                            const cssWidth = 1400;
+                            const cssHeight = 800;
+
+                            const x = Math.random() * (cssWidth - textWidth);
+                            const y = Math.random() * (cssHeight - textHeight) + textHeight;
+
+                            ctx.fillText(text, x, y);
                         }
                     }
 
