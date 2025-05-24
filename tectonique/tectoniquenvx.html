@@ -41,6 +41,7 @@
     <canvas id="handCanvas"></canvas>
     <canvas id="riveCanvasTecto"></canvas>
     <canvas id="riveCanvasTectoFleches"></canvas>
+    <div id="info">Détection en cours...</div>
 
     <canvas id="output_canvas"></canvas>
     <canvas id="riveCanvasConverge"></canvas>
@@ -429,6 +430,7 @@
                 } else {
                     messages.push("Aucune main détectée");
                 }
+                info.innerText = messages.join("\n");
 
                 document.getElementById("bigcontidroite").style.display = "none";
                 document.getElementById("bigoceandroite").style.display = "none";
