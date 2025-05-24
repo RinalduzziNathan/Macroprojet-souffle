@@ -41,15 +41,15 @@
     <canvas id="handCanvas"></canvas>
     <canvas id="riveCanvasTecto"></canvas>
     <canvas id="riveCanvasTectoFleches"></canvas>
-    <div id="info">Détection en cours...</div>
+    <div id="texteMains">Détection en cours...</div>
 
     <canvas id="output_canvas"></canvas>
     <canvas id="riveCanvasConverge"></canvas>
     <canvas id="riveCanvasDiverge"></canvas>
     <button id="showAnimationButton" class="showButton"> à toi de jouer</button>
-    <button id="startBouton" class="startBouton centerTop">prêt ?</button>
+    <button id="startBouton" class="startBouton ">>>></button>
     <div id="timerDisplay" class="timer centerTop hidden">0.0s</div>
-    <button id="boutonRestart" class="startBouton centerTop">recommencer</button>
+    <button id="boutonRestart" class="startBouton centerTop">>>></button>
     <img id="contidroite" src="../interface/conti.png" class="centerRight" alt="contidroite" />
     <img id="contigauche" src="../interface/conti.png" class="centerLeft" alt="contigauche" />
     <img id="oceandroite" src="../interface/ocean.png" class="centerRight" alt="oceandroite" />
@@ -66,12 +66,14 @@
         <p id="consignes">1. Choisi ta plaque !</p>
     </div>
 
-    <div id="RectangleJaune2" style="visibility: hidden;">
-
-        <div id="banniere">
-          <p id="consignes2">2. Détermine le mouvement</p>
-        </div>
+    <div id="RectangleJauneV2">
+          <p id="consignesV2">2. Détermine le mouvement</p>
     </div>
+
+    <div id="annonce1" class="annonce tu ">TU</div>
+    <div id="annonce2" class="annonce as ">AS</div>
+    <div id="annonce3" class="annonce cinq">5</div>
+    <div id="annonce4" class="annonce secondes">SECONDES</div>
   
 
 
@@ -83,10 +85,19 @@
         const RectangleJaune = document.getElementById("RectangleJaune");
         RectangleJaune.style.visibility = "hidden";
 
-        const RectangleJaune2 = document.getElementById("RectangleJaune2");
-        RectangleJaune2.style.visibility = "hidden";
-        const consignes2 = document.getElementById("consignes2");
+        const RectangleJauneV2 = document.getElementById("RectangleJauneV2");
+        RectangleJauneV2.style.visibility = "hidden";
+        const texteMains = document.getElementById("texteMains");
+        texteMains.style.visibility = "hidden";
 
+        const annonce1 = document.getElementById("annonce1");
+        annonce1.style.visibility = "hidden";
+        const annonce2 = document.getElementById("annonce2");
+        annonce2.style.visibility = "hidden";
+        const annonce3 = document.getElementById("annonce3");
+        annonce3.style.visibility = "hidden";
+        const annonce4 = document.getElementById("annonce4");
+        annonce4.style.visibility = "hidden";
 
         let rConverge = new rive.Rive({
             src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_convergence.riv",
@@ -335,6 +346,7 @@
                 titre.style.visibility = "hidden";
                 showNext2.style.visibility= "visible"
                 canvas.style.visibility = "visible"
+                texteMains.style.visibility = "visible";
                 
                 setTimeout(() => {
                     riveCanvasTecto.style.visibility = "visible";
@@ -344,6 +356,10 @@
             })
 
             showNext2.addEventListener('click',()=>{
+                RectangleJauneV2.style.animation = "none";
+                RectangleJauneV2.offsetHeight; // trick pour forcer le reflow
+                RectangleJauneV2.style.animation = null;
+                RectangleJauneV2.style.visibility = "visible";
                 showNextClicked = false;
                 tectoRectangle.style.visibility = "hidden";
                 titre.style.visibility = "hidden";
@@ -351,12 +367,77 @@
                 showNext2.style.visibility= "hidden"
                 riveCanvasTecto.style.visibility = "hidden";
                 showAnimationButton.style.visibility = "visible";
+                texteMains.style.visibility = "hidden";
                 document.getElementById("contidroite").style.display = "none";
                 document.getElementById("contigauche").style.display = "none";
                 document.getElementById("oceandroite").style.display = "none";
                 document.getElementById("oceangauche").style.display = "none";
 
+                riveCanvasTectoFleches.style.visibility = "visible";
+                if (toFleches) toFleches.fire();
+
             })
+
+            
+            showAnimationButton.addEventListener("click", () => {
+                tectoRectangle.style.visibility = "visible";
+
+                
+                showAnimationButton.style.visibility = "hidden";
+
+                document.getElementById("startBouton").style.visibility = "visible";
+                riveCanvasTectoFleches.style.visibility = "hidden";
+                
+                setTimeout(() => {
+                    annonce1.style.visibility = "visible";
+                }, 300);
+                
+                setTimeout(() => {
+                    annonce2.style.visibility = "visible";
+                }, 600);
+
+                setTimeout(() => {
+                    annonce3.style.visibility = "visible";
+                }, 1000);
+                
+                setTimeout(() => {
+                    annonce4.style.visibility = "visible";
+                }, 1500);
+
+
+
+            });
+
+            startBouton.addEventListener("click", () => {
+            startBoutonAction();
+            });
+
+            boutonRestart.addEventListener("click", () => {
+                console.log("Restarting...");
+                document.getElementById("bigcontidroite").style.display = "none";
+                document.getElementById("bigoceandroite").style.display = "none";
+                document.getElementById("bigcontigauche").style.display = "none";
+                document.getElementById("bigoceangauche").style.display = "none";
+                //resetAnim();
+                cleanRiveAnimation();
+                DistanceIsCalculated = false;
+                rightHandStates = []; // "open" or "fist"
+                leftHandStates = [];
+                rightHandStates = [];
+                leftHandStates = [];
+                distances = [];
+                //cleanRiveAnimation();
+
+                boutonRestart.style.visibility = "hidden";
+                timerDisplay.classList.remove("hidden");
+                startBoutonAction();
+
+                annonce1.style.visibility = "hidden";
+                annonce2.style.visibility = "hidden";
+                annonce3.style.visibility = "hidden";
+                annonce4.style.visibility = "hidden";
+            });
+
 
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             video.srcObject = stream;
@@ -428,9 +509,13 @@
                         }
                     })
                 } else {
+                    contidroite.style.visibility = "hidden";
+                    contigauche.style.visibility = "hidden";
+                    oceandroite.style.visibility = "hidden";
+                    oceangauche.style.visibility = "hidden";   
                     messages.push("Aucune main détectée");
                 }
-                info.innerText = messages.join("\n");
+                texteMains.innerText = messages.join("\n");
 
                 document.getElementById("bigcontidroite").style.display = "none";
                 document.getElementById("bigoceandroite").style.display = "none";
@@ -646,47 +731,7 @@
             }, 100);
         }
 
-        startBouton.addEventListener("click", () => {
-            startBoutonAction();
-        });
-
-        boutonRestart.addEventListener("click", () => {
-            console.log("Restarting...");
-            document.getElementById("bigcontidroite").style.display = "none";
-                document.getElementById("bigoceandroite").style.display = "none";
-                document.getElementById("bigcontigauche").style.display = "none";
-                document.getElementById("bigoceangauche").style.display = "none";
-            //resetAnim();
-            cleanRiveAnimation();
-            DistanceIsCalculated = false;
-            rightHandStates = []; // "open" or "fist"
-            leftHandStates = [];
-            rightHandStates = [];
-            leftHandStates = [];
-            distances = [];
-            //cleanRiveAnimation();
-
-            boutonRestart.style.visibility = "hidden";
-            timerDisplay.classList.remove("hidden");
-            startBoutonAction();
-        });
-
-        showAnimationButton.addEventListener("click", () => {
-            document.getElementById("contidroite").style.display = "none";
-            document.getElementById("contigauche").style.display = "none";
-            document.getElementById("oceandroite").style.display = "none";
-            document.getElementById("oceangauche").style.display = "none";
-
-
-            showAnimationButton.style.visibility = "hidden";
-
-            document.getElementById("startBouton").style.visibility = "visible";
-            riveCanvasTectoFleches.style.visibility = "visible";
-            if (toFleches) toFleches.fire();
-
-
-
-        });
+        
 
     </script>
 </body>
