@@ -37,16 +37,38 @@
     <canvas id="riveCanvasMains"></canvas>
     <canvas id="handCanvas"></canvas>
     <canvas id="output_canvas"></canvas>
-    <button id="startBouton" class="startBouton centerTop">créer un séisme</button>
+    <button id="startBouton" class="startBouton">>>></button>
     <div id="timerDisplay" class="timer centerTop hidden">0.0s</div>
-    <button id="boutonRestart" class="startBouton centerTop">GO</button>
+    <button id="boutonRestart" class="startBouton">>>></button>
     <div id="titre" class="titre "> Ressentons ensemble la pression accumulée sous nos pieds</div>
-    <button id="showNext" class="showButton"> >>> </button>
-    <button id="showNext2" class="showButton"> >>> </button>
+    <button id="showNext" class="showButton"> tutoriel </button>
+    <button id="showNext2" class="showButton"> à toi de jouer </button>
     <div id="messagePression" class="resultMessage hidden">Pression détectée</div>
     <div id="messageResultat" class="resultMessage hidden"></div>
 
+    <div id="RectangleJaune2" style="visibility: hidden;">
 
+        <div id="banniere">
+          <p id="consignes2">1. simule la pression *si tu t’en sens la force</p>
+        </div>
+    </div>
+
+    <div id="annonce1" class="annonce tu ">TU</div>
+    <div id="annonce2" class="annonce as ">AS</div>
+    <div id="annonce3" class="annonce cinq">5</div>
+    <div id="annonce4" class="annonce secondes">SECONDES</div>
+    <div id="texteDecalage" class="texteFaille">
+        Les plaques glissent horizontalement <br />
+        l’une contre l’autre.
+    </div>
+    <div id="texteInverse" class="texteFaille">
+        La croûte se compresse et un bloc <br />
+        de roche se soulève au-dessus de l’autre.
+    </div>
+    <div id="texteNormale" class="texteFaille">
+        La croûte s’étire et un bloc <br />
+        de roche glisse vers le bas.
+    </div>
 
 
     <script>
@@ -73,7 +95,26 @@
             riveCanvasMains.style.visibility = "hidden";
             let showNextClicked = false;
 
-            boutonRestart.style.visibility = "hidden";;
+            const annonce1 = document.getElementById("annonce1");
+            annonce1.style.visibility = "hidden";
+            const annonce2 = document.getElementById("annonce2");
+            annonce2.style.visibility = "hidden";
+            const annonce3 = document.getElementById("annonce3");
+            annonce3.style.visibility = "hidden";
+            const annonce4 = document.getElementById("annonce4");
+            annonce4.style.visibility = "hidden";
+
+            const texteDecalage = document.getElementById("texteDecalage");
+            texteDecalage.style.visibility = "hidden";
+            const texteInverse = document.getElementById("texteInverse");
+            texteInverse.style.visibility = "hidden";
+            const texteNormale = document.getElementById("texteNormale");
+            texteNormale.style.visibility = "hidden";
+
+            const RectangleJaune2 = document.getElementById("RectangleJaune2");
+            RectangleJaune2.style.visibility = "hidden";
+            const consignes2 = document.getElementById("consignes2");
+            boutonRestart.style.visibility = "hidden";
             let isTouching = false;
             let TimerStarted = false;
             let TimerOver = false;
@@ -85,18 +126,20 @@
             let lastDetectionTime = Date.now();
             let ordreMains = []; // contiendra "gauche", "droite", ou "croise"
 
+            let couleurFond = false;
 
+            let toschemas;
 
-            let TOmains;
+            let startBoutonClicked = false;
 
             const rMains = new rive.Rive({
-                src: "https://rinalduzzinathan.github.io/file-stash/rive/seismeMains2.riv",
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/seismemains3.riv",
                 canvas: document.getElementById("riveCanvasMains"),
                 autoplay: true,
                 stateMachines: "State Machine 1",
                 onLoad: () => {
                     const inputs = rMains.stateMachineInputs("State Machine 1");
-                    TOmains = inputs.find(i => i.name === "TOmains");
+                    toschemas = inputs.find(i => i.name === "toschemas");
                     rMains.resizeDrawingSurfaceToCanvas();
                 }
 
@@ -120,11 +163,11 @@
 
             });
 
-            let baseToDecalage, toBase, baseToInverse, baseToNormale;
+            let baseToDecalage, toBase, baseToInverse, baseToNormale, toFond;
 
 
             const r = new rive.Rive({
-                src: "https://rinalduzzinathan.github.io/file-stash/rive/seismeperspective.riv",
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/seismeperspective2.riv",
                 canvas: document.getElementById("riveCanvas"),
                 autoplay: true,
                 stateMachines: "State Machine 1",
@@ -135,6 +178,8 @@
                     baseToInverse= inputs.find(i => i.name === "baseToInverse");
                     baseToDecalage = inputs.find(i => i.name === "baseToDecalage");
                     toBase = inputs.find(i => i.name === "toBase");
+                    toFond = inputs.find(i => i.name === "toFond");
+
 
                     r.resizeDrawingSurfaceToCanvas();
                 }
@@ -158,6 +203,10 @@
                     console.log("Event reçu : " + data.name);
                     boutonRestart.style.visibility = "visible";
                     messageResultat.style.visibility = "hidden";
+                    texteNormale.style.visibility = "hidden";
+                    texteInverse.style.visibility = "hidden";
+                    texteDecalage.style.visibility = "hidden";
+
 
                     if (toBase) toBase.fire();
                 }
@@ -168,15 +217,27 @@
                 titre.style.visibility = "hidden";
                 riveCanvas.style.visibility = "hidden";
                 riveCanvasMains.style.visibility = "visible";
-                if (TOmains) TOmains.fire();
+                if (toschemas) toschemas.fire();
                 showNext.style.visibility = "hidden"
                 showNext2.style.visibility = "visible"
+                RectangleJaune2.style.visibility = "visible";
+                // Supprime et redémarre l'animation proprement
+                consignes2.classList.remove("defilement");
+
+                // Forcer le reflow : indispensable pour relancer proprement l'animation
+                void consignes2.offsetWidth;
+
+                // Puis on la relance
+                consignes2.classList.add("defilement");
             })
 
             showNext2.addEventListener('click', () => {
+                RectangleJaune2.style.visibility = "hidden";
                 showNextClicked = false;
                 titre.style.visibility = "hidden";
                 riveCanvas.style.visibility = "visible";
+                if (toFond) toFond.fire();
+
                 //riveCanvasCube.style.visibility = "visible";
                 //if (toBloc) toBloc.fire(); 
 
@@ -187,6 +248,22 @@
                 // Show the Start button
                 const startBouton = document.getElementById('startBouton');
                 startBouton.style.visibility = 'visible';
+
+                setTimeout(() => {
+                    annonce1.style.visibility = "visible";
+                }, 500);
+                
+                setTimeout(() => {
+                    annonce2.style.visibility = "visible";
+                }, 1000);
+
+                setTimeout(() => {
+                    annonce3.style.visibility = "visible";
+                }, 1500);
+                
+                setTimeout(() => {
+                    annonce4.style.visibility = "visible";
+                }, 2000);
 
             })
 
@@ -221,16 +298,24 @@
                 }
 
                 if (endAvg > startAvg + 0.01 && !detecterCroisementDepuisOrdre()) {
+              
                     if (baseToInverse) baseToInverse.fire(); // éloignement
                     //if (toSecousse) toSecousse.fire(); 
+                    texteInverse.style.visibility = "visible";
+                    
 
                 } else if (endAvg < startAvg - 0.01 && !detecterCroisementDepuisOrdre()) {
+                  
                     if (baseToNormale) baseToNormale.fire(); // rapprochement
                     //if (toSecousse) toSecousse.fire(); 
+                    texteNormale.style.visibility = "visible";
+
                 }
                 if (detecterCroisementDepuisOrdre()) {
+                    
                    if(baseToDecalage) baseToDecalage.fire();
                    //if (toSecousse) toSecousse.fire(); 
+                   texteDecalage.style.visibility = "visible";
                 }
             }
 
@@ -276,11 +361,13 @@
                 ctx.clearRect(0, 0, handCanvas.width, handCanvas.height);
                 handCanvas.width = video.videoWidth;
                 handCanvas.height = video.videoHeight;
-
-                if ((!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) && !animationEnCours) {
-                    if (toBase) toBase.fire();
-                    animationEnCours = false;
-                    return;
+             
+                if ((!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) && !animationEnCours && startBoutonClicked) {
+                
+                        if (toBase) toBase.fire();
+                        animationEnCours = false;
+                        return;
+                  
                 }
 
 
@@ -308,18 +395,24 @@
                     lastRightHand = hand2[8];
 
                     // Partie 1 : juste afficher le message
-                    if (close && showNextClicked) {
-                        document.getElementById("messagePression").classList.remove("hidden");
-                        setTimeout(() => {
-                            document.getElementById("messagePression").classList.add("hidden");
-                        }, 2000);
-                    }
+                    //if (close && showNextClicked) {
+                        //document.getElementById("messagePression").classList.remove("hidden");
+                        //setTimeout(() => {
+                         //   document.getElementById("messagePression").classList.add("hidden");
+                        //}, 2000);
+                    //}
 
                     // Partie 2 : pendant le timer, enregistrer les distances
                     if (TimerIsRunning) {
                         onHandsDetected(hand1[8], hand2[8]);
+                        couleurFond = true;
                         animationEnCours = false;
 
+                        if (couleurFond === true) {
+                            changerCouleurFond();
+                        } else {
+                            document.body.style.backgroundColor = "white";
+                        }
                     }
 
                     // Fin du timer
@@ -388,7 +481,13 @@
             DistanceIsCalculated = false;
 
             function startBoutonAction() {
+                annonce1.style.visibility = "hidden";
+                annonce2.style.visibility = "hidden";
+                annonce3.style.visibility = "hidden";
+                annonce4.style.visibility = "hidden";
                 startBouton.style.visibility = "hidden";
+                riveCanvas.style.visibility = "visible";
+
                 timerDisplay.classList.remove("hidden");
                 let startTime = Date.now();
 
@@ -410,6 +509,22 @@
                         timerDisplay.classList.add("hidden");
                     }
                 }, 100);
+            }
+
+            function changerCouleurFond() {
+                // Étape 1 : Blanc → Orange (2.5s)
+                document.body.style.transition = "background-color 2.5s linear";
+                document.body.style.backgroundColor = "orange";
+
+                // Étape 2 : Orange → Rouge (2.5s plus tard)
+                setTimeout(() => {
+                    document.body.style.backgroundColor = "red";
+                }, 2000);
+
+                // Étape 3 : Rouge → Blanc (5s plus tard au total)
+                setTimeout(() => {
+                    document.body.style.backgroundColor = "white";
+                }, 5000);
             }
 
 
@@ -480,6 +595,7 @@
 
             startBouton.addEventListener("click", function () {
                 startBoutonAction();
+                startBoutonClicked = true;
                
             });
 

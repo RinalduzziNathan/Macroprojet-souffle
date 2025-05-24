@@ -14,9 +14,10 @@ canvas {
 }
 
 #riveCanvasMains {
+    top: -3%;
     width: 1366;
     height: 768;
-    z-index: 5;
+    z-index: 15;
 }
 
 #riveCanvasTecto {
@@ -95,6 +96,8 @@ body {
     background-repeat: no-repeat;
     height: 100vh;
     transition: background 0.5s;
+    background-color: white;
+    transition: background-color 2.5s linear;
 }
 .background-grid {
     position: absolute;
@@ -317,12 +320,14 @@ body {
     position: absolute;
     top: 2%;
     left: 2%;
+    z-index: 10;
 }
 
 .as {
     position: absolute;
     top: 2%;
     left: 23%;
+    z-index: 10;
 }
 
 
@@ -330,12 +335,14 @@ body {
     position: absolute;
     top: 36%;
     left: 23%;
+    z-index: 10;
 }
 
 .secondes {
     position: absolute;
     top: 70%;
     left: 23%;
+    z-index: 10;
 }
 
 
@@ -431,16 +438,16 @@ body {
     height: 250px;
     z-index: 1;
     overflow: hidden; /* Masque ce qui sort du rectangle */
-  }
+}
   
-  #banniere {
+#banniere {
     height: 100%;
     display: flex;
     align-items: center;
     white-space: nowrap;
-  }
+}
   
-  #consignes2 {
+#consignes2 {
     font-family: "Bricolage Grotesque", sans-serif;
     font-weight: 200;
     color: black;
@@ -448,19 +455,19 @@ body {
     margin: 0;
     padding-left: 100%;
     white-space: nowrap;
-  }
+}
   
   /* Animation déplacée dans une classe à part */
-  .defilement {
+.defilement {
     animation: defilement 13s linear infinite;
-  }
+}
   
-  @keyframes defilement {
+@keyframes defilement {
     from {
       transform: translateX(0);
     }
     to {
       transform: translateX(-100%);
     }
-  }
+}
 
