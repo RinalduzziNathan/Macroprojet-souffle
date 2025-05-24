@@ -103,23 +103,60 @@
     transition: opacity 0.5s ease; /* Smooth fade */
 }
 
-#clickZoneLunettes {
+
+
+
+.pastille-rebond {
     position: absolute;
-    top: 5px; /* même top que ton lunettes.png */
-    left: 5px; /* même left que ton lunettes.png */
-    width: 150px; /* taille à ajuster selon la taille de l'image */
-    height: 100px; /* taille à ajuster aussi */
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0); /* transparent */
-    z-index: 15; /* au-dessus du background */
+    width: 25px;
+    height: 25px;
+    background-color: red;
+    border-radius: 50%;
+    top: 42%; /* Ajuste selon ton besoin */
+    left: 46%; /* Ajuste selon ton besoin */
+    z-index: 9999;
+    animation: bounceIn 0.6s ease;
+}
+
+.pastille-rebond2 {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background-color: red;
+    border-radius: 50%;
+    top: 42%; /* Ajuste selon ton besoin */
+    left: 65%; /* Ajuste selon ton besoin */
+    z-index: 9999;
+    animation: bounceIn 0.6s ease;
+}
+
+.pastille-rebond3 {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background-color: red;
+    border-radius: 50%;
+    top: 35%; /* Ajuste selon ton besoin */
+    left: 51%; /* Ajuste selon ton besoin */
+    z-index: 9999;
+    animation: bounceIn 0.6s ease;
 }
 
 
-#lunettesImage {
-    position: absolute;
-    top: 55px; /* Or wherever you want */
-    left: 35px; /* Or wherever you want */
-    z-index: 10; /* Make sure it is in front of the circle */
-    width: 170px; /* taille à ajuster selon la taille de l'image */
-    height: 150px;
+/* Animation rebond */
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.5) translateY(-30px);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.2) translateY(10px);
+        opacity: 1;
+    }
+    80% {
+        transform: scale(0.9) translateY(-4px);
+    }
+    100% {
+        transform: scale(1) translateY(0);
+    }
 }
