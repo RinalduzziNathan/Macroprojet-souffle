@@ -40,11 +40,15 @@
     </video>
 
     <div id="volcanCircle"></div>
-    <button id="startBouton" class="startBouton centerTop">GO</button>
-    <button id="boutonRestart" class="startBouton centerTop">GO</button>
+    <button id="startBouton" class="startBouton">>>></button>
+    <button id="boutonRestart" class="restartBouton centerTop">>>></button>
     <div id="timer" class="timer verticalCenter"></div>
     <div id="titre" class="titre "> Le souffle de la Terre dépend de la nature de sa lave</div>
     <div id="explication" class="explication "> 2 possibilités</div>
+    <div id="annonce1" class="annonce tu ">TU</div>
+    <div id="annonce2" class="annonce as ">AS</div>
+    <div id="annonce3" class="annonce cinq">5</div>
+    <div id="annonce4" class="annonce secondes">SECONDES</div>
 
 
     <img id="volcanImage" src="../interface/volcanintro.png" alt="volcanintro" />
@@ -60,16 +64,17 @@
     <div id="RectangleJaune2" style="visibility: hidden;">
 
         <div id="banniere">
-          <p id="consignes2">2. Souffle pour faire jaillir la lave</p>
+          <p id="consignes2">2. Souffle pour faire monter la pression</p>
         </div>
     </div>
 
 
 
     
-    <button id="showAnimationButton" class="showButton">2/2</button>
+   
     <button id="showRiveCircles" class="showButton"> tutoriel </button>
     <button id="showSouffleTest" class="showButton"> suite</button>
+     <button id="showAnimationButton" class="showButton">à toi de jouer</button>
     <div id="dragDropContainer" style="display: none;">
         <div id="draggables">
             <div class="draggable" draggable="true" data-target="circle1">Lave fluide</div>
@@ -97,13 +102,20 @@
 
     <div id="texteEruption" class="texteEruption">votre souffle va déterminer <br />
         le type d’éruption</div>
-    <div id="texteEruptionEffusive" class="texteEruption">une lave fluide permet <br /> 
-        aux gaz de s’échapper calmement, <br />
-        les éruptions sont lentes et régulières.</div>
+    <div id="texteEruptionEffusive" class="texteEruption">
+        La lave fluide permet <br /> 
+        aux gaz de s’échapper calmement,<br /> 
+        les éruptions sont lentes et régulières <br /> 
+        formant des coulées de lave fluide. <br /> 
+        L'accumulation des projections de lave <br /> 
+        forment le cône volcanique.</div>
 
-    <div id="texteEruptionExplosive" class="texteEruption">une lave visqueuse piège <br /> 
-        les gaz. La pression monte <br /> 
-        jusqu’à provoquer une éruption brutale.
+    <div id="texteEruptionExplosive" class="texteEruption">
+        La lave visqueuse constitue un dôme <br /> 
+        dans lequel les gaz s'accumulent.<br />  
+        Lorsque la pression est trop forte, <br /> 
+        il se produit une explosion.</div>
+       
 
 
     <script>
@@ -123,6 +135,15 @@
             const titre = document.getElementById("titre");
             const explication = document.getElementById("explication");
             explication.style.visibility = "hidden";
+
+            const annonce1 = document.getElementById("annonce1");
+            annonce1.style.visibility = "hidden";
+            const annonce2 = document.getElementById("annonce2");
+            annonce2.style.visibility = "hidden";
+            const annonce3 = document.getElementById("annonce3");
+            annonce3.style.visibility = "hidden";
+            const annonce4 = document.getElementById("annonce4");
+            annonce4.style.visibility = "hidden";
             
             const texteEruption = document.getElementById("texteEruption");
             texteEruption.style.visibility = "hidden";
@@ -332,20 +353,35 @@
 
             showAnimationButton.addEventListener('click', () => {
 
-                volcanCircle.style.visibility = "hidden";
+                activeColorChange = false;
+                document.body.style.backgroundColor = "white";
+                RectangleJaune2.style.visibility = "hidden";
+                volcanCircle.style.visibility = "visible";
                 explication.style.visibility = "hidden";
                 souffle1.style.visibility = "hidden";
                 souffle2.style.visibility = "hidden";
-                texteEruption.style.visibility = "visible";
+                //texteEruption.style.visibility = "visible";
                // riveCanvasPlay.style.visibility = "visible";
                // if (toPlaymobiles) toPlaymobiles.fire();
                 activeColorChange = false;
+                
+                setTimeout(() => {
+                    annonce1.style.visibility = "visible";
+                }, 500);
+                
+                setTimeout(() => {
+                    annonce2.style.visibility = "visible";
+                }, 1000);
 
+                setTimeout(() => {
+                    annonce3.style.visibility = "visible";
+                }, 1500);
+                
+                setTimeout(() => {
+                    annonce4.style.visibility = "visible";
+                }, 2000);
 
-
-
-               
-                riveCanvas.style.visibility = "visible";
+                riveCanvas.style.visibility = "hidden";
                 const volcanImage = document.getElementById('volcanImage');
                 volcanImage.style.display = 'none';
                 showAnimationButton.hidden = true;
@@ -406,11 +442,19 @@
 
             startBouton.addEventListener("click", function () {
                 console.log("startBouton clicked");
+                riveCanvas.style.visibility = "visible";
+                volcanCircle.style.visibility = "hidden";
                 texteEruption.style.visibility = "hidden";
 
                 if (toBase) toBase.fire();
                 startTimer();
                 startBouton.style.visibility = "hidden";
+
+                annonce1.style.visibility = "hidden";
+                annonce2.style.visibility = "hidden";
+                annonce3.style.visibility = "hidden";
+                annonce4.style.visibility = "hidden";
+
             });
 
             boutonRestart.addEventListener("click", function () {
@@ -452,8 +496,46 @@
                         let volume = dataArray.reduce((a, b) => a + b) / dataArray.length;
                         let intensity = Math.min(volume / 2, 100); // Normalize volume
 
+                        let rCurrent = 255, gCurrent = 255, bCurrent = 255; // couleur initiale = blanc
+
+                        function lerp(a, b, t) {
+                        return a + (b - a) * t;
+                        }
+
+                        function intensityToRGB(intensity) {
+                            intensity = Math.min(Math.max(intensity, 0), 100); // Clamp
+
+                            let r = 255, g = 255, b = 255;
+
+                            if (intensity < 33) {
+                                // Blanc (#FFFFFF) → Jaune (#FFFF00)
+                                const t = intensity / 33;
+                                b = Math.round(255 * (1 - t)); // 255 → 0
+                            } else if (intensity < 66) {
+                                // Jaune (#FFFF00) → Orange (#FFA500)
+                                const t = (intensity - 33) / 33;
+                                g = Math.round(255 - t * 105); // 255 → 150
+                                b = 0;
+                            } else {
+                                // Orange (#FFA500) → Rouge (#FF0000)
+                                const t = (intensity - 66) / 34;
+                                g = Math.round(150 * (1 - t)); // 150 → 0
+                                b = 0;
+                            }
+
+                            return { r, g, b };
+                        }
+
+
+                        // Dans ta fonction draw() quand activeColorChange === true
                         if (activeColorChange) {
-                            changerCouleurSelonIntensite(intensity);
+                        const targetColor = intensityToRGB(intensity);
+                        
+                        rCurrent = lerp(rCurrent, targetColor.r, 0.7);
+                        gCurrent = lerp(gCurrent, targetColor.g, 0.7);
+                        bCurrent = lerp(bCurrent, targetColor.b, 0.7);
+
+                        document.body.style.backgroundColor = `rgb(${Math.round(rCurrent)}, ${Math.round(gCurrent)}, ${Math.round(bCurrent)})`;
                         }
 
                         if (intensity !== null && intensity !== undefined && !isNaN(intensity)) {

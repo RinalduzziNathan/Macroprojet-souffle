@@ -28,6 +28,36 @@
     position: absolute;
     line-height: 0.9;
     background-color: white;
+    top: 40%;
+    left: 40%;
+
+    display: inline-block;
+    padding: 30px 80px;
+    visibility: hidden;
+    background-color: white;
+    color: rgb(0, 0, 0);
+    border: 3px, solid black;
+    border-radius: 100px;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+    font-size: 90px;
+    color: black;
+    cursor: pointer;
+    z-index: 20;
+}
+
+.startBouton:hover {
+    background-color: red;
+}
+
+
+.restartBouton {
+    position: absolute;
+    line-height: 0.9;
+    background-color: white;
     top: 20%;
     left: center;
 
@@ -49,6 +79,6 @@
     z-index: 20;
 }
 
-.startBouton:hover {
+.restartBouton:hover {
     background-color: red;
 }

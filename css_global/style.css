@@ -253,7 +253,7 @@ body {
     line-height: 0.8;
     display: inline-block;
     text-align: left;
-  }
+}
 
 #info {
     position: absolute;
@@ -286,4 +286,40 @@ body {
     font-style: normal;
     font-variation-settings: "wdth" 100;
     z-index: 12;
+}
+
+.annonce {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 700;
+    color: rgb(255, 255, 0);
+    font-size: 230px;
+    margin: 0;
+    line-height: 0.8;
+    display: inline-block;
+    text-align: left;
+}
+
+.tu {
+    position: absolute;
+    top: 2%;
+    left: 2%;
+}
+
+.as {
+    position: absolute;
+    top: 2%;
+    left: 23%;
+}
+
+
+.cinq {
+    position: absolute;
+    top: 36%;
+    left: 23%;
+}
+
+.secondes {
+    position: absolute;
+    top: 70%;
+    left: 23%;
 }
