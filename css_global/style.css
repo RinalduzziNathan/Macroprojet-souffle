@@ -16,13 +16,13 @@ canvas {
 #riveCanvasMains {
     width: 1366;
     height: 768;
-    z-index: 1;
+    z-index: 5;
 }
 
 #riveCanvasTecto {
     width: 1366;
     height: 768;
-    z-index: 1;
+    z-index: 5;
 }
 
 #riveCanvasDino {

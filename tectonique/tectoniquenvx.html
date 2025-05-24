@@ -49,10 +49,10 @@
     <button id="startBouton" class="startBouton centerTop">prêt ?</button>
     <div id="timerDisplay" class="timer centerTop hidden">0.0s</div>
     <button id="boutonRestart" class="startBouton centerTop">recommencer</button>
-    <img id="contidroite" src="../interface/conti.png" class="topRight" alt="contidroite" />
-    <img id="contigauche" src="../interface/conti.png" class="bottomLeft" alt="contigauche" />
-    <img id="oceandroite" src="../interface/ocean.png" class="bottomRight" alt="oceandroite" />
-    <img id="oceangauche" src="../interface/ocean.png" class="topLeft" alt="oceangauche" />
+    <img id="contidroite" src="../interface/conti.png" class="centerRight" alt="contidroite" />
+    <img id="contigauche" src="../interface/conti.png" class="centerLeft" alt="contigauche" />
+    <img id="oceandroite" src="../interface/ocean.png" class="centerRight" alt="oceandroite" />
+    <img id="oceangauche" src="../interface/ocean.png" class="centerLeft" alt="oceangauche" />
     <img id="bigcontidroite" src="../interface/conti.png" class="centerRight" alt="bigcontidroite" />
     <img id="bigcontigauche" src="../interface/conti.png" class="centerLeft" alt="bigcontigauche" />
     <img id="bigoceandroite" src="../interface/ocean.png" class="centerRight" alt="bigoceandroite" />
@@ -385,6 +385,10 @@
                 let messages = [];
 
                 if (results.multiHandLandmarks.length > 0) {
+                    contidroite.style.visibility = "hidden";
+                    contigauche.style.visibility = "hidden";
+                    oceandroite.style.visibility = "hidden";
+                    oceangauche.style.visibility = "hidden";                                
                     results.multiHandLandmarks.forEach((handLandmarks, i) => {
                         drawHand(handLandmarks);
 
@@ -395,37 +399,31 @@
                             //color = "pink";
                             messages.push("Main droite : Poing fermé");
                             triggerBounce("oceangauche");
-                            contidroite.style.visibility = "hidden";
-                            contigauche.style.visibility = "hidden";
-                            oceandroite.style.visibility = "hidden";
+                            
                             oceangauche.style.visibility = "visible";
 
                         } else if (handedness === "Right" && !isFistPose) {
                             //color = "green";
                             messages.push("Main droite : Main tendue");
                             triggerBounce("contigauche");
-                            contidroite.style.visibility = "hidden";
+                            
                             contigauche.style.visibility = "visible";
-                            oceandroite.style.visibility = "hidden";
-                            oceangauche.style.visibility = "hidden";
+            
 
                         } else if (handedness === "Left" && isFistPose) {
                             //color = "blue";
                             messages.push("Main gauche : Poing fermé");
                             triggerBounce("oceandroite");
-                            contidroite.style.visibility = "hidden";
-                            contigauche.style.visibility = "hidden";
+                            
                             oceandroite.style.visibility = "visible";
-                            oceangauche.style.visibility = "hidden";
+                
 
                         } else if (handedness === "Left" && !isFistPose) {
                             //color = "yellow";
                             messages.push("Main gauche : Main tendue");
                             triggerBounce("contidroite");
                             contidroite.style.visibility = "visible";
-                            contigauche.style.visibility = "hidden";
-                            oceandroite.style.visibility = "hidden";
-                            oceangauche.style.visibility = "hidden";
+                       
                         }
                     })
                 } else {

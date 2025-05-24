@@ -1,29 +1,29 @@
 
 
 #contidroite {
-    z-index: 10;
-    width: 230px;
+    z-index: 1;
+    width: 300px;
     height: auto;
     /* Optional, makes it responsive */
 }
 
 #contigauche {
-    z-index: 10;
-    width: 230px;
+    z-index: 1;
+    width: 300px;
     height: auto;
     /* Optional, makes it responsive */
 }
 
 #oceandroite {
-    z-index: 10;
-    width: 230px;
+    z-index: 1;
+    width: 300px;
     height: auto;
     /* Optional, makes it responsive */
 }
 
 #oceangauche {
-    z-index: 10;
-    width: 230px;
+    z-index: 1;
+    width: 300px;
     height: auto;
     /* Optional, makes it responsive */
 }
