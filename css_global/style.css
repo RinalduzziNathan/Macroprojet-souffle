@@ -285,7 +285,7 @@ body {
     z-index: 12;
 }
 
-.resultMessage {
+#resultMessage {
     text-align: center;
     position: absolute;
     top: 3%;

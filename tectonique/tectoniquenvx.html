@@ -42,6 +42,39 @@
     <canvas id="riveCanvasTecto"></canvas>
     <canvas id="riveCanvasTectoFleches"></canvas>
     <div id="texteMains">Détection en cours...</div>
+    <div id="texteConvOO"> 
+        L'une des plaques s'enfonce <br />
+        sous l'autre (subduction), <br />
+        formant une fosse océanique. <br />
+        Cela peut créer une chaîne d'îles volcaniques.
+    </div>
+    <div id="texteConvTT"> 
+        Aucune des deux plaques ne s'enfonce, <br />
+        elles se compressent et se soulèvent. <br />
+        Cela donne naissance à de grandes <br />
+        chaînes de montagnes.
+    </div>
+    <div id="texteConvTO"> 
+        La plaque océanique, plus dense, <br />
+        plonge sous la plaque continentale, <br />
+        provoquant la formation de volcans. 
+    </div>
+    <div id="texteDivOO"> 
+        Du magma remonte et crée une nouvelle <br />
+        "lithosphère océanique constituée de basalte".
+    </div>
+    <div id="texteDivTT"> 
+        La croûte s’amincit, se fissure <br />
+        et forme un rift continental. <br />
+        Ce rift peut à terme devenir <br />
+        un océan si l’écartement se poursuit.
+    </div>
+    <div id="texteDivTO"> 
+        Ce point n'existe pas ! <br />
+        Un écartement est toujours associé <br />
+        à une dorsale océanique qui constitue <br />
+        des lithosphères océaniques de part et d'autre.
+    </div>
 
     <canvas id="output_canvas"></canvas>
     <canvas id="riveCanvasConverge"></canvas>
@@ -49,7 +82,7 @@
     <button id="showAnimationButton" class="showButton"> à toi de jouer</button>
     <button id="startBouton" class="startBouton ">>>></button>
     <div id="timerDisplay" class="timer centerTop hidden">0.0s</div>
-    <button id="boutonRestart" class="startBouton centerTop">>>></button>
+    <button id="boutonRestart" class="startBouton">>>></button>
     <img id="contidroite" src="../interface/conti.png" class="centerRight" alt="contidroite" />
     <img id="contigauche" src="../interface/conti.png" class="centerLeft" alt="contigauche" />
     <img id="oceandroite" src="../interface/ocean.png" class="centerRight" alt="oceandroite" />
@@ -82,6 +115,7 @@
         let TimerOver = false;
         let TimerIsRunning = false;
         let DistanceIsCalculated = false;
+        let detectionActive = false;
         const RectangleJaune = document.getElementById("RectangleJaune");
         RectangleJaune.style.visibility = "hidden";
 
@@ -89,6 +123,19 @@
         RectangleJauneV2.style.visibility = "hidden";
         const texteMains = document.getElementById("texteMains");
         texteMains.style.visibility = "hidden";
+
+        const texteConvOO = document.getElementById("texteConvOO");
+        texteConvOO.style.visibility = "hidden";
+        const texteConvTT = document.getElementById("texteConvTT");
+        texteConvTT.style.visibility = "hidden";
+        const texteConvTO = document.getElementById("texteConvTO");
+        texteConvTO.style.visibility = "hidden";
+        const texteDivOO = document.getElementById("texteDivOO");
+        texteDivOO.style.visibility = "hidden";
+        const texteDivTT = document.getElementById("texteDivTT");
+        texteDivTT.style.visibility = "hidden";
+        const texteDivTO = document.getElementById("texteDivTO");
+        texteDivTO.style.visibility = "hidden";
 
         const annonce1 = document.getElementById("annonce1");
         annonce1.style.visibility = "hidden";
@@ -98,6 +145,7 @@
         annonce3.style.visibility = "hidden";
         const annonce4 = document.getElementById("annonce4");
         annonce4.style.visibility = "hidden";
+        
 
         let rConverge = new rive.Rive({
             src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_convergence.riv",
@@ -136,7 +184,12 @@
             const data = event.data;
             if (data.type === rive.RiveEventType.General) {
                 boutonRestart.style.visibility = "visible";
-
+                texteConvOO.style.visibility = "hidden";
+                texteConvTT.style.visibility = "hidden";
+                texteConvTO.style.visibility = "hidden";
+                texteDivOO.style.visibility = "hidden";
+                texteDivTT.style.visibility = "hidden";
+                texteDivTO.style.visibility = "hidden";
 
             }
         });
@@ -145,6 +198,13 @@
             const data = event.data;
             if (data.type === rive.RiveEventType.General) {
                 boutonRestart.style.visibility = "visible";
+                texteConvOO.style.visibility = "hidden";
+                texteConvTT.style.visibility = "hidden";
+                texteConvTO.style.visibility = "hidden";
+ 
+                texteDivOO.style.visibility = "hidden";
+                texteDivTT.style.visibility = "hidden";
+                texteDivTO.style.visibility = "hidden";
 
             }
         });
@@ -347,6 +407,7 @@
                 showNext2.style.visibility= "visible"
                 canvas.style.visibility = "visible"
                 texteMains.style.visibility = "visible";
+                detectionActive = true;
                 
                 setTimeout(() => {
                     riveCanvasTecto.style.visibility = "visible";
@@ -409,7 +470,11 @@
             });
 
             startBouton.addEventListener("click", () => {
-            startBoutonAction();
+                startBoutonAction();
+                annonce1.style.visibility = "hidden";
+                annonce2.style.visibility = "hidden";
+                annonce3.style.visibility = "hidden";
+                annonce4.style.visibility = "hidden";
             });
 
             boutonRestart.addEventListener("click", () => {
@@ -432,10 +497,7 @@
                 timerDisplay.classList.remove("hidden");
                 startBoutonAction();
 
-                annonce1.style.visibility = "hidden";
-                annonce2.style.visibility = "hidden";
-                annonce3.style.visibility = "hidden";
-                annonce4.style.visibility = "hidden";
+               
             });
 
 
@@ -466,11 +528,13 @@
                 //let color = "white";
                 let messages = [];
 
-                if (results.multiHandLandmarks.length > 0) {
-                    contidroite.style.visibility = "hidden";
-                    contigauche.style.visibility = "hidden";
-                    oceandroite.style.visibility = "hidden";
-                    oceangauche.style.visibility = "hidden";                                
+                if (results.multiHandLandmarks.length > 0 && detectionActive) {
+                    
+                    if (contidroite.style.visibility !== "hidden") contidroite.style.visibility = "hidden";
+                    if (contigauche.style.visibility !== "hidden") contigauche.style.visibility = "hidden";
+                    if (oceandroite.style.visibility !== "hidden") oceandroite.style.visibility = "hidden";
+                    if (oceangauche.style.visibility !== "hidden") oceangauche.style.visibility = "hidden";
+                                                 
                     results.multiHandLandmarks.forEach((handLandmarks, i) => {
                         drawHand(handLandmarks);
 
@@ -478,34 +542,34 @@
                         const handedness = results.multiHandedness[i].label; // "Left" ou "Right"
 
                         if (handedness === "Right" && isFistPose) {
-                            //color = "pink";
-                            messages.push("Main droite : Poing fermé");
-                            triggerBounce("oceangauche");
-                            
-                            oceangauche.style.visibility = "visible";
-
+                            messages.push("Main droite : poing fermé");
+                            if (contigauche.style.visibility !== "visible") {
+                                //triggerBounce("oceangauche");
+                                contigauche.style.visibility = "visible";
+                            }
                         } else if (handedness === "Right" && !isFistPose) {
-                            //color = "green";
-                            messages.push("Main droite : Main tendue");
-                            triggerBounce("contigauche");
                             
-                            contigauche.style.visibility = "visible";
-            
+                            messages.push("Main droite : main ouverte");
+                            if (oceangauche.style.visibility !== "visible") {
+                                //triggerBounce("contigauche");
+                            
+                                oceangauche.style.visibility = "visible";
+                            }
 
                         } else if (handedness === "Left" && isFistPose) {
                             //color = "blue";
-                            messages.push("Main gauche : Poing fermé");
-                            triggerBounce("oceandroite");
-                            
-                            oceandroite.style.visibility = "visible";
+                            messages.push("Main gauche : poing fermé");
+                            if (contidroite.style.visibility !== "visible") {
+                                //triggerBounce("oceandroite");
+                                contidroite.style.visibility = "visible";
                 
-
-                        } else if (handedness === "Left" && !isFistPose) {
-                            //color = "yellow";
-                            messages.push("Main gauche : Main tendue");
-                            triggerBounce("contidroite");
-                            contidroite.style.visibility = "visible";
-                       
+                            }                                   
+                        } if (handedness === "Left" && !isFistPose) {
+                            messages.push("Main gauche : main ouverte");
+                            if (oceandroite.style.visibility !== "visible") {
+                                //triggerBounce("contidroite");
+                                oceandroite.style.visibility = "visible";
+                            }
                         }
                     })
                 } else {
@@ -639,21 +703,47 @@
                             riveCanvasDiverge.style.visibility = "visible";
                             console.log(postureKey+ " divergence");
                             switch (postureKey) {
-                                case "fist_fist": DIVbaseToCC.fire(); break;
-                                case "fist_open": DIVbaseToOC.fire(); break;
-                                case "open_fist": DIVbaseToCO.fire(); break;
-                                case "open_open": DIVbaseToOO.fire(); break;
+                                case "fist_fist": 
+                                    DIVbaseToCC.fire(); 
+                                    texteDivTT.style.visibility = "visible";
+                                    break;
+
+                                case "fist_open": 
+                                    DIVbaseToOC.fire(); 
+                                    texteDivTO.style.visibility = "visible";
+                                    break;
+                                case "open_fist": 
+                                    DIVbaseToCO.fire();
+                                    texteDivTO.style.visibility = "visible"; 
+                                    break;
+                                case "open_open":
+                                    DIVbaseToOO.fire();
+                                    texteDivOO.style.visibility = "visible"; 
+                                    break;
                                 default: console.log("Unknown posture key:", postureKey); break;
                             }
                         } else if (endAvg < startAvg - 0.01) {
                             // convergence
+
                             console.log(postureKey+ " convergence");
                             riveCanvasConverge.style.visibility = "visible";
                             switch (postureKey) {
-                                case "fist_fist": baseToCC.fire(); break;
-                                case "fist_open": baseToOC.fire(); break;
-                                case "open_fist": baseToCO.fire(); break;
-                                case "open_open": baseToOO.fire(); break;
+                                case "fist_fist": 
+                                    baseToCC.fire(); 
+                                    texteConvTT.style.visibility = "visible";
+                                    break;
+                                case "fist_open": 
+                                    baseToOC.fire(); 
+                                    texteConvTO.style.visibility = "visible";
+                                    break;
+                                case "open_fist": 
+                                    baseToCO.fire(); 
+                                    texteConvTO.style.visibility = "visible";
+                                    break;
+                                case "open_open": 
+                                    baseToOO.fire(); 
+                                    texteConvOO.style.visibility = "visible";
+                                    break;
                                 default: console.log("Unknown posture key:", postureKey); break;
                             }
                         }

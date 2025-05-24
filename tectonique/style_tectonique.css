@@ -161,3 +161,117 @@
     font-variation-settings: "wdth" 100;
     z-index: 20;    
 }
+
+#texteDivOO {
+    text-align: center;
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 28px;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    line-height: 1;
+    display: inline-block;
+    text-align: left;
+    word-wrap: break-word;
+    z-index: 12;
+}
+
+#texteDivTO {
+    text-align: center;
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 28px;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    line-height: 1;
+    display: inline-block;
+    text-align: left;
+    word-wrap: break-word;
+    z-index: 12;
+}
+
+#texteDivTT {
+    text-align: center;
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 28px;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    line-height: 1;
+    display: inline-block;
+    text-align: left;
+    word-wrap: break-word;
+    z-index: 12;
+}
+
+#texteConvOO {
+    text-align: center;
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 28px;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    line-height: 1;
+    display: inline-block;
+    text-align: left;
+    word-wrap: break-word;
+    z-index: 12;
+}
+
+#texteConvTO {
+    text-align: center;
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 28px;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    line-height: 1;
+    display: inline-block;
+    text-align: left;
+    word-wrap: break-word;
+    z-index: 12;
+}
+
+#texteConvTT {
+    text-align: center;
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 28px;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    line-height: 1;
+    display: inline-block;
+    text-align: left;
+    word-wrap: break-word;
+    z-index: 12;
+}
