@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détection main et poing</title>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/@rive-app/canvas"></script>
+
+    </style>
+    <link rel="stylesheet" href="../css_global/style.css">
+    <link rel="stylesheet" href="../css_global/style_boutons.css">
+    <link rel="stylesheet" href="style_tectonique.css">
+</head>
+
+<body>
+    <div class="background-grid"></div>
+    <video id="video" autoplay playsinline></video>
+    <div id="tectoRectangle"></div>
+    <div id="legendeLithoConti"></div>
+    <div id="legendeLithoOce"></div>
+    <div id="legendeAstheno"></div>
+    <div id="textLithoConti">lithosphère continentale</div>
+    <div id="textLithoOce"> lithosphère océanique</div>
+    <div id="textAstheno"> asthénosphère</div>
+    <canvas id="riveCanvas"></canvas>
+    <canvas id="handCanvas"></canvas>
+    <canvas id="riveCanvasTecto"></canvas>
+    <canvas id="riveCanvasTectoFleches"></canvas>
+
+    <canvas id="output_canvas"></canvas>
+    <canvas id="riveCanvasConverge"></canvas>
+    <canvas id="riveCanvasDiverge"></canvas>
+    <button id="showAnimationButton" class="showButton"> à toi de jouer</button>
+    <button id="startBouton" class="startBouton centerTop">prêt ?</button>
+    <div id="timerDisplay" class="timer centerTop hidden">0.0s</div>
+    <button id="boutonRestart" class="startBouton centerTop">recommencer</button>
+    <img id="contidroite" src="../interface/conti.png" class="topRight" alt="contidroite" />
+    <img id="contigauche" src="../interface/conti.png" class="bottomLeft" alt="contigauche" />
+    <img id="oceandroite" src="../interface/ocean.png" class="bottomRight" alt="oceandroite" />
+    <img id="oceangauche" src="../interface/ocean.png" class="topLeft" alt="oceangauche" />
+    <img id="bigcontidroite" src="../interface/conti.png" class="centerRight" alt="bigcontidroite" />
+    <img id="bigcontigauche" src="../interface/conti.png" class="centerLeft" alt="bigcontigauche" />
+    <img id="bigoceandroite" src="../interface/ocean.png" class="centerRight" alt="bigoceandroite" />
+    <img id="bigoceangauche" src="../interface/ocean.png" class="centerLeft" alt="bigoceangauche" />
+    <div id="titre" class="titre "> Explorons ensemble les plaques tectoniques et leurs mouvements</div>
+    <button id="showNext" class="showButton"> tutoriel </button>
+    <button id="showNext2" class="showButton"> suite </button>
+
+    <div id="RectangleJaune">
+        <p id="consignes">1. Choisi ta plaque !</p>
+    </div>
+
+    <div id="RectangleJaune2" style="visibility: hidden;">
+
+        <div id="banniere">
+          <p id="consignes2">2. Détermine le mouvement</p>
+        </div>
+    </div>
+  
+
+
+    <script>
+        let TimerStarted = false;
+        let TimerOver = false;
+        let TimerIsRunning = false;
+        let DistanceIsCalculated = false;
+        const RectangleJaune = document.getElementById("RectangleJaune");
+        RectangleJaune.style.visibility = "hidden";
+
+        const RectangleJaune2 = document.getElementById("RectangleJaune2");
+        RectangleJaune2.style.visibility = "hidden";
+        const consignes2 = document.getElementById("consignes2");
+
+
+        let rConverge = new rive.Rive({
+            src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_convergence.riv",
+            canvas: document.getElementById("riveCanvasConverge"),
+            autoplay: true,
+            stateMachines: "State Machine 1",
+            onLoad: () => {
+                const inputs = rConverge.stateMachineInputs("State Machine 1");
+                baseToCC = inputs.find(i => i.name === "baseToCC");
+                baseToCO = inputs.find(i => i.name === "baseToCO");
+                baseToOO = inputs.find(i => i.name === "baseToOO");
+                baseToOC = inputs.find(i => i.name === "baseToOC");
+
+                rConverge.resizeDrawingSurfaceToCanvas();
+            }
+        });
+
+        // Load divergence Rive
+        let rDiverge = new rive.Rive({
+            src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_divergence.riv",
+            canvas: document.getElementById("riveCanvasDiverge"),
+            autoplay: true,
+            stateMachines: "State Machine 1",
+            onLoad: () => {
+                const inputs = rDiverge.stateMachineInputs("State Machine 1");
+                DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
+                DIVbaseToCO = inputs.find(i => i.name === "DIVbaseToCO");
+                DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
+                DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
+
+                rDiverge.resizeDrawingSurfaceToCanvas();
+            }
+        });
+
+        rConverge.on(rive.EventType.RiveEvent, (event) => {
+            const data = event.data;
+            if (data.type === rive.RiveEventType.General) {
+                boutonRestart.style.visibility = "visible";
+
+
+            }
+        });
+
+        rDiverge.on(rive.EventType.RiveEvent, (event) => {
+            const data = event.data;
+            if (data.type === rive.RiveEventType.General) {
+                boutonRestart.style.visibility = "visible";
+
+            }
+        });
+
+     
+
+        function cleanRiveAnimation() {
+            if (rDiverge && rConverge) {
+
+
+                riveCanvasDiverge.style.visibility = "hidden";
+                riveCanvasConverge.style.visibility = "hidden";
+                console.log("Cleaning up Rive instances");
+                // Détruit l'ancienne instance
+                rDiverge.cleanup();
+                rConverge.cleanup();
+
+                rConverge = new rive.Rive({
+                    src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_convergence.riv",
+                    canvas: document.getElementById("riveCanvasConverge"),
+                    autoplay: true,
+                    stateMachines: "State Machine 1",
+                    onLoad: () => {
+                        const inputs = rConverge.stateMachineInputs("State Machine 1");
+                        baseToCC = inputs.find(i => i.name === "baseToCC");
+                        baseToCO = inputs.find(i => i.name === "baseToCO");
+                        baseToOO = inputs.find(i => i.name === "baseToOO");
+                        baseToOC = inputs.find(i => i.name === "baseToOC");
+
+
+                    }
+
+                });
+                rDiverge = new rive.Rive({
+                    src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_divergence.riv",
+                    canvas: document.getElementById("riveCanvasDiverge"),
+                    autoplay: true,
+                    stateMachines: "State Machine 1",
+                    onLoad: () => {
+                        const inputs = rDiverge.stateMachineInputs("State Machine 1");
+                        DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
+                        DIVbaseToCO = inputs.find(i => i.name === "DIVbaseToCO");
+                        DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
+                        DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
+
+                    }
+                });
+                rConverge.on(rive.EventType.RiveEvent, (event) => {
+                    const data = event.data;
+                    if (data.type === rive.RiveEventType.General) {
+                        boutonRestart.style.visibility = "visible";
+
+
+                    }
+                });
+
+                rDiverge.on(rive.EventType.RiveEvent, (event) => {
+                    const data = event.data;
+                    if (data.type === rive.RiveEventType.General) {
+                        boutonRestart.style.visibility = "visible";
+
+                    }
+                });
+
+
+            }
+
+        }
+
+
+            let poingsMains;
+
+            const rMains = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectomains.riv",
+                canvas: document.getElementById("riveCanvasTecto"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rMains.stateMachineInputs("State Machine 1");
+                    poingsMains = inputs.find(i => i.name === "poingsMains");
+                    rMains.resizeDrawingSurfaceToCanvas();
+                }
+                
+
+            });
+
+            let toFleches;
+
+            const rFleches = new rive.Rive({
+                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectofleches.riv",
+                canvas: document.getElementById("riveCanvasTectoFleches"),
+                autoplay: true,
+                stateMachines: "State Machine 1",
+                onLoad: () => {
+                    const inputs = rFleches.stateMachineInputs("State Machine 1");
+                    toFleches = inputs.find(i => i.name === "toFleches");
+                    rFleches.resizeDrawingSurfaceToCanvas();
+                }
+                
+
+            });
+
+            
+        async function startGestureRecognition() {
+
+            const handCanvas = document.getElementById("handCanvas");
+            const riveCanvasTecto = document.getElementById("riveCanvasTecto");
+            riveCanvasTecto.style.visibility = "hidden";
+            const riveCanvasTectoFleches = document.getElementById("riveCanvasTectoFleches");
+            riveCanvasTectoFleches.style.visibility = "hidden";
+            const riveCanvasDiverge = document.getElementById("riveCanvasDiverge");
+            const riveCanvasConverge = document.getElementById("riveCanvasConverge");
+            const riveCanvas = document.getElementById("riveCanvas");
+            //const ctx = handCanvas.getContext("2d");
+            const startBouton = document.getElementById("startBouton");
+            const boutonRestart = document.getElementById("boutonRestart")
+            const contidroite = document.getElementById('contidroite');
+            const contigauche = document.getElementById('contigauche');
+            const oceandroite = document.getElementById('oceandroite');
+            const oceangauche = document.getElementById('oceangauche');
+            contidroite.style.visibility = "hidden";
+            contigauche.style.visibility = "hidden";
+            oceandroite.style.visibility = "hidden";
+            oceangauche.style.visibility = "hidden";
+
+            const bigcontidroite = document.getElementById('bigcontidroite');
+            const bigcontigauche = document.getElementById('bigcontigauche');
+            const bigoceandroite = document.getElementById('bigoceandroite');
+            const bigoceangauche = document.getElementById('bigoceangauche');
+            const tectoRectangle = document.getElementById('tectoRectangle');
+
+            const legendeLithoConti = document.getElementById ('legendeLithoConti')
+            const legendeLithoOce = document.getElementById ('legendeLithoOce')
+            const legendeAstheno = document.getElementById ('legendeAstheno')
+            const textLithoConti = document.getElementById ('textLithoConti')
+            const textLithoOce = document.getElementById ('textLithoOce')
+            const textAstheno = document.getElementById ('textAstheno')
+
+            legendeLithoConti.style.visibility = "hidden";
+            legendeLithoOce.style.visibility = "hidden";
+            legendeAstheno.style.visibility = "hidden";
+            textLithoConti.style.visibility = "hidden";
+            textLithoOce.style.visibility = "hidden";
+            textAstheno.style.visibility = "hidden";
+
+
+            tectoRectangle.style.visibility = "hidden";
+            const video = document.getElementById("video");
+            const canvas = document.getElementById("output_canvas");
+            canvas.style.visibility = "hidden"
+            const ctx = canvas.getContext("2d");
+            let distances = [];
+            riveCanvas.style.visibility = "hidden";
+            riveCanvasConverge.style.visibility = "hidden";
+            riveCanvasDiverge.style.visibility = "hidden";
+            const titre = document.getElementById("titre")
+            const showNext = document.getElementById('showNext');
+            showNext.style.visibility = "visible"
+            const showNext2 = document.getElementById('showNext2');
+            showNext2.style.visibility = "hidden"
+            let showNextClicked = false;
+            const showAnimationButton = document.getElementById('showAnimationButton');
+            showAnimationButton.style.visibility = "hidden"
+
+
+            let previousDistance = null;
+
+            // Get both canvases
+            //const canvasConverge = document.getElementById("riveCanvasConverge");
+
+            // const canvasDiverge = document.getElementById("riveCanvasDiverge");
+
+            // Load convergence Rive
+
+
+            // Set canvas size to match video size exactly
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            window.addEventListener("resize", () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+
+            video.addEventListener("loadedmetadata", () => {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+            });
+
+            boutonRestart.style.visibility = "hidden";
+
+
+            await tf.setBackend("webgl");
+
+            showNext.addEventListener('click',()=>{
+                showNext.style.visibility = "hidden";
+                RectangleJaune.style.visibility = "visible";
+                showNextClicked = true;
+                titre.style.visibility = "hidden";
+                showNext2.style.visibility= "visible"
+                canvas.style.visibility = "visible"
+                
+                setTimeout(() => {
+                    riveCanvasTecto.style.visibility = "visible";
+                    if (poingsMains) poingsMains.fire();
+                }, 4000);
+
+            })
+
+            showNext2.addEventListener('click',()=>{
+                showNextClicked = false;
+                tectoRectangle.style.visibility = "hidden";
+                titre.style.visibility = "hidden";
+                showNext.style.visibility= "hidden"
+                showNext2.style.visibility= "hidden"
+                riveCanvasTecto.style.visibility = "hidden";
+                showAnimationButton.style.visibility = "visible";
+                document.getElementById("contidroite").style.display = "none";
+                document.getElementById("contigauche").style.display = "none";
+                document.getElementById("oceandroite").style.display = "none";
+                document.getElementById("oceangauche").style.display = "none";
+
+            })
+
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+
+            video.onloadedmetadata = () => {
+                video.play();
+                //handCanvas.width = video.videoWidth;
+                //handCanvas.height = video.videoHeight;
+                detectHands();
+            };
+
+            const hands = new Hands({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}` });
+            hands.setOptions({
+                maxNumHands: 2,
+                modelComplexity: 1,
+                minDetectionConfidence: 0.9,
+                minTrackingConfidence: 0.9
+            });
+
+            hands.onResults((results) => {
+                ctx.clearRect(0, 0, handCanvas.width, handCanvas.height);
+                handCanvas.width = video.videoWidth;
+                handCanvas.height = video.videoHeight;
+
+
+                //let color = "white";
+                let messages = [];
+
+                if (results.multiHandLandmarks.length > 0) {
+                    results.multiHandLandmarks.forEach((handLandmarks, i) => {
+                        drawHand(handLandmarks);
+
+                        const isFistPose = isFist(handLandmarks);
+                        const handedness = results.multiHandedness[i].label; // "Left" ou "Right"
+
+                        if (handedness === "Right" && isFistPose) {
+                            //color = "pink";
+                            messages.push("Main droite : Poing fermé");
+                            triggerBounce("oceangauche");
+                            contidroite.style.visibility = "hidden";
+                            contigauche.style.visibility = "hidden";
+                            oceandroite.style.visibility = "hidden";
+                            oceangauche.style.visibility = "visible";
+
+                        } else if (handedness === "Right" && !isFistPose) {
+                            //color = "green";
+                            messages.push("Main droite : Main tendue");
+                            triggerBounce("contigauche");
+                            contidroite.style.visibility = "hidden";
+                            contigauche.style.visibility = "visible";
+                            oceandroite.style.visibility = "hidden";
+                            oceangauche.style.visibility = "hidden";
+
+                        } else if (handedness === "Left" && isFistPose) {
+                            //color = "blue";
+                            messages.push("Main gauche : Poing fermé");
+                            triggerBounce("oceandroite");
+                            contidroite.style.visibility = "hidden";
+                            contigauche.style.visibility = "hidden";
+                            oceandroite.style.visibility = "visible";
+                            oceangauche.style.visibility = "hidden";
+
+                        } else if (handedness === "Left" && !isFistPose) {
+                            //color = "yellow";
+                            messages.push("Main gauche : Main tendue");
+                            triggerBounce("contidroite");
+                            contidroite.style.visibility = "visible";
+                            contigauche.style.visibility = "hidden";
+                            oceandroite.style.visibility = "hidden";
+                            oceangauche.style.visibility = "hidden";
+                        }
+                    })
+                } else {
+                    messages.push("Aucune main détectée");
+                }
+
+                document.getElementById("bigcontidroite").style.display = "none";
+                document.getElementById("bigoceandroite").style.display = "none";
+                document.getElementById("bigcontigauche").style.display = "none";
+                document.getElementById("bigoceangauche").style.display = "none";
+
+
+                if (results.multiHandLandmarks.length > 0) {
+                    results.multiHandLandmarks.forEach((handLandmarks, i) => {
+                        drawHand(handLandmarks);
+
+                        const isFistPose = isFist(handLandmarks);
+                        const handedness = results.multiHandedness[i].label;
+                        ;
+                        if (TimerIsRunning) {
+                            if (handedness === "Right" && !isFistPose) {
+                                document.getElementById("bigoceangauche").style.display = "block";
+                            } else if (handedness === "Left" && isFistPose) {
+                                document.getElementById("bigcontidroite").style.display = "block";
+                            } else if (handedness === "Left" && !isFistPose) {
+                                document.getElementById("bigoceandroite").style.display = "block";
+                            } else if (handedness === "Right" && isFistPose) {
+                                document.getElementById("bigcontigauche").style.display = "block";
+                            }
+                        }
+                    });
+                }
+
+                //document.body.style.background = color;
+
+                function triggerBounce(id) {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    el.classList.remove("bounce"); // reset in case it's still animating
+                    void el.offsetWidth;           // force reflow
+                    el.classList.add("bounce");
+                }
+
+
+                if (TimerIsRunning) {
+
+                    legendeLithoConti.style.visibility = "visible";
+                    legendeLithoOce.style.visibility = "visible";
+                    legendeAstheno.style.visibility = "visible";
+                    textLithoConti.style.visibility = "visible";
+                    textLithoOce.style.visibility = "visible";
+                    textAstheno.style.visibility = "visible";
+
+                    function onHandsDetected(hand1, hand2) {
+                        const dist = Math.sqrt(
+                            Math.pow(hand1.x - hand2.x, 2)
+                        );
+                        distances.push(dist);
+                    }
+
+                    results.multiHandLandmarks.forEach((landmarks, i) => {
+                        const isFistPose = isFist(landmarks);
+                        const handedness = results.multiHandedness[i].label;
+
+                        if (handedness === "Right") {
+                            rightHandStates.push(isFistPose ? "fist" : "open");
+                        } else if (handedness === "Left") {
+                            leftHandStates.push(isFistPose ? "fist" : "open");
+                        }
+                    });
+
+
+
+
+
+
+                    if (results.multiHandLandmarks.length >= 2) {
+
+                        const hand1 = results.multiHandLandmarks[0][8]; // Index finger
+                        const hand2 = results.multiHandLandmarks[1][8];
+                        onHandsDetected(hand1, hand2);
+
+
+
+
+
+                        //   previousDistance = dist;
+                    }
+                }
+
+
+
+                if (TimerOver && !DistanceIsCalculated) {
+                    DistanceIsCalculated = true;
+                    console.log(distances.length);
+                    const dominantRight = mostFrequentState(rightHandStates);
+                    const dominantLeft = mostFrequentState(leftHandStates);
+
+
+
+                    analyzeDistanceChange();
+
+                 
+
+                    function mostFrequentState(arr) {
+                        const counts = { fist: 0, open: 0 };
+                        arr.forEach(state => counts[state]++);
+                        return counts.fist > counts.open ? "fist" : "open";
+                    }
+
+
+                    function analyzeDistanceChange() {
+                        const len = distances.length;
+
+                        if (len < 4) console.log("pas assez donnes"); // pas assez de données
+
+                        const firstHalf = distances.slice(0, len / 2);
+                        const secondHalf = distances.slice(len / 2);
+                        distances = []; // reset distances for next calculation
+                        const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+                        const startAvg = avg(firstHalf);
+                        const endAvg = avg(secondHalf);
+                        const postureKey = `${dominantLeft}_${dominantRight}`; // e.g. "open_fist"
+                        if (endAvg > startAvg + 0.01) {
+                            // divergence
+                            riveCanvasDiverge.style.visibility = "visible";
+                            console.log(postureKey+ " divergence");
+                            switch (postureKey) {
+                                case "fist_fist": DIVbaseToCC.fire(); break;
+                                case "fist_open": DIVbaseToOC.fire(); break;
+                                case "open_fist": DIVbaseToCO.fire(); break;
+                                case "open_open": DIVbaseToOO.fire(); break;
+                                default: console.log("Unknown posture key:", postureKey); break;
+                            }
+                        } else if (endAvg < startAvg - 0.01) {
+                            // convergence
+                            console.log(postureKey+ " convergence");
+                            riveCanvasConverge.style.visibility = "visible";
+                            switch (postureKey) {
+                                case "fist_fist": baseToCC.fire(); break;
+                                case "fist_open": baseToOC.fire(); break;
+                                case "open_fist": baseToCO.fire(); break;
+                                case "open_open": baseToOO.fire(); break;
+                                default: console.log("Unknown posture key:", postureKey); break;
+                            }
+                        }
+
+                    }
+                }
+                ;
+            });
+
+            async function detectHands() {
+                await hands.send({ image: video });
+                requestAnimationFrame(detectHands);
+            }
+
+            function drawHand(landmarks) {
+                ctx.fillStyle = "red"; // Set fill color to red
+                for (let i = 0; i < landmarks.length; i++) {
+                    const { x, y } = landmarks[i];
+                    ctx.beginPath();
+                    ctx.arc(x * canvas.width, y * canvas.height, 5, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+            }
+
+            function isFist(landmarks) {
+                return [8, 12, 16, 20].every(tipIndex => {
+                    const pipIndex = tipIndex - 2;
+                    return landmarks[tipIndex].y > landmarks[pipIndex].y;
+                });
+            }
+
+
+        }
+        function hideAllPlaques() {
+
+            document.getElementById("bigcontidroite").style.display = "none";
+            document.getElementById("bigoceandroite").style.display = "none";
+            document.getElementById("bigcontigauche").style.display = "none";
+            document.getElementById("bigoceangauche").style.display = "none";
+        }
+
+        startGestureRecognition();
+
+        const startBouton = document.getElementById("startBouton");
+        const timerDisplay = document.getElementById("timerDisplay");
+        let rightHandStates = []; // "open" or "fist"
+        let leftHandStates = [];
+        rightHandStates = [];
+        leftHandStates = [];
+        distances = [];
+        DistanceIsCalculated = false;
+
+        function startBoutonAction() {
+            startBouton.style.visibility = "hidden";
+            timerDisplay.classList.remove("hidden");
+            riveCanvasTectoFleches.style.visibility = "hidden";
+
+
+            let startTime = Date.now();
+
+            TimerStarted = true;
+            TimerOver = false;
+            TimerIsRunning = true;
+            const interval = setInterval(() => {
+                const elapsed = (Date.now() - startTime) / 1000;
+                timerDisplay.innerText = `${elapsed.toFixed(1)}s`;
+
+                if (elapsed >= 5) {
+                    TimerIsRunning = false;
+                    TimerOver = true;
+                    clearInterval(interval);
+                    timerDisplay.classList.add("hidden");
+                    hideAllPlaques(); // Optionally hide plaques after timer
+                }
+            }, 100);
+        }
+
+        startBouton.addEventListener("click", () => {
+            startBoutonAction();
+        });
+
+        boutonRestart.addEventListener("click", () => {
+            console.log("Restarting...");
+            document.getElementById("bigcontidroite").style.display = "none";
+                document.getElementById("bigoceandroite").style.display = "none";
+                document.getElementById("bigcontigauche").style.display = "none";
+                document.getElementById("bigoceangauche").style.display = "none";
+            //resetAnim();
+            cleanRiveAnimation();
+            DistanceIsCalculated = false;
+            rightHandStates = []; // "open" or "fist"
+            leftHandStates = [];
+            rightHandStates = [];
+            leftHandStates = [];
+            distances = [];
+            //cleanRiveAnimation();
+
+            boutonRestart.style.visibility = "hidden";
+            timerDisplay.classList.remove("hidden");
+            startBoutonAction();
+        });
+
+        showAnimationButton.addEventListener("click", () => {
+            document.getElementById("contidroite").style.display = "none";
+            document.getElementById("contigauche").style.display = "none";
+            document.getElementById("oceandroite").style.display = "none";
+            document.getElementById("oceangauche").style.display = "none";
+
+
+            showAnimationButton.style.visibility = "hidden";
+
+            document.getElementById("startBouton").style.visibility = "visible";
+            riveCanvasTectoFleches.style.visibility = "visible";
+            if (toFleches) toFleches.fire();
+
+
+
+        });
+
+    </script>
+</body>
+
+</html>

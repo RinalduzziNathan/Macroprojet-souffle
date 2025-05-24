@@ -339,46 +339,7 @@ body {
   }
 
 
-  #RectangleJaune {
-    position: absolute;
-    top: 33%;
-    left: 100%; /* Commence en dehors de l'écran, à droite */
-    transform: translateX(0);
-    width: auto; /* S’adapte à la taille du texte */
-    background-color: rgb(255, 255, 0);
-    height: 250px;
-    z-index: 51;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    padding: 0 200px; /* un peu d’espace autour du texte */
-    animation: glissement 20s cubic-bezier(0.30, -0.05, 0.22, 1.05) forwards;
-}
   
-  #consignes {
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-weight: 200;
-    color: black;
-    font-size: 165px;
-    margin: 0;
-  }
-  
-  @keyframes glissement {
-    0% {
-      transform: translateX(0);
-      opacity: 0;
-    }
-    10% {
-      opacity: 1;
-    }
-    90% {
-      opacity: 1;
-    }
-    100% {
-      transform: translateX(-200%);
-      opacity: 0;
-    }
-  }
 
   #RectangleBlanc {
     top: 0px;
@@ -404,46 +365,5 @@ body {
 }
 
 
-#RectangleJaune2 {
-    position: absolute;
-    top: 33%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 1450px;
-    background-color: rgb(255, 255, 0);
-    height: 250px;
-    z-index: 1;
-    overflow: hidden; /* Masque ce qui sort du rectangle */
-  }
-  
-  #banniere {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-  }
-  
-  #consignes2 {
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-weight: 200;
-    color: black;
-    font-size: 165px;
-    margin: 0;
-    padding-left: 100%;
-    white-space: nowrap;
-  }
-  
-  /* Animation déplacée dans une classe à part */
-  .defilement {
-    animation: defilement 13s linear infinite;
-  }
-  
-  @keyframes defilement {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-100%);
-    }
-  }
+
   
