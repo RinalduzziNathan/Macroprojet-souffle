@@ -182,10 +182,18 @@
 
 
                     r.resizeDrawingSurfaceToCanvas();
+                    r.onStateChange = (event) => {
+                        const { stateMachineName, data } = event;
+                        console.log(`StateMachine "${stateMachineName}" est passé à l'état :`, data);
+
+
+                    };
                 }
 
 
             });
+
+
 
             r.on(rive.EventType.RiveEvent, (event) => {
                 const data = event.data;
@@ -290,6 +298,7 @@
             }
 
             function analyzeDistanceChange() {
+
                 const len = distances.length;
                 if (len < 4) {
                     console.log("Pas assez de données");
@@ -302,29 +311,31 @@
                 const startAvg = avg(firstHalf);
                 const endAvg = avg(secondHalf);
 
-                // ✅ Vérifie si les mains sont toujours là, sinon utilise les dernières positions
-                if (!lastLeftHand || !lastRightHand) {
-                    console.log("Mains absentes, on utilise les données enregistrées");
-                }
+
 
                 if (endAvg > startAvg + 0.01 && !detecterCroisementDepuisOrdre()) {
-
-                    if (baseToInverse) baseToInverse.fire(); // éloignement
-                    //if (toSecousse) toSecousse.fire(); 
+                  
+                    if (toBase) toBase.fire();
+                    setTimeout(() => {
+                        baseToInverse.fire();
+                    }, 50);
                     texteInverse.style.visibility = "visible";
-
-
                 } else if (endAvg < startAvg - 0.01 && !detecterCroisementDepuisOrdre()) {
-
-                    if (baseToNormale) baseToNormale.fire(); // rapprochement
-                    //if (toSecousse) toSecousse.fire(); 
+                  
+                    if (toBase) toBase.fire();
+                    setTimeout(() => {
+                        baseToNormale.fire();
+                    }, 50);
+                  
                     texteNormale.style.visibility = "visible";
 
                 }
                 if (detecterCroisementDepuisOrdre()) {
-
-                    if (baseToDecalage) baseToDecalage.fire();
-                    //if (toSecousse) toSecousse.fire(); 
+                    if (toBase) toBase.fire();
+                    setTimeout(() => {
+                        baseToDecalage.fire();
+                    }, 50);
+                   
                     texteDecalage.style.visibility = "visible";
                 }
             }
@@ -373,7 +384,7 @@
                 handCanvas.height = video.videoHeight;
 
                 if ((!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) && !animationEnCours && startBoutonClicked) {
-
+                    console.log("passe peut")
                     if (toBase) toBase.fire();
                     animationEnCours = false;
                     return;
@@ -395,7 +406,7 @@
                         ordreMains.push("droite-gauche");
                     }
 
-                    console.log("ordre mains actuel :", ordreMains[ordreMains.length - 1]);
+                    //console.log("ordre mains actuel :", ordreMains[ordreMains.length - 1]);
 
                     drawHand(hand1);
                     drawHand(hand2);
@@ -405,16 +416,9 @@
                     lastLeftHand = hand1[8];
                     lastRightHand = hand2[8];
 
-                    // Partie 1 : juste afficher le message
-                    //if (close && showNextClicked) {
-                    //document.getElementById("messagePression").classList.remove("hidden");
-                    //setTimeout(() => {
-                    //   document.getElementById("messagePression").classList.add("hidden");
-                    //}, 2000);
-                    //}
-
                     // Partie 2 : pendant le timer, enregistrer les distances
                     if (TimerIsRunning) {
+                        console.log("enregistrement")
 
                         onHandsDetected(hand1[8], hand2[8]);
                         couleurFond = true;
@@ -426,38 +430,7 @@
                             document.body.style.backgroundColor = "white";
                         }
                     }
-
-                    // Fin du timer
-                    if (TimerOver && !DistanceIsCalculated) {
-                        DistanceIsCalculated = true;
-                        animationEnCours = true;
-
-
-                        analyzeDistanceChange();
-
-                        function detecterCroisementDepuisOrdre() {
-                            if (ordreMains.length < 2) return false;
-                            let precedent = ordreMains[0];
-                            for (let i = 1; i < ordreMains.length; i++) {
-                                if (ordreMains[i] !== precedent) {
-                                    return true;
-                                }
-                                precedent = ordreMains[i];
-                            }
-                            return false;
-                        }
-
-                        const mainsCroisees = detecterCroisementDepuisOrdre();
-
-
-                    }
-
                 }
-
-
-
-
-
             });
 
             async function detectHands() {
@@ -513,6 +486,7 @@
                 const interval = setInterval(() => {
                     const elapsed = (Date.now() - startTime) / 1000;
                     timerDisplay.innerText = `${elapsed.toFixed(1)}s`;
+
                     annonce1.style.visibility = "hidden";
                     annonce2.style.visibility = "hidden";
                     annonce3.style.visibility = "hidden";
@@ -523,6 +497,29 @@
                         TimerOver = true;
                         clearInterval(interval);
                         timerDisplay.classList.add("hidden");
+                        // Fin du timer
+
+                        if (TimerOver && !DistanceIsCalculated) {
+
+                            analyzeDistanceChange();
+
+                            function detecterCroisementDepuisOrdre() {
+                                if (ordreMains.length < 2) return false;
+                                let precedent = ordreMains[0];
+                                for (let i = 1; i < ordreMains.length; i++) {
+                                    if (ordreMains[i] !== precedent) {
+                                        return true;
+                                    }
+                                    precedent = ordreMains[i];
+                                }
+                                return false;
+                            }
+
+                            detecterCroisementDepuisOrdre();
+                            DistanceIsCalculated = true;
+                            animationEnCours = true;
+
+                        }
                     }
                 }, 100);
             }
@@ -541,70 +538,6 @@
                 setTimeout(() => {
                     document.body.style.backgroundColor = "white";
                 }, 5000);
-            }
-
-
-            function updateTimerDisplay() {
-                const display = document.getElementById("timerDisplay");
-                display.textContent = (timer / 10).toFixed(1) + "s";
-            }
-
-            function startTimer() {
-                timer = 0;
-                timerRunning = true;
-                document.getElementById("timerDisplay").classList.remove("hidden");
-
-                timerInterval = setInterval(() => {
-                    timer++;
-                    updateTimerDisplay();
-                }, 100); // every 100ms = 0.1s
-                previousDistance = null;
-                movementTrend = null;
-                crossedDetected = false;
-
-            }
-
-            function stopTimer() {
-                clearInterval(timerInterval);
-                timerRunning = false;
-
-                const messageDiv = document.getElementById("messageResultat");
-                const seconds = (timer / 10).toFixed(1);
-
-                if (timer / 10 >= 10) {
-                    messageDiv.textContent = `Vous avez mis ${seconds} secondes à rapprocher vos mains.\nLa tension accumulée est suffisante. Le séisme s’est déclenché.`;
-                } else {
-                    messageDiv.textContent = `Vous avez mis ${seconds} secondes à rapprocher vos mains.\nLa tension accumulée n’est pas suffisante. Le séisme ne s’est pas déclenché.`;
-                }
-
-                messageDiv.classList.remove("hidden");
-                setTimeout(() => {
-                    messageDiv.classList.add("hidden");
-                }, 6000);
-
-                // Analyse du mouvement
-                if (distances.length >= 4) {
-                    const halfway = Math.floor(distances.length / 2);
-                    const firstHalf = distances.slice(0, halfway);
-                    const secondHalf = distances.slice(halfway);
-                    const avg = arr => arr.reduce((sum, val) => sum + val, 0) / arr.length;
-                    const avgFirst = avg(firstHalf);
-                    const avgSecond = avg(secondHalf);
-                    const diff = avgSecond - avgFirst;
-
-                    if (diff < -0.01) {
-                        movementTrend = "rapprochement";
-                        if (baseToInverse) baseToInverse.fire();
-                    } else if (diff > 0.01) {
-                        movementTrend = "eloignement";
-                        if (baseToNormale) baseToNormale.fire();
-                    }
-                }
-
-                // Décalage
-                if (crossedDetected && compToDecalage) {
-                    baseToDecalage.fire();
-                }
             }
 
 
