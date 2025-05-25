@@ -250,13 +250,21 @@
                         DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
                         DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
 
+                        
+
                     }
                 });
                 rConverge.on(rive.EventType.RiveEvent, (event) => {
                     const data = event.data;
                     if (data.type === rive.RiveEventType.General) {
                         boutonRestart.style.visibility = "visible";
-
+                        texteConvOO.style.visibility = "hidden";
+                        texteConvTT.style.visibility = "hidden";
+                        texteConvTO.style.visibility = "hidden";
+        
+                        texteDivOO.style.visibility = "hidden";
+                        texteDivTT.style.visibility = "hidden";
+                        texteDivTO.style.visibility = "hidden";
 
                     }
                 });
@@ -265,6 +273,13 @@
                     const data = event.data;
                     if (data.type === rive.RiveEventType.General) {
                         boutonRestart.style.visibility = "visible";
+                        texteConvOO.style.visibility = "hidden";
+                        texteConvTT.style.visibility = "hidden";
+                        texteConvTO.style.visibility = "hidden";
+        
+                        texteDivOO.style.visibility = "hidden";
+                        texteDivTT.style.visibility = "hidden";
+                        texteDivTO.style.visibility = "hidden";
 
                     }
                 });
