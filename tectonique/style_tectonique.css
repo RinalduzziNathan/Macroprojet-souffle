@@ -120,10 +120,51 @@
 
 }
 
+#legendeVolcan {
+    position: absolute;
+    top: 76%; /* Ajuste selon ton besoin */
+    left: 5%; /* Ajuste selon ton besoin */
+    width: 25px;
+    height: 25px;
+    background-color: red;
+    border-radius: 50%;
+
+    transform: translate(-50%, -50%);
+    z-index: 20;
+}
+
 #textLithoConti {
 
     position: absolute;
     top: 80%;
+    left: 9%;
+    font-size: 20px;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+    z-index: 20;    
+}
+
+#textVolcanEff {
+
+    position: absolute;
+    top: 74%;
+    left: 9%;
+    font-size: 20px;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+    z-index: 20;    
+}
+
+#textVolcanExp {
+
+    position: absolute;
+    top: 74%;
     left: 9%;
     font-size: 20px;
     font-family: "Bricolage Grotesque", sans-serif;
@@ -275,3 +316,5 @@
     word-wrap: break-word;
     z-index: 12;
 }
+
+

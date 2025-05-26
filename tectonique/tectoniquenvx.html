@@ -34,9 +34,13 @@
     <div id="legendeLithoConti"></div>
     <div id="legendeLithoOce"></div>
     <div id="legendeAstheno"></div>
+    <div id="legendeVolcan"></div>
+
     <div id="textLithoConti">lithosphère continentale</div>
     <div id="textLithoOce"> lithosphère océanique</div>
     <div id="textAstheno"> asthénosphère</div>
+    <div id="textVolcanEff">volcanisme effusif</div>
+    <div id="textVolcanExp">volcanisme explosif</div>
     <canvas id="riveCanvas"></canvas>
     <canvas id="handCanvas"></canvas>
     <canvas id="riveCanvasTecto"></canvas>
@@ -96,11 +100,11 @@
     <button id="showNext2" class="showButton"> suite </button>
 
     <div id="RectangleJaune">
-        <p id="consignes">1. Choisi ta plaque !</p>
+        <p id="consignes">1. Choisi tes plaques !</p>
     </div>
 
     <div id="RectangleJauneV2">
-          <p id="consignesV2">2. Détermine le mouvement</p>
+          <p id="consignesV2">2. Détermine leurs mouvements</p>
     </div>
 
     <div id="annonce1" class="annonce tu ">TU</div>
@@ -190,6 +194,10 @@
                 texteDivOO.style.visibility = "hidden";
                 texteDivTT.style.visibility = "hidden";
                 texteDivTO.style.visibility = "hidden";
+                textVolcanEff.style.visibility = "hidden";
+                textVolcanExp.style.visibility = "hidden";
+                legendeVolcan.style.visibility = "hidden";
+
 
             }
         });
@@ -205,6 +213,10 @@
                 texteDivOO.style.visibility = "hidden";
                 texteDivTT.style.visibility = "hidden";
                 texteDivTO.style.visibility = "hidden";
+
+                textVolcanEff.style.visibility = "hidden";
+                textVolcanExp.style.visibility = "hidden";
+                legendeVolcan.style.visibility = "hidden";
 
             }
         });
@@ -354,9 +366,14 @@
             const legendeLithoConti = document.getElementById ('legendeLithoConti')
             const legendeLithoOce = document.getElementById ('legendeLithoOce')
             const legendeAstheno = document.getElementById ('legendeAstheno')
+            const legendeVolcan = document.getElementById ('legendeVolcan')
+            
             const textLithoConti = document.getElementById ('textLithoConti')
             const textLithoOce = document.getElementById ('textLithoOce')
             const textAstheno = document.getElementById ('textAstheno')
+            const textVolcanEff = document.getElementById ('textVolcanEff')
+            const textVolcanExp = document.getElementById ('textVolcanExp')
+
 
             legendeLithoConti.style.visibility = "hidden";
             legendeLithoOce.style.visibility = "hidden";
@@ -364,6 +381,11 @@
             textLithoConti.style.visibility = "hidden";
             textLithoOce.style.visibility = "hidden";
             textAstheno.style.visibility = "hidden";
+            textVolcanEff.style.visibility = "hidden";
+            textVolcanExp.style.visibility = "hidden";
+            legendeVolcan.style.visibility = "hidden";
+
+
 
 
             tectoRectangle.style.visibility = "hidden";
@@ -642,6 +664,7 @@
                     textLithoConti.style.visibility = "visible";
                     textLithoOce.style.visibility = "visible";
                     textAstheno.style.visibility = "visible";
+                   
 
                     function onHandsDetected(hand1, hand2) {
                         const dist = Math.sqrt(
@@ -734,6 +757,8 @@
                                 case "open_open":
                                     DIVbaseToOO.fire();
                                     texteDivOO.style.visibility = "visible"; 
+                                    textVolcanEff.style.visibility = "visible";
+                                    legendeVolcan.style.visibility = "visible";
                                     break;
                                 default: console.log("Unknown posture key:", postureKey); break;
                             }
@@ -750,14 +775,20 @@
                                 case "fist_open": 
                                     baseToOC.fire(); 
                                     texteConvTO.style.visibility = "visible";
+                                    textVolcanExp.style.visibility = "visible";
+                                    legendeVolcan.style.visibility = "visible";
                                     break;
                                 case "open_fist": 
                                     baseToCO.fire(); 
                                     texteConvTO.style.visibility = "visible";
+                                    textVolcanExp.style.visibility = "visible";
+                                    legendeVolcan.style.visibility = "visible";
                                     break;
                                 case "open_open": 
                                     baseToOO.fire(); 
                                     texteConvOO.style.visibility = "visible";
+                                    textVolcanExp.style.visibility = "visible";
+                                    legendeVolcan.style.visibility = "visible";
                                     break;
                                 default: console.log("Unknown posture key:", postureKey); break;
                             }
