@@ -317,17 +317,17 @@
                   
                     if (toBase) toBase.fire();
                     setTimeout(() => {
-                        baseToInverse.fire();
+                        baseToNormale.fire();
                     }, 50);
-                    texteInverse.style.visibility = "visible";
+                    texteNormale.style.visibility = "visible";
                 } else if (endAvg < startAvg - 0.01 && !detecterCroisementDepuisOrdre()) {
                   
                     if (toBase) toBase.fire();
                     setTimeout(() => {
-                        baseToNormale.fire();
+                        baseToInverse.fire();
                     }, 50);
                   
-                    texteNormale.style.visibility = "visible";
+                    texteInverse.style.visibility = "visible";
 
                 }
                 if (detecterCroisementDepuisOrdre()) {
