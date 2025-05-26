@@ -31,6 +31,12 @@
     <video id="video" autoplay hidden></video>
     <div id="resultMessage" class="resultMessage"></div>
     <div id="temps">Il y a <span id="tempsValeur">250</span> millions d'années</div>
+    <div id="evenementPangée" >la Pangée, un méga contincent</div>
+    <div id="evenementDino" >pouf... des dinosaures</div>
+    <div id="evenementOcean" > arrivée de l'océan atlantique</div>
+    <div id="evenementFinDino"> plus de dino...</div>
+    <div id="evenementMontagnes"> formation des Alpes et de l'Himalaya</div>
+    
     <canvas id="riveCanvasMains"></canvas>
     <div id="titre" class="titre "> Explorons 250 millions d’années d’histoire de la Terre...
         En un clin d’oeil</div>
@@ -103,6 +109,19 @@
         riveCanvasOcean.style.visibility = "hidden";
         const riveCanvasVolcan = document.getElementById("riveCanvasVolcan");
         riveCanvasVolcan.style.visibility = "hidden";
+
+        const evenementPangée = document.getElementById("evenementPangée");
+        evenementPangée.style.visibility = "hidden";
+        const evenementDino = document.getElementById("evenementDino");
+        evenementDino.style.visibility = "hidden";
+        const evenementOcean= document.getElementById("evenementOcean");
+        evenementOcean.style.visibility = "hidden";
+        const evenementFinDino= document.getElementById("evenementFinDino");
+        evenementFinDino.style.visibility = "hidden";
+        const evenementMontagnes= document.getElementById("evenementMontagnes");
+        evenementMontagnes.style.visibility = "hidden";
+
+
 
         let activeImage = 1; // Start with sequenceImage1
         let showNext2Clicked = false;
@@ -266,7 +285,7 @@
                 tempsValeur.style.visibility = "visible";
                 temps.style.visibility = "visible";
                 ctx.clearRect(0, 0, canvas.width, canvas.height);  // Efface tout le canvas
-
+                evenementPangée.style.visibility = "visible";
 
 
 
@@ -346,11 +365,20 @@
                                         //rDino.play();
                                        // if (toDino) toDino.fire();
                                     riveCanvasEvenement.style.visibility = "visible";
-
+                                    evenementPangée.style.visibility = "hidden";
+                                    evenementDino.style.visibility = "visible";
                                     if (toDinosaure) toDinosaure.fire();
                                     }
+                                    if (tempsValeur.textContent == "240") {
+                
+                                        evenementDino.style.visibility = "hidden";
+                
+                                    }
+
 
                                     if (tempsValeur.textContent == "50") {
+                                        evenementMontagnes.style.visibility = "visible";
+
                                         riveCanvasMontagne.style.visibility = "visible";
                                         rMontagne.play();
                                         if (baseToCC) baseToCC.fire();
@@ -379,8 +407,13 @@
 
                                     }
 
+                                    if (tempsValeur.textContent == "40") {
+                                        evenementMontagnes.style.visibility = "hidden";
+                                    }
+
                                     if (tempsValeur.textContent == "190") {
                                         riveCanvasOcean.style.visibility = "visible";
+                                        evenementOcean.style.visibility = "visible";
                                         rOcean.play();
                                         if (DIVbaseToCC) DIVbaseToCC.fire();
                                         if (toWater) toWater.fire();
@@ -396,10 +429,22 @@
                                         }, 3000);
                                     }
 
+                                    if (tempsValeur.textContent == "180") {
+                                        evenementOcean.style.visibility = "hidden";
+                                    }
+
                                     if (tempsValeur.textContent == "80") {
                                         //riveCanvasDino.style.visibility = "visible";
                                         //if (toMorts) toMorts.fire();
+                                        evenementFinDino.style.visibility = "visible";
+
                                         if (toDinoEnd) toDinoEnd.fire();
+                                    }
+
+                                    if (tempsValeur.textContent == "70") {
+                                        //riveCanvasDino.style.visibility = "visible";
+                                        //if (toMorts) toMorts.fire();
+                                        evenementFinDino.style.visibility = "hidden";
                                     }
 
                                     if (currentImageIndex === imageSequence.length - 2) {

@@ -67,9 +67,79 @@
     z-index: 20;
 }
 
+#evenementPangée { 
+    position: absolute;
+    top: 13%;
+    left: 65%; 
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings:"wdth" 100;
+    font-size: 24px;
+    color: black;
+    z-index: 20;
+}
+
+#evenementDino { 
+    position: absolute;
+    top: 13%;
+    left: 65%; 
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings:"wdth" 100;
+    font-size: 24px;
+    color: black;
+    z-index: 20;
+}
+
+#evenementOcean { 
+    position: absolute;
+    top: 13%;
+    left: 65%; 
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings:"wdth" 100;
+    font-size: 24px;
+    color: black;
+    z-index: 20;
+}
+
+#evenementMontagnes { 
+    position: absolute;
+    top: 13%;
+    left: 65%; 
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings:"wdth" 100;
+    font-size: 24px;
+    color: black;
+    z-index: 20;
+}
+
+#evenementFinDino { 
+    position: absolute;
+    top: 13%;
+    left: 65%; 
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings:"wdth" 100;
+    font-size: 24px;
+    color: black;
+    z-index: 20;
+}
+
 #temps { 
     position: absolute;
-    top: 10%; /* 10% from the top */
+    top: 8%; /* 10% from the top */
     left: 65%; /* 50% from the left */
     font-family: "Bricolage Grotesque", sans-serif;
     font-optical-sizing: auto;
