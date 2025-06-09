@@ -30,6 +30,9 @@
 </head>
 
 <body>
+    <button class="homebutton" div id="menuButton">
+         <img src="../image/homeIcon.svg" alt="menu" width="24" height="24">
+    </button>
     <div class="background-grid"></div>
     <video id="video" autoplay playsinline></video>
     <canvas id="riveCanvas"></canvas>
@@ -73,6 +76,8 @@
 
     <script>
         async function startGestureRecognition() {
+            let menuBtn = document.getElementById("menuButton");
+            menuBtn.style.visibility = "hidden"
             const video = document.getElementById("video");
             let touchDistance = 0;
             let proximityDistance = 0;
@@ -542,9 +547,13 @@
                 }, 5000);
             }
 
-
+            menuBtn.addEventListener("click", () => {
+               window.location.href = "../hub/hub.html";
+            });
 
             startBouton.addEventListener("click", function () {
+                menuBtn.style.visibility = "visible";
+
                 startBoutonAction();
                 startBoutonClicked = true;
 

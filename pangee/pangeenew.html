@@ -27,6 +27,9 @@
 </head>
 
 <body>
+    <button class="homebutton" div id="menuButton">
+         <img src="../image/homeIcon.svg" alt="menu" width="24" height="24">
+    </button>
     <div class="background-grid"></div>
     <video id="video" autoplay hidden></video>
     <div id="resultMessage" class="resultMessage"></div>
@@ -59,6 +62,8 @@
     </div>
 
     <script>
+        let menuBtn = document.getElementById("menuButton");
+        menuBtn.style.visibility = "hidden"
         const canvas = document.getElementById('monCanvas');
         const ctx = canvas.getContext('2d');
         const dpr = window.devicePixelRatio || 1;
@@ -271,10 +276,13 @@
                 showNext.style.visibility= "hidden"
                 showNext2.style.visibility= "visible"
             })
+        menuBtn.addEventListener("click", () => {
+               window.location.href = "../hub/hub.html";
+            });
 
         showNext2.addEventListener('click',()=>{
                 showNext1Clicked = false;
-
+                menuBtn.style.visibility = "visible";           
                 showNext2Clicked = true;
                 titre.style.visibility = "hidden";
                 riveCanvasMains.style.visibility = "hidden";

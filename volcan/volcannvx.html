@@ -30,6 +30,9 @@
 </head>
 
 <body>
+    <button class="homebutton" div id="menuButton">
+         <img src="../image/homeIcon.svg" alt="menu" width="24" height="24">
+    </button>
     <canvas id="riveCanvas"></canvas>
     <canvas id="riveCanvasPlay"></canvas>
     <canvas id="visqueuseCanvas"></canvas>
@@ -119,6 +122,8 @@
 
 
     <script>
+        let menuBtn = document.getElementById("menuButton");
+        menuBtn.style.visibility = "hidden"
         const souffle1 = document.getElementById("souffle1");
         const souffle2 = document.getElementById("souffle2");
         souffle1.style.visibility = "hidden";
@@ -299,6 +304,10 @@
             //videoFeu.addEventListener('ended', () => {
            //     videoFeu.style.display = "none";  
            // });
+            RectangleJaune.style.animation = "none";
+            RectangleJaune.offsetHeight; // trick pour forcer le reflow
+            RectangleJaune.style.animation = null;
+
             RectangleJaune.style.visibility = "visible";
             RectangleBlanc.style.visibility = "visible";
 
@@ -438,9 +447,14 @@
                 }, 100); // mise à jour toutes les 100 ms
             }
 
+            menuBtn.addEventListener("click", () => {
+               window.location.href = "../hub/hub.html";
+            });
+
 
 
             startBouton.addEventListener("click", function () {
+                menuBtn.style.visibility = "visible";
                 console.log("startBouton clicked");
                 riveCanvas.style.visibility = "visible";
                 volcanCircle.style.visibility = "hidden";

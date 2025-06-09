@@ -510,21 +510,30 @@
                 riveCanvasTectoFleches.style.visibility = "hidden";
 
                 setTimeout(() => {
-                    annonce1.style.visibility = "visible";
-                }, 300);
+                    if (!TimerIsRunning) {
+                        annonce1.style.visibility = "visible";
+                    }
+                }, 500);
 
                 setTimeout(() => {
-                    annonce2.style.visibility = "visible";
-                }, 600);
-
-                setTimeout(() => {
-                    annonce3.style.visibility = "visible";
+                    if (!TimerIsRunning) {
+                        annonce2.style.visibility = "visible";
+                    }
                 }, 1000);
 
                 setTimeout(() => {
-                    annonce4.style.visibility = "visible";
+                    if (!TimerIsRunning) {
+                        annonce3.style.visibility = "visible";
+                    }
+
                 }, 1500);
 
+                setTimeout(() => {
+                    if (!TimerIsRunning) {
+                        annonce4.style.visibility = "visible";
+                    }
+
+                }, 2000);
 
 
             });
