@@ -460,6 +460,8 @@
             })
 
             showNext2.addEventListener('click',()=>{
+                riveCanvasTecto.style.visibility = "hidden"
+                RectangleJaune.style.visibility = "hidden"
                 RectangleJauneV2.style.animation = "none";
                 RectangleJauneV2.offsetHeight; // trick pour forcer le reflow
                 RectangleJauneV2.style.animation = null;
@@ -486,6 +488,8 @@
             
             showAnimationButton.addEventListener("click", () => {
                 tectoRectangle.style.visibility = "visible";
+                RectangleJauneV2.style.visibility = "hidden"
+                
 
                 
                 showAnimationButton.style.visibility = "hidden";
