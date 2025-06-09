@@ -28,6 +28,9 @@
 </head>
 
 <body>
+    <button class="homebutton" div id="menuButton">
+         <img src="../image/homeIcon.svg" alt="menu" width="24" height="24">
+    </button>
     <div class="background-grid"></div>
     <video id="video" autoplay playsinline></video>
     <div id="tectoRectangle"></div>
@@ -46,34 +49,34 @@
     <canvas id="riveCanvasTecto"></canvas>
     <canvas id="riveCanvasTectoFleches"></canvas>
     <div id="texteMains">Détection en cours...</div>
-    <div id="texteConvOO"> 
+    <div id="texteConvOO">
         L'une des plaques s'enfonce <br />
         sous l'autre (subduction), <br />
         formant une fosse océanique. <br />
         Cela peut créer une chaîne d'îles volcaniques.
     </div>
-    <div id="texteConvTT"> 
+    <div id="texteConvTT">
         Aucune des deux plaques ne s'enfonce, <br />
         elles se compressent et se soulèvent. <br />
         Cela donne naissance à de grandes <br />
         chaînes de montagnes.
     </div>
-    <div id="texteConvTO"> 
+    <div id="texteConvTO">
         La plaque océanique, plus dense, <br />
         plonge sous la plaque continentale, <br />
-        provoquant la formation de volcans. 
+        provoquant la formation de volcans.
     </div>
-    <div id="texteDivOO"> 
+    <div id="texteDivOO">
         Du magma remonte et crée une nouvelle <br />
         "lithosphère océanique constituée de basalte".
     </div>
-    <div id="texteDivTT"> 
+    <div id="texteDivTT">
         La croûte s’amincit, se fissure <br />
         et forme un rift continental. <br />
         Ce rift peut à terme devenir <br />
         un océan si l’écartement se poursuit.
     </div>
-    <div id="texteDivTO"> 
+    <div id="texteDivTO">
         Ce point n'existe pas ! <br />
         Un écartement est toujours associé <br />
         à une dorsale océanique qui constitue <br />
@@ -104,14 +107,14 @@
     </div>
 
     <div id="RectangleJauneV2">
-          <p id="consignesV2">2. Détermine leurs mouvements</p>
+        <p id="consignesV2">2. Détermine leurs mouvements</p>
     </div>
 
     <div id="annonce1" class="annonce tu ">TU</div>
     <div id="annonce2" class="annonce as ">AS</div>
     <div id="annonce3" class="annonce cinq">5</div>
     <div id="annonce4" class="annonce secondes">SECONDES</div>
-  
+
 
 
     <script>
@@ -120,6 +123,8 @@
         let TimerIsRunning = false;
         let DistanceIsCalculated = false;
         let detectionActive = false;
+        let menuBtn = document.getElementById("menuButton");
+        menuBtn.style.visibility = "hidden"
         const RectangleJaune = document.getElementById("RectangleJaune");
         RectangleJaune.style.visibility = "hidden";
 
@@ -149,7 +154,7 @@
         annonce3.style.visibility = "hidden";
         const annonce4 = document.getElementById("annonce4");
         annonce4.style.visibility = "hidden";
-        
+
         var showNext2Clicked = false;
 
 
@@ -211,7 +216,7 @@
                 texteConvOO.style.visibility = "hidden";
                 texteConvTT.style.visibility = "hidden";
                 texteConvTO.style.visibility = "hidden";
- 
+
                 texteDivOO.style.visibility = "hidden";
                 texteDivTT.style.visibility = "hidden";
                 texteDivTO.style.visibility = "hidden";
@@ -223,7 +228,7 @@
             }
         });
 
-     
+
 
         function cleanRiveAnimation() {
             if (rDiverge && rConverge) {
@@ -264,7 +269,7 @@
                         DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
                         DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
 
-                        
+
 
                     }
                 });
@@ -275,7 +280,7 @@
                         texteConvOO.style.visibility = "hidden";
                         texteConvTT.style.visibility = "hidden";
                         texteConvTO.style.visibility = "hidden";
-        
+
                         texteDivOO.style.visibility = "hidden";
                         texteDivTT.style.visibility = "hidden";
                         texteDivTO.style.visibility = "hidden";
@@ -290,7 +295,7 @@
                         texteConvOO.style.visibility = "hidden";
                         texteConvTT.style.visibility = "hidden";
                         texteConvTO.style.visibility = "hidden";
-        
+
                         texteDivOO.style.visibility = "hidden";
                         texteDivTT.style.visibility = "hidden";
                         texteDivTO.style.visibility = "hidden";
@@ -304,39 +309,39 @@
         }
 
 
-            let poingsMains;
+        let poingsMains;
 
-            const rMains = new rive.Rive({
-                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectomains.riv",
-                canvas: document.getElementById("riveCanvasTecto"),
-                autoplay: true,
-                stateMachines: "State Machine 1",
-                onLoad: () => {
-                    const inputs = rMains.stateMachineInputs("State Machine 1");
-                    poingsMains = inputs.find(i => i.name === "poingsMains");
-                    rMains.resizeDrawingSurfaceToCanvas();
-                }
-                
+        const rMains = new rive.Rive({
+            src: "https://rinalduzzinathan.github.io/file-stash/rive/tectomains.riv",
+            canvas: document.getElementById("riveCanvasTecto"),
+            autoplay: true,
+            stateMachines: "State Machine 1",
+            onLoad: () => {
+                const inputs = rMains.stateMachineInputs("State Machine 1");
+                poingsMains = inputs.find(i => i.name === "poingsMains");
+                rMains.resizeDrawingSurfaceToCanvas();
+            }
 
-            });
 
-            let toFleches;
+        });
 
-            const rFleches = new rive.Rive({
-                src: "https://rinalduzzinathan.github.io/file-stash/rive/tectofleches.riv",
-                canvas: document.getElementById("riveCanvasTectoFleches"),
-                autoplay: true,
-                stateMachines: "State Machine 1",
-                onLoad: () => {
-                    const inputs = rFleches.stateMachineInputs("State Machine 1");
-                    toFleches = inputs.find(i => i.name === "toFleches");
-                    rFleches.resizeDrawingSurfaceToCanvas();
-                }
-                
+        let toFleches;
 
-            });
+        const rFleches = new rive.Rive({
+            src: "https://rinalduzzinathan.github.io/file-stash/rive/tectofleches.riv",
+            canvas: document.getElementById("riveCanvasTectoFleches"),
+            autoplay: true,
+            stateMachines: "State Machine 1",
+            onLoad: () => {
+                const inputs = rFleches.stateMachineInputs("State Machine 1");
+                toFleches = inputs.find(i => i.name === "toFleches");
+                rFleches.resizeDrawingSurfaceToCanvas();
+            }
 
-            
+
+        });
+
+
         async function startGestureRecognition() {
 
             const handCanvas = document.getElementById("handCanvas");
@@ -365,16 +370,16 @@
             const bigoceangauche = document.getElementById('bigoceangauche');
             const tectoRectangle = document.getElementById('tectoRectangle');
 
-            const legendeLithoConti = document.getElementById ('legendeLithoConti')
-            const legendeLithoOce = document.getElementById ('legendeLithoOce')
-            const legendeAstheno = document.getElementById ('legendeAstheno')
-            const legendeVolcan = document.getElementById ('legendeVolcan')
-            
-            const textLithoConti = document.getElementById ('textLithoConti')
-            const textLithoOce = document.getElementById ('textLithoOce')
-            const textAstheno = document.getElementById ('textAstheno')
-            const textVolcanEff = document.getElementById ('textVolcanEff')
-            const textVolcanExp = document.getElementById ('textVolcanExp')
+            const legendeLithoConti = document.getElementById('legendeLithoConti')
+            const legendeLithoOce = document.getElementById('legendeLithoOce')
+            const legendeAstheno = document.getElementById('legendeAstheno')
+            const legendeVolcan = document.getElementById('legendeVolcan')
+
+            const textLithoConti = document.getElementById('textLithoConti')
+            const textLithoOce = document.getElementById('textLithoOce')
+            const textAstheno = document.getElementById('textAstheno')
+            const textVolcanEff = document.getElementById('textVolcanEff')
+            const textVolcanExp = document.getElementById('textVolcanExp')
 
 
             legendeLithoConti.style.visibility = "hidden";
@@ -438,46 +443,47 @@
 
             await tf.setBackend("webgl");
 
-            showNext.addEventListener('click',()=>{
+            showNext.addEventListener('click', () => {
+
                 showNext.style.visibility = "hidden";
-         
-                   RectangleJaune.style.animation = "none";
+
+                RectangleJaune.style.animation = "none";
                 RectangleJaune.offsetHeight; // trick pour forcer le reflow
                 RectangleJaune.style.animation = null;
-               
+
                 RectangleJaune.style.visibility = "visible";
 
                 showNextClicked = true;
                 titre.style.visibility = "hidden";
-                showNext2.style.visibility= "visible"
+                showNext2.style.visibility = "visible"
                 canvas.style.visibility = "visible"
                 texteMains.style.visibility = "visible";
                 detectionActive = true;
-                
+
                 setTimeout(() => {
-                    if(!showNext2Clicked){
+                    if (!showNext2Clicked) {
                         riveCanvasTecto.style.visibility = "visible";
                         if (poingsMains) poingsMains.fire();
                     }
-                    
+
                 }, 4000);
 
             })
 
-            showNext2.addEventListener('click',()=>{
+            showNext2.addEventListener('click', () => {
                 showNext2Clicked = true;
                 riveCanvasTecto.style.visibility = "hidden"
                 RectangleJaune.style.visibility = "hidden"
                 RectangleJauneV2.style.animation = "none";
                 RectangleJauneV2.offsetHeight; // trick pour forcer le reflow
                 RectangleJauneV2.style.animation = null;
-               
+
                 RectangleJauneV2.style.visibility = "visible";
                 showNextClicked = false;
                 tectoRectangle.style.visibility = "hidden";
                 titre.style.visibility = "hidden";
-                showNext.style.visibility= "hidden"
-                showNext2.style.visibility= "hidden"
+                showNext.style.visibility = "hidden"
+                showNext2.style.visibility = "hidden"
                 riveCanvasTecto.style.visibility = "hidden";
                 showAnimationButton.style.visibility = "visible";
                 texteMains.style.visibility = "hidden";
@@ -491,22 +497,22 @@
 
             })
 
-            
+
             showAnimationButton.addEventListener("click", () => {
                 tectoRectangle.style.visibility = "visible";
                 RectangleJauneV2.style.visibility = "hidden"
-                
 
-                
+
+
                 showAnimationButton.style.visibility = "hidden";
 
                 document.getElementById("startBouton").style.visibility = "visible";
                 riveCanvasTectoFleches.style.visibility = "hidden";
-                
+
                 setTimeout(() => {
                     annonce1.style.visibility = "visible";
                 }, 300);
-                
+
                 setTimeout(() => {
                     annonce2.style.visibility = "visible";
                 }, 600);
@@ -514,7 +520,7 @@
                 setTimeout(() => {
                     annonce3.style.visibility = "visible";
                 }, 1000);
-                
+
                 setTimeout(() => {
                     annonce4.style.visibility = "visible";
                 }, 1500);
@@ -523,7 +529,13 @@
 
             });
 
+
+
+            menuBtn.addEventListener("click", () => {
+               window.location.href = "../hub/hub.html";
+            });
             startBouton.addEventListener("click", () => {
+                menuBtn.style.visibility = "visible";
                 startBoutonAction();
                 annonce1.style.visibility = "hidden";
                 annonce2.style.visibility = "hidden";
@@ -551,7 +563,7 @@
                 timerDisplay.classList.remove("hidden");
                 startBoutonAction();
 
-               
+
             });
 
 
@@ -583,12 +595,12 @@
                 let messages = [];
 
                 if (results.multiHandLandmarks.length > 0 && detectionActive) {
-                    
+
                     if (contidroite.style.visibility !== "hidden") contidroite.style.visibility = "hidden";
                     if (contigauche.style.visibility !== "hidden") contigauche.style.visibility = "hidden";
                     if (oceandroite.style.visibility !== "hidden") oceandroite.style.visibility = "hidden";
                     if (oceangauche.style.visibility !== "hidden") oceangauche.style.visibility = "hidden";
-                                                 
+
                     results.multiHandLandmarks.forEach((handLandmarks, i) => {
                         drawHand(handLandmarks);
 
@@ -602,11 +614,11 @@
                                 contigauche.style.visibility = "visible";
                             }
                         } else if (handedness === "Right" && !isFistPose) {
-                            
+
                             messages.push("Main droite : main ouverte");
                             if (oceangauche.style.visibility !== "visible") {
                                 //triggerBounce("contigauche");
-                            
+
                                 oceangauche.style.visibility = "visible";
                             }
 
@@ -616,8 +628,8 @@
                             if (contidroite.style.visibility !== "visible") {
                                 //triggerBounce("oceandroite");
                                 contidroite.style.visibility = "visible";
-                
-                            }                                   
+
+                            }
                         } if (handedness === "Left" && !isFistPose) {
                             messages.push("Main gauche : main ouverte");
                             if (oceandroite.style.visibility !== "visible") {
@@ -630,7 +642,7 @@
                     contidroite.style.visibility = "hidden";
                     contigauche.style.visibility = "hidden";
                     oceandroite.style.visibility = "hidden";
-                    oceangauche.style.visibility = "hidden";   
+                    oceangauche.style.visibility = "hidden";
                     messages.push("Aucune main détectée");
                 }
                 texteMains.innerText = messages.join("\n");
@@ -681,7 +693,7 @@
                     textLithoConti.style.visibility = "visible";
                     textLithoOce.style.visibility = "visible";
                     textAstheno.style.visibility = "visible";
-                   
+
 
                     function onHandsDetected(hand1, hand2) {
                         const dist = Math.sqrt(
@@ -732,7 +744,7 @@
 
                     analyzeDistanceChange();
 
-                 
+
 
                     function mostFrequentState(arr) {
                         const counts = { fist: 0, open: 0 };
@@ -756,24 +768,24 @@
                         if (endAvg > startAvg + 0.01) {
                             // divergence
                             riveCanvasDiverge.style.visibility = "visible";
-                            console.log(postureKey+ " divergence");
+                            console.log(postureKey + " divergence");
                             switch (postureKey) {
-                                case "fist_fist": 
-                                    DIVbaseToCC.fire(); 
+                                case "fist_fist":
+                                    DIVbaseToCC.fire();
                                     texteDivTT.style.visibility = "visible";
                                     break;
 
-                                case "fist_open": 
-                                    DIVbaseToOC.fire(); 
+                                case "fist_open":
+                                    DIVbaseToOC.fire();
                                     texteDivTO.style.visibility = "visible";
                                     break;
-                                case "open_fist": 
+                                case "open_fist":
                                     DIVbaseToCO.fire();
-                                    texteDivTO.style.visibility = "visible"; 
+                                    texteDivTO.style.visibility = "visible";
                                     break;
                                 case "open_open":
                                     DIVbaseToOO.fire();
-                                    texteDivOO.style.visibility = "visible"; 
+                                    texteDivOO.style.visibility = "visible";
                                     textVolcanEff.style.visibility = "visible";
                                     legendeVolcan.style.visibility = "visible";
                                     break;
@@ -782,27 +794,27 @@
                         } else if (endAvg < startAvg - 0.01) {
                             // convergence
 
-                            console.log(postureKey+ " convergence");
+                            console.log(postureKey + " convergence");
                             riveCanvasConverge.style.visibility = "visible";
                             switch (postureKey) {
-                                case "fist_fist": 
-                                    baseToCC.fire(); 
+                                case "fist_fist":
+                                    baseToCC.fire();
                                     texteConvTT.style.visibility = "visible";
                                     break;
-                                case "fist_open": 
-                                    baseToOC.fire(); 
+                                case "fist_open":
+                                    baseToOC.fire();
                                     texteConvTO.style.visibility = "visible";
                                     textVolcanExp.style.visibility = "visible";
                                     legendeVolcan.style.visibility = "visible";
                                     break;
-                                case "open_fist": 
-                                    baseToCO.fire(); 
+                                case "open_fist":
+                                    baseToCO.fire();
                                     texteConvTO.style.visibility = "visible";
                                     textVolcanExp.style.visibility = "visible";
                                     legendeVolcan.style.visibility = "visible";
                                     break;
-                                case "open_open": 
-                                    baseToOO.fire(); 
+                                case "open_open":
+                                    baseToOO.fire();
                                     texteConvOO.style.visibility = "visible";
                                     textVolcanExp.style.visibility = "visible";
                                     legendeVolcan.style.visibility = "visible";
@@ -884,7 +896,7 @@
             }, 100);
         }
 
-        
+
 
     </script>
 </body>
