@@ -150,6 +150,8 @@
         const annonce4 = document.getElementById("annonce4");
         annonce4.style.visibility = "hidden";
         
+        var showNext2Clicked = false;
+
 
         let rConverge = new rive.Rive({
             src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_convergence.riv",
@@ -453,13 +455,17 @@
                 detectionActive = true;
                 
                 setTimeout(() => {
-                    riveCanvasTecto.style.visibility = "visible";
-                    if (poingsMains) poingsMains.fire();
+                    if(!showNext2Clicked){
+                        riveCanvasTecto.style.visibility = "visible";
+                        if (poingsMains) poingsMains.fire();
+                    }
+                    
                 }, 4000);
 
             })
 
             showNext2.addEventListener('click',()=>{
+                showNext2Clicked = true;
                 riveCanvasTecto.style.visibility = "hidden"
                 RectangleJaune.style.visibility = "hidden"
                 RectangleJauneV2.style.animation = "none";
