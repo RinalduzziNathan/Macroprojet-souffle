@@ -366,7 +366,7 @@ body {
     display: flex;
     align-items: center;
     padding: 0 200px; /* un peu d’espace autour du texte */
-    animation: glissement 20s cubic-bezier(0.30, -0.05, 0.22, 1.05) forwards;
+    animation: glissement 6.9s cubic-bezier(.22,.68,.77,.36)
 }
   
 #consignes {

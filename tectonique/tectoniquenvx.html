@@ -100,7 +100,7 @@
     <button id="showNext2" class="showButton"> suite </button>
 
     <div id="RectangleJaune">
-        <p id="consignes">1. Choisi tes plaques !</p>
+        <p id="consignes">1. Choisis tes plaques !</p>
     </div>
 
     <div id="RectangleJauneV2">
@@ -438,7 +438,13 @@
 
             showNext.addEventListener('click',()=>{
                 showNext.style.visibility = "hidden";
+         
+                   RectangleJaune.style.animation = "none";
+                RectangleJaune.offsetHeight; // trick pour forcer le reflow
+                RectangleJaune.style.animation = null;
+               
                 RectangleJaune.style.visibility = "visible";
+
                 showNextClicked = true;
                 titre.style.visibility = "hidden";
                 showNext2.style.visibility= "visible"
@@ -457,6 +463,7 @@
                 RectangleJauneV2.style.animation = "none";
                 RectangleJauneV2.offsetHeight; // trick pour forcer le reflow
                 RectangleJauneV2.style.animation = null;
+               
                 RectangleJauneV2.style.visibility = "visible";
                 showNextClicked = false;
                 tectoRectangle.style.visibility = "hidden";
