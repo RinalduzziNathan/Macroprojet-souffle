@@ -71,7 +71,7 @@ body {
   
   /* Première ligne normale */
   .ligne1 {
-    transform: translateX(-110px); /* décale vers la gauche */
+    right : center;
   }
   
   /* Deuxième ligne un peu vers la droite */

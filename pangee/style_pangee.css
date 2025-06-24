@@ -1,6 +1,6 @@
 #riveCanvasPangee {
     position: absolute;
-    top: 8%;
+    top: 14%;
     left: 6%;
     width: 88%;
     height: auto;
@@ -165,7 +165,7 @@
 
 #sequenceImage1, #sequenceImage2 {
     position: absolute;
-    top: 55%;
+    top: 67%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 1000px;

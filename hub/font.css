@@ -14,3 +14,20 @@
     from { font-variation-settings: "wght" 100; }
     to   { font-variation-settings: "wght" 900; }
   }
+
+
+@font-face {
+  font-family: 'Redaction35';
+  src: url('./redaction/Redaction_2/webfonts/Redaction_20-Bold.woff2') format('woff2');
+  font-weight: normal;
+}
+
+.typo {
+  font-family: 'Redaction35', sans-serif;
+  color: black;
+  font-size: 300px;
+  margin: 0;
+  line-height: 0.8;
+  display: inline-block;
+  text-align: left;
+}
