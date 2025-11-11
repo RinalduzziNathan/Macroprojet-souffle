@@ -15,9 +15,16 @@ canvas {
 
 
 #riveCanvas {
-    top : 15%;
-    width: 1366;
+    top : 2%;
+    left : -5%;
+    width: 112%;
     height: 768;
+    z-index: 1;
+}
+
+#riveCanvasVolcan {
+    left : -5%;
+    width: 112%;
     z-index: 1;
 }
 

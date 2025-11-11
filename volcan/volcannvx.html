@@ -33,7 +33,7 @@
     <button class="homebutton" div id="menuButton">
          <img src="../image/homeIcon.svg" alt="menu" width="24" height="24">
     </button>
-    <canvas id="riveCanvas"></canvas>
+    <canvas id="riveCanvasVolcan"></canvas>
     <canvas id="riveCanvasPlay"></canvas>
     <canvas id="visqueuseCanvas"></canvas>
     <div class="background-grid"></div>
@@ -132,7 +132,7 @@
             const startBouton = document.getElementById("startBouton");
             const boutonRestart = document.getElementById("boutonRestart");
             const timerDisplay = document.getElementById("timer");
-            const riveCanvas = document.getElementById("riveCanvas");
+            const riveCanvasVolcan = document.getElementById("riveCanvasVolcan");
             const visqueuseCanvas = document.getElementById("visqueuseCanvas");
             const volcanCircle = document.getElementById("volcanCircle");
             const volcanImage = document.getElementById("volcanImage");
@@ -163,7 +163,7 @@
 
 
             volcanCircle.style.visibility = "hidden";
-            riveCanvas.style.visibility = "hidden";
+            riveCanvasVolcan.style.visibility = "hidden";
             volcanImage.style.visibility = "hidden";
             soundRectangle.style.visibility = "hidden";
             boutonRestart.style.visibility = "hidden";
@@ -203,7 +203,7 @@
 
             const r = new rive.Rive({
                 src: "https://rinalduzzinathan.github.io/file-stash/rive/volcan_final.riv",
-                canvas: document.getElementById("riveCanvas"),
+                canvas: document.getElementById("riveCanvasVolcan"),
                 autoplay: true,
                 stateMachines: "State Machine 1",
                 onLoad: () => {
@@ -390,7 +390,7 @@
                     annonce4.style.visibility = "visible";
                 }, 2000);
 
-                riveCanvas.style.visibility = "hidden";
+                riveCanvasVolcan.style.visibility = "hidden";
                 const volcanImage = document.getElementById('volcanImage');
                 volcanImage.style.display = 'none';
                 showAnimationButton.hidden = true;
@@ -456,7 +456,7 @@
             startBouton.addEventListener("click", function () {
                 menuBtn.style.visibility = "visible";
                 console.log("startBouton clicked");
-                riveCanvas.style.visibility = "visible";
+                riveCanvasVolcan.style.visibility = "visible";
                 volcanCircle.style.visibility = "hidden";
                 texteEruption.style.visibility = "hidden";
 
