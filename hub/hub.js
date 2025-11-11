@@ -1,15 +1,31 @@
 
 
 const canvas = document.getElementById("canvasRive");
-let riveInstance = new rive.Rive({
-    src: "https://rinalduzzinathan.github.io/file-stash/rive/d%C3%A9mog%C3%A9o_accueil.riv",
-    canvas: canvas,
-    autoplay: true,
-    stateMachines: "State Machine 1",
-    onLoad: () => {
-        resizeCanvasToViewport();
-    },
-});
+let riveInstance = null;
+
+createRiveInstance();
+
+function createRiveInstance() {
+    riveInstance = new rive.Rive({
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/demogeo_accueil.riv",
+        canvas: canvas,
+        autoplay: true,
+        stateMachines: "State Machine 1",
+        layout: new rive.Layout({
+            fit: rive.Fit.Contain,
+            alignment: rive.Alignment.Center,
+        }),
+        onLoad: () => {
+            resizeCanvasToViewport();
+            riveEventCheck(riveInstance); // ✅ déplacer ici
+        },
+    });
+}
+
+function rechargePage() {
+    location.reload();
+}
+
 
 function resizeCanvasToViewport() {
     canvas.width = window.innerWidth;
@@ -20,11 +36,9 @@ function resizeCanvasToViewport() {
 }
 
 window.addEventListener("resize", resizeCanvasToViewport);
-resizeCanvasToViewport();
 
 
 
-riveEventCheck(riveInstance);
 
 function riveEventCheck(riveInstance) {
     if (riveInstance) {
@@ -37,21 +51,22 @@ function riveEventCheck(riveInstance) {
             if (eventData.name == "clicPangee") {
 
                 window.open("../pangee/pangeenew.html", "_blank");
-
+                rechargePage();
             }
             else if (eventData.name == "clicVolcan") {
+                rechargePage();
                 window.open("../volcan/volcannvx.html", "_blank");
+                rechargePage
             }
-
             else if (eventData.name == "clicTecto") {
 
                 window.open("../tectonique/tectoniquenvx.html", "_blank");
+                rechargePage();
             }
-
             else if (eventData.name == "clicSeisme") {
 
                 window.open("../seismeNVX/seismenewtest.html", "_blank");
-
+                rechargePage
             }
         }
     }
