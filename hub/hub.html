@@ -5,41 +5,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nouveau design</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&display=swap"
-    rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300&display=swap"
-    rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900&display=swap" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="hub.css" />
   <link rel="stylesheet" href="font.css" />
+
+  <script src="https://unpkg.com/@rive-app/canvas@2.24.0"></script>
+  <script src="hub.js" defer></script>
+
 
 </head>
 
 <body>
-  <div class="background-grid"></div>
-  <main class="content">
-    <a href="../tectonique/tectoniquenvx.html" class="image-gants"></a>
-    <a href="../pangee/pangeenew.html" class="image-globe"></a>
-    <a href="../volcan/volcannvx.html" class="image-ventilateur"></a>
-    <a href="../seismeNVX/seismenewtest.html" class="image-pompe"></a>
-    <div id="Rectangle"></div>
-
-
-
-    <!-- Titre centré -->
-    <h1 class="font">
-      <span class="ligne ligne1">BOUGE</span>
-      <span class="ligne ligne2">TA TERRE</span>
-    </h1>
-
-  </main>
+  
+  <canvas id="canvasRive" style="width:100vw; height:100vh; display:block;"></canvas>
 </body>
 
 </html>
