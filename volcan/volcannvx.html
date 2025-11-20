@@ -20,12 +20,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300&display=swap"
         rel="stylesheet">
     <script src="https://unpkg.com/@rive-app/canvas"></script>
-
-    </style>
+    <script src="volcan.js"defer ></script>
+    
     <link rel="stylesheet" href="../css_global/style.css">
     <link rel="stylesheet" href="../css_global/style_boutons.css">
     <link rel="stylesheet" href="style_volcan.css">
-    <script src="hub.js" defer></script>
+    
        
 
 </head>
@@ -38,10 +38,6 @@
     <canvas id="riveCanvasPlay"></canvas>
     <canvas id="visqueuseCanvas"></canvas>
     <div class="background-grid"></div>
-    <video id="feu" muted playsinline>
-        <source src="feurouge.webm" type="video/webm">
-        Votre navigateur ne supporte pas la vidéo HTML5.
-    </video>
 
     <div id="volcanCircle"></div>
     <button id="startBouton" class="startBouton">>>></button>
@@ -59,7 +55,6 @@
     <div id="soundRectangle"></div>
     <div id="RectangleBlanc"></div>
 
-
    
     <div id="RectangleJaune">
         <p id="consignes">1. Fluide ou visqueuse ?</p>
@@ -72,9 +67,6 @@
         </div>
     </div>
 
-
-
-    
    
     <button id="showRiveCircles" class="showButton"> tutoriel </button>
     <button id="showSouffleTest" class="showButton"> suite</button>

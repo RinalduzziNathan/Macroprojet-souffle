@@ -1,11 +1,13 @@
 
-let menuBtn = document.getElementById("menuButton");
-menuBtn.style.visibility = "hidden"
-const souffle1 = document.getElementById("souffle1");
-const souffle2 = document.getElementById("souffle2");
-souffle1.style.visibility = "hidden";
-souffle2.style.visibility = "hidden";
 window.addEventListener('DOMContentLoaded', (event) => {
+
+    let menuBtn = document.getElementById("menuButton");
+    menuBtn.style.visibility = "hidden"
+    const souffle1 = document.getElementById("souffle1");
+    const souffle2 = document.getElementById("souffle2");
+    souffle1.style.visibility = "hidden";
+    souffle2.style.visibility = "hidden";
+
     const startBouton = document.getElementById("startBouton");
     const boutonRestart = document.getElementById("boutonRestart");
     const timerDisplay = document.getElementById("timer");
@@ -33,8 +35,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     texteEruptionEffusive.style.visibility = "hidden";
     const texteEruptionExplosive = document.getElementById("texteEruptionExplosive");
     texteEruptionExplosive.style.visibility = "hidden";
-    const videoFeu = document.getElementById('feu');
-    videoFeu.style.display = "hidden";
+ 
     const riveCanvasPlay = document.getElementById("riveCanvasPlay");
     riveCanvasPlay.style.visibility = "hidden";
 
@@ -175,12 +176,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     showRiveCircles.addEventListener('click', () => {
 
         document.getElementById("dragDropContainer").style.display = "block";
-        //videoFeu.style.display = "block";
-        //videoFeu.currentTime = 0; // Revenir au début si rejouée
-        // videoFeu.play(); // ✅ Lancement manuel
-        //videoFeu.addEventListener('ended', () => {
-        //     videoFeu.style.display = "none";  
-        // });
+    
         RectangleJaune.style.animation = "none";
         RectangleJaune.offsetHeight; // trick pour forcer le reflow
         RectangleJaune.style.animation = null;
