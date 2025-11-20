@@ -48,8 +48,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     var remplirTableau = false;
     var finTableau = false;
 
-    const RectangleJaune = document.getElementById("RectangleJaune");
-    RectangleJaune.style.visibility = "hidden";
+
 
     const RectangleJaune2 = document.getElementById("RectangleJaune2");
     RectangleJaune2.style.visibility = "hidden";
@@ -57,8 +56,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
 
-    const RectangleBlanc = document.getElementById("RectangleBlanc");
-    RectangleBlanc.style.visibility = "hidden";
     let activeColorChange = false;  // contrôle si la couleur doit changer en live
 
     function changerCouleurSelonIntensite(intensity) {
@@ -177,17 +174,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
         document.getElementById("dragDropContainer").style.display = "block";
     
-        RectangleJaune.style.animation = "none";
-        RectangleJaune.offsetHeight; // trick pour forcer le reflow
-        RectangleJaune.style.animation = null;
-
-        RectangleJaune.style.visibility = "visible";
-        RectangleBlanc.style.visibility = "visible";
-
-        setTimeout(() => {
-            RectangleBlanc.style.visibility = "hidden";
-        }, 5000);
-
 
         showRiveCircles.style.visibility = "hidden";
         titre.style.visibility = "hidden";
