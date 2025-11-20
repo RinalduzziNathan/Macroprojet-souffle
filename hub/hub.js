@@ -16,7 +16,7 @@ function createRiveInstance() {
             alignment: rive.Alignment.Center,
         }),
         onLoad: () => {
-            resizeCanvasToViewport();
+            riveInstance.resizeDrawingSurfaceToCanvas();
             riveEventCheck(riveInstance); // ✅ déplacer ici
         },
     });
@@ -54,10 +54,9 @@ function riveEventCheck(riveInstance) {
                 rechargePage();
             }
             else if (eventData.name == "clicVolcan") {
-    
-                window.open("../volcan/volcannvx.html", "_blank");
                 rechargePage();
-
+                window.open("../volcan/volcannvx.html", "_blank");
+                rechargePage
             }
             else if (eventData.name == "clicTecto") {
 

@@ -13,6 +13,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const timerDisplay = document.getElementById("timer");
     const riveCanvasVolcan = document.getElementById("riveCanvasVolcan");
     const visqueuseCanvas = document.getElementById("visqueuseCanvas");
+    const popupCanvas1 = document.getElementById("popupCanvas1");
     const volcanCircle = document.getElementById("volcanCircle");
     const volcanImage = document.getElementById("volcanImage");
     const soundRectangle = document.getElementById("soundRectangle");
@@ -35,13 +36,16 @@ window.addEventListener('DOMContentLoaded', (event) => {
     texteEruptionEffusive.style.visibility = "hidden";
     const texteEruptionExplosive = document.getElementById("texteEruptionExplosive");
     texteEruptionExplosive.style.visibility = "hidden";
- 
+
     const riveCanvasPlay = document.getElementById("riveCanvasPlay");
     riveCanvasPlay.style.visibility = "hidden";
+
+    popupCanvas1.style.visibility = "hidden";
 
 
     volcanCircle.style.visibility = "hidden";
     riveCanvasVolcan.style.visibility = "hidden";
+
     volcanImage.style.visibility = "hidden";
     soundRectangle.style.visibility = "hidden";
     boutonRestart.style.visibility = "hidden";
@@ -69,6 +73,57 @@ window.addEventListener('DOMContentLoaded', (event) => {
             document.body.style.backgroundColor = "red";
         }
     }
+
+    let popup1 = null;
+
+    function createpopup1() {
+        popup1 = new rive.Rive({
+            src: "https://rinalduzzinathan.github.io/file-stash/rive/popup_volcan_1.riv",
+            canvas: document.getElementById("popupCanvas1"),
+            autoplay: true,
+            stateMachines: "State Machine 1",
+            layout: new rive.Layout({
+                fit: rive.Fit.Contain,
+                alignment: rive.Alignment.Center,
+            }),
+            onLoad: () => {
+                popup1.resizeDrawingSurfaceToCanvas();
+                riveEventCheck(popup1); // ✅ déplacer ici
+            },
+        });
+
+    }
+
+
+    function riveEventCheck(riveInstance) {
+        if (riveInstance) {
+            riveInstance.on(rive.EventType.RiveEvent, onRiveEventReceived);
+            function onRiveEventReceived(riveEvent) {
+                const eventData = riveEvent.data;
+                console.log("Event data:", eventData);
+                if (eventData.name == "close1") {
+                    popupCanvas1.style.visibility = "hidden";
+                    visqueuseCanvas.style.visibility = "visible";
+                    document.getElementById("dragDropContainer").style.display = "block";
+                }
+
+            }
+        }
+    }
+
+
+
+    function resizeCanvasToViewport() {
+        popupCanvas1.width = window.innerWidth;
+        popupCanvas1.height = window.innerHeight;
+        if (popup1) {
+            popup1.resizeDrawingSurfaceToCanvas();
+        }
+    }
+
+
+    window.addEventListener("resize", resizeCanvasToViewport);
+
 
 
     let baseToEffu;
@@ -172,14 +227,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     showRiveCircles.addEventListener('click', () => {
 
-        document.getElementById("dragDropContainer").style.display = "block";
-    
+
+
+        popupCanvas1.style.visibility = "visible";
+        createpopup1();
+
 
         showRiveCircles.style.visibility = "hidden";
         titre.style.visibility = "hidden";
         explication.style.visibility = "hidden";
-
-        visqueuseCanvas.style.visibility = "visible";
         volcanImage.style.visibility = "hidden";
         soundRectangle.style.visibility = "hidden";
         volcanCircle.style.visibility = "hidden";
