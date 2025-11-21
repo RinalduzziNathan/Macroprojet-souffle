@@ -1,59 +1,66 @@
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    let menuBtn = document.getElementById("menuButton");
-    menuBtn.style.visibility = "hidden"
-    const souffle1 = document.getElementById("souffle1");
-    const souffle2 = document.getElementById("souffle2");
-    souffle1.style.visibility = "hidden";
-    souffle2.style.visibility = "hidden";
-
+    //boutons
     const startBouton = document.getElementById("startBouton");
     const boutonRestart = document.getElementById("boutonRestart");
-    const timerDisplay = document.getElementById("timer");
+    let menuBtn = document.getElementById("menuButton");
+    const showSouffleTest = document.getElementById('showSouffleTest');
+    const showRiveCircles = document.getElementById('showRiveCircles');
+
+    //canvas
+    const riveCanvasPlay = document.getElementById("riveCanvasPlay");
     const riveCanvasVolcan = document.getElementById("riveCanvasVolcan");
     const visqueuseCanvas = document.getElementById("visqueuseCanvas");
     const popupCanvas1 = document.getElementById("popupCanvas1");
+    const popupCanvas2 = document.getElementById("popupCanvas2");
+
+    //images
     const volcanCircle = document.getElementById("volcanCircle");
     const volcanImage = document.getElementById("volcanImage");
+
+    //objets
     const soundRectangle = document.getElementById("soundRectangle");
+
+    //textes
     const titre = document.getElementById("titre");
-    const explication = document.getElementById("explication");
-    explication.style.visibility = "hidden";
-
-    const annonce1 = document.getElementById("annonce1");
-    annonce1.style.visibility = "hidden";
-    const annonce2 = document.getElementById("annonce2");
-    annonce2.style.visibility = "hidden";
-    const annonce3 = document.getElementById("annonce3");
-    annonce3.style.visibility = "hidden";
-    const annonce4 = document.getElementById("annonce4");
-    annonce4.style.visibility = "hidden";
-
-    const texteEruption = document.getElementById("texteEruption");
-    texteEruption.style.visibility = "hidden";
+    const timerDisplay = document.getElementById("timer");
     const texteEruptionEffusive = document.getElementById("texteEruptionEffusive");
-    texteEruptionEffusive.style.visibility = "hidden";
     const texteEruptionExplosive = document.getElementById("texteEruptionExplosive");
+
+
+    //boutons
+    menuBtn.style.visibility = "hidden"
+    boutonRestart.style.visibility = "hidden";
+    showRiveCircles.style.visibility = "visible"
+    showSouffleTest.style.visibility = "hidden"
+
+
+    //canvas
+    riveCanvasPlay.style.visibility = "hidden";
+    popupCanvas1.style.visibility = "hidden";
+    popupCanvas2.style.visibility = "hidden";
+    riveCanvasVolcan.style.visibility = "hidden";
+    visqueuseCanvas.style.visibility = "hidden";
+
+
+    //Images
+    volcanCircle.style.visibility = "hidden";
+    volcanImage.style.visibility = "hidden";
+
+    //objets
+    soundRectangle.style.visibility = "hidden";
+    //textes
+    texteEruptionEffusive.style.visibility = "hidden";
     texteEruptionExplosive.style.visibility = "hidden";
 
-    const riveCanvasPlay = document.getElementById("riveCanvasPlay");
-    riveCanvasPlay.style.visibility = "hidden";
-
-    popupCanvas1.style.visibility = "hidden";
 
 
-    volcanCircle.style.visibility = "hidden";
-    riveCanvasVolcan.style.visibility = "hidden";
-
-    volcanImage.style.visibility = "hidden";
-    soundRectangle.style.visibility = "hidden";
-    boutonRestart.style.visibility = "hidden";
     var remplirTableau = false;
     var finTableau = false;
-
-
     let activeColorChange = false;  // contrôle si la couleur doit changer en live
+
+
 
     function changerCouleurSelonIntensite(intensity) {
         if (intensity < 20) {
@@ -66,6 +73,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
             document.body.style.backgroundColor = "red";
         }
     }
+
+
 
     let popup1 = null;
 
@@ -87,25 +96,27 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     }
 
-    function resizeCanvasToViewport() {
-        popupCanvas1.width = window.innerWidth;
-        popupCanvas1.height = window.innerHeight;
-        if (popup1) {
-            popup1.resizeDrawingSurfaceToCanvas();
-        }
-        visqueuseCanvas.width = window.innerWidth;
-        visqueuseCanvas.height = window.innerHeight;
-        if (rvisqueux) {
-            rvisqueux.resizeDrawingSurfaceToCanvas();
-        }
+    let popup2 = null;
+
+    function createpopup2() {
+        popup2 = new rive.Rive({
+            src: "https://rinalduzzinathan.github.io/file-stash/rive/popup_volcan_2.riv",
+            canvas: document.getElementById("popupCanvas2"),
+            autoplay: true,
+            stateMachines: "State Machine 1",
+            layout: new rive.Layout({
+                fit: rive.Fit.Contain,
+                alignment: rive.Alignment.Center,
+            }),
+            onLoad: () => {
+                popup2.resizeDrawingSurfaceToCanvas();
+                riveEventCheck(popup2); // ✅ déplacer ici
+            },
+        });
+
     }
 
-
-    window.addEventListener("resize", resizeCanvasToViewport);
-
-
     let baseToAnim;
-
     let visqueuseToBase;
     let slowFast;
     var artBoard;
@@ -130,7 +141,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 baseToAnim = inputs.find(i => i.name === 'baseToAnim');
                 visqueuseToBase = inputs.find(i => i.name === 'visqueuseToBase');
                 slowFast = inputs.find(i => i.name === 'slowFast');
-               
+
                 riveEventCheck(rvisqueux); // ✅ déplacer ici
 
 
@@ -139,44 +150,56 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
 
-
-
+    window.addEventListener("resize", resizeCanvasToViewport);
     let baseToEffu;
     let baseToExplo;
     let toBase;
 
+    let volcan = null;
 
-    const r = new rive.Rive({
-        src: "https://rinalduzzinathan.github.io/file-stash/rive/volcan_final.riv",
-        canvas: document.getElementById("riveCanvasVolcan"),
-        autoplay: true,
-        stateMachines: "State Machine 1",
-        onLoad: () => {
-            r.resizeDrawingSurfaceToCanvas();
-            // Récupère les inputs (dont les triggers)
-            const inputs = r.stateMachineInputs('State Machine 1');
-            baseToEffu = inputs.find(i => i.name === 'baseToEffu');
-            baseToExplo = inputs.find(i => i.name === 'baseToExplo');
-            toBase = inputs.find(i => i.name === 'toBase');
+    function createvolcan() {
 
 
+        volcan = new rive.Rive({
+            src: "https://rinalduzzinathan.github.io/file-stash/rive/demogeo_volcan.riv",
+            canvas: document.getElementById("riveCanvasVolcan"),
+            autoplay: true,
+            stateMachines: "State Machine 1",
+            onLoad: () => {
+                volcan.resizeDrawingSurfaceToCanvas();
+                // Récupère les inputs (dont les triggers)
+                const inputs = volcan.stateMachineInputs('State Machine 1');
+                baseToEffu = inputs.find(i => i.name === 'baseToEffu');
+                baseToExplo = inputs.find(i => i.name === 'baseToExplo');
+                toBase = inputs.find(i => i.name === 'toBase');
+                riveEventCheck(volcan); // ✅ déplacer ici
 
-        },
-    });
+            },
+        });
+    }
 
-
-
-    r.on(rive.EventType.RiveEvent, (event) => {
-        const data = event.data;
-        if (data.type === rive.RiveEventType.General) {
-            console.log("Event reçu : " + data.name);
-            boutonRestart.style.visibility = "visible";
-            if (toBase) toBase.fire();
-            texteEruptionExplosive.style.visibility = "hidden";
-            texteEruptionEffusive.style.visibility = "hidden";
+    function resizeCanvasToViewport() {
+        popupCanvas1.width = window.innerWidth;
+        popupCanvas1.height = window.innerHeight;
+        if (popup1) {
+            popup1.resizeDrawingSurfaceToCanvas();
         }
-    });
-
+        popupCanvas2.width = window.innerWidth;
+        popupCanvas2.height = window.innerHeight;
+        if (popup2) {
+            popup2.resizeDrawingSurfaceToCanvas();
+        }
+        visqueuseCanvas.width = window.innerWidth;
+        visqueuseCanvas.height = window.innerHeight;
+        if (rvisqueux) {
+            rvisqueux.resizeDrawingSurfaceToCanvas();
+        }
+        riveCanvasVolcan.width = window.innerWidth;
+        riveCanvasVolcan.height = window.innerHeight;
+        if (volcan) {
+            volcan.resizeDrawingSurfaceToCanvas();
+        }
+    }
 
 
     function riveEventCheck(riveInstance) {
@@ -196,98 +219,86 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     createvisqueux()
                 }
 
+                if (eventData.name == "close2") {
+
+                    popupCanvas1.style.visibility = "hidden";
+                    activeColorChange = false;
+                    document.body.style.backgroundColor = "white";
+                    volcanCircle.style.visibility = "visible";
+                    activeColorChange = false;
+                    riveCanvasVolcan.style.visibility = "hidden";
+                    volcanImage.style.visibility = 'visible';
+                    soundRectangle.style.visibility = 'visible';
+                    startBouton.style.visibility = 'visible';
+                }
+
+                if (eventData.name == "EndAnim") {
+
+                    boutonRestart.style.visibility = "visible";
+                    if (toBase) toBase.fire();
+                    texteEruptionExplosive.style.visibility = "hidden";
+                    texteEruptionEffusive.style.visibility = "hidden";
+                }
+
             }
         }
     }
 
-
-    const showAnimationButton = document.getElementById('showAnimationButton');
-    showAnimationButton.style.visibility = "hidden"
-    const showSouffleTest = document.getElementById('showSouffleTest');
-    showSouffleTest.style.visibility = "hidden"
-    const showRiveCircles = document.getElementById('showRiveCircles');
-    showRiveCircles.style.visibility = "visible"
-    visqueuseCanvas.style.visibility = "hidden";
-
-
+    //boutons
 
     showRiveCircles.addEventListener('click', () => {
-
-
-
         popupCanvas1.style.visibility = "visible";
         createpopup1();
-        
-
-
         showRiveCircles.style.visibility = "hidden";
         titre.style.visibility = "hidden";
-        explication.style.visibility = "hidden";
         volcanImage.style.visibility = "hidden";
         soundRectangle.style.visibility = "hidden";
         volcanCircle.style.visibility = "hidden";
-        showAnimationButton.style.visibility = "hidden"
     })
 
+
     showSouffleTest.addEventListener('click', () => {
-
+        popupCanvas2.style.visibility = "visible";
+        createpopup2();
         document.getElementById("dragDropContainer").style.display = "none"; // 👈 masquer les éléments
-
-
         showSouffleTest.style.visibility = "hidden";
         visqueuseCanvas.style.visibility = "hidden";
-
-        showAnimationButton.style.visibility = "visible"
-        souffle1.style.visibility = "visible";
-        souffle2.style.visibility = "visible";
         activeColorChange = true;
 
     })
 
-    showAnimationButton.addEventListener('click', () => {
 
-        activeColorChange = false;
-        document.body.style.backgroundColor = "white";
-        volcanCircle.style.visibility = "visible";
-        explication.style.visibility = "hidden";
-        souffle1.style.visibility = "hidden";
-        souffle2.style.visibility = "hidden";
-        //texteEruption.style.visibility = "visible";
-        // riveCanvasPlay.style.visibility = "visible";
-        // if (toPlaymobiles) toPlaymobiles.fire();
-        activeColorChange = false;
+    startBouton.addEventListener("click", function () {
+        createvolcan();
+        volcanImage.style.visibility = 'hidden';
+        soundRectangle.style.visibility = 'hidden';
+        menuBtn.style.visibility = "visible";
+        console.log("startBouton clicked");
+        riveCanvasVolcan.style.visibility = "visible";
+        volcanCircle.style.visibility = "hidden";
+        if (toBase) toBase.fire();
 
-        setTimeout(() => {
-            annonce1.style.visibility = "visible";
-        }, 500);
 
-        setTimeout(() => {
-            annonce2.style.visibility = "visible";
-        }, 1000);
-
-        setTimeout(() => {
-            annonce3.style.visibility = "visible";
-        }, 1500);
-
-        setTimeout(() => {
-            annonce4.style.visibility = "visible";
-        }, 2000);
-
-        riveCanvasVolcan.style.visibility = "hidden";
-        const volcanImage = document.getElementById('volcanImage');
-        volcanImage.style.display = 'none';
-        showAnimationButton.hidden = true;
-
-        // Hide the sound rectangle
-        const soundRectangle = document.getElementById('soundRectangle');
-        soundRectangle.style.display = 'none';
-
-        // Show the Start button
-        const startBouton = document.getElementById('startBouton');
-        startBouton.style.visibility = 'visible';
-
+        startTimer();
+        startBouton.style.visibility = "hidden";
 
     });
+
+    boutonRestart.addEventListener("click", function () {
+        createvolcan();
+        console.log("REstartBouton clicked");
+        if (toBase) toBase.fire();
+        //if (toPlaymobiles) toPlaymobiles.fire();
+        startTimer();
+        boutonRestart.style.visibility = "hidden";
+
+    });
+
+    menuBtn.addEventListener("click", () => {
+        window.location.href = "../hub/hub.html";
+    });
+
+
 
     function intensite(intensity) {
         //console.log(intensity)
@@ -330,38 +341,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }, 100); // mise à jour toutes les 100 ms
     }
 
-    menuBtn.addEventListener("click", () => {
-        window.location.href = "../hub/hub.html";
-    });
-
-
-
-    startBouton.addEventListener("click", function () {
-        menuBtn.style.visibility = "visible";
-        console.log("startBouton clicked");
-        riveCanvasVolcan.style.visibility = "visible";
-        volcanCircle.style.visibility = "hidden";
-        texteEruption.style.visibility = "hidden";
-
-        if (toBase) toBase.fire();
-        startTimer();
-        startBouton.style.visibility = "hidden";
-
-        annonce1.style.visibility = "hidden";
-        annonce2.style.visibility = "hidden";
-        annonce3.style.visibility = "hidden";
-        annonce4.style.visibility = "hidden";
-
-    });
-
-    boutonRestart.addEventListener("click", function () {
-        console.log("REstartBouton clicked");
-        if (toBase) toBase.fire();
-        //if (toPlaymobiles) toPlaymobiles.fire();
-        startTimer();
-        boutonRestart.style.visibility = "hidden";
-
-    });
 
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {

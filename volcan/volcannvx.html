@@ -38,19 +38,15 @@
     <canvas id="riveCanvasPlay"></canvas>
     <canvas id="visqueuseCanvas"></canvas>
     <canvas id="popupCanvas1"style="width:100vw; height:100vh; display:block;z-index: 20;"></canvas>
+    <canvas id="popupCanvas2"style="width:100vw; height:100vh; display:block;z-index: 20;"></canvas>
 
     <div class="background-grid"></div>
 
     <div id="volcanCircle"></div>
-    <button id="startBouton" class="startBouton">>>></button>
-    <button id="boutonRestart" class="restartBouton centerTop">>>></button>
+    <button id="startBouton" class="startBouton">prêt ?</button>
+    <button id="boutonRestart" class="restartBouton centerTop">recommencer</button>
     <div id="timer" class="timer verticalCenter"></div>
     <div id="titre" class="titre "> Le souffle de la Terre dépend de la nature de sa lave</div>
-    <div id="explication" class="explication "> 2 possibilités</div>
-    <div id="annonce1" class="annonce tu ">TU</div>
-    <div id="annonce2" class="annonce as ">AS</div>
-    <div id="annonce3" class="annonce cinq">5</div>
-    <div id="annonce4" class="annonce secondes">SECONDES</div>
 
 
     <img id="volcanImage" src="../interface/volcanintro.png" alt="volcanintro" />
@@ -60,7 +56,7 @@
    
     <button id="showRiveCircles" class="showButton"> tutoriel </button>
     <button id="showSouffleTest" class="showButton"> suite</button>
-     <button id="showAnimationButton" class="showButton">à toi de jouer</button>
+    
     <div id="dragDropContainer" style="display: none;">
         <div id="draggables">
             <div class="draggable" draggable="true" data-target="circle1">Lave fluide</div>
@@ -74,20 +70,7 @@
     
         <div id="resultMessage" class="resultMessage"></div>
     </div>
-    <div id="souffle1">
-       
-        <div id="rectangle1">
-            <img id="souffleImage1" src="../interface/souffle1.png" alt="souffleImage1" />
-        </div>
-    </div>
-    <div id="souffle2">
-        <div id="rectangle2">
-            <img id="souffleImage2" src="../interface/souffle2.png" alt="souffleImage2" />
-        </div>
-    </div>
 
-    <div id="texteEruption" class="texteEruption">votre souffle va déterminer <br />
-        le type d’éruption</div>
     <div id="texteEruptionEffusive" class="texteEruption">
         La lave fluide permet <br /> 
         aux gaz de s’échapper calmement,<br /> 
