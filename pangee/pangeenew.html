@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/@rive-app/canvas"></script>
+    <script src="https://unpkg.com/@rive-app/webgl2"></script>
     <script src="pangee.js" defer></script>
 
 </style>
@@ -28,32 +28,21 @@
 </head>
 
 <body>
-    <button class="homebutton" div id="menuButton">
+    <button class="homebutton"  id="menuButton">
          <img src="../image/homeIcon.svg" alt="menu" width="24" height="24">
     </button>
     <div class="background-grid"></div>
     <video id="video" autoplay hidden></video>
+    
     <div id="resultMessage" class="resultMessage"></div>
     <div id="temps">Il y a <span id="tempsValeur">250</span> millions d'années</div>
-    <div id="evenementPangée" >la Pangée, un méga contincent</div>
-    <div id="evenementDino" >pouf... des dinosaures</div>
-    <div id="evenementOcean" > arrivée de l'océan atlantique</div>
-    <div id="evenementFinDino"> plus de dino...</div>
-    <div id="evenementMontagnes"> formation des Alpes et de l'Himalaya</div>
-    
-    <canvas id="riveCanvasMains"></canvas>
     <div id="titre" class="titre "> Explorons 250 millions d’années d’histoire de la Terre...
         En un clin d’oeil</div>
     <button id="showNext" class="showButton"> tutoriel </button>
     <button id="showNext2" class="showButton"> lancement </button>
-    <canvas id="riveCanvasPangee"></canvas>
-    <canvas id="riveCanvasEvenement"></canvas>
 
-    <canvas id="riveCanvasDino"></canvas>
-    <canvas id="riveCanvasMontagne"></canvas>
-    <canvas id="riveCanvasOcean"></canvas>
-    <canvas id="riveCanvasVolcan"></canvas>
     <canvas id="monCanvas"></canvas>
+    <canvas id="riveCanvasMains" style="width:100vw; height:100vh; display:block;"></canvas>
     <canvas id="canvasRive" style="width:100vw; height:100vh; display:block;"></canvas>
 
 
