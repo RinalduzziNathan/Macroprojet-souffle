@@ -111,9 +111,10 @@ body {
     cursor: grab;
    
     background-color: white;
-    color: rgb(0, 0, 0);
-    border: 2px, solid black;
+    color: #00FF00;
+    border: 3px, solid #00FF00;
     border-radius: 50px;
+    box-shadow:5px 5px 5px #d6d6d6;
 }
 
 #dropTargets {

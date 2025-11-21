@@ -54,7 +54,6 @@ function riveEventCheck(riveInstance) {
                 rechargePage();
             }
             else if (eventData.name == "clicVolcan") {
-                rechargePage();
                 window.open("../volcan/volcannvx.html", "_blank");
                 rechargePage
             }

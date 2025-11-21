@@ -53,13 +53,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     var finTableau = false;
 
 
-
-    const RectangleJaune2 = document.getElementById("RectangleJaune2");
-    RectangleJaune2.style.visibility = "hidden";
-    const consignes2 = document.getElementById("consignes2");
-
-
-
     let activeColorChange = false;  // contrôle si la couleur doit changer en live
 
     function changerCouleurSelonIntensite(intensity) {
@@ -94,35 +87,57 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     }
 
-
-    function riveEventCheck(riveInstance) {
-        if (riveInstance) {
-            riveInstance.on(rive.EventType.RiveEvent, onRiveEventReceived);
-            function onRiveEventReceived(riveEvent) {
-                const eventData = riveEvent.data;
-                console.log("Event data:", eventData);
-                if (eventData.name == "close1") {
-                    popupCanvas1.style.visibility = "hidden";
-                    visqueuseCanvas.style.visibility = "visible";
-                    document.getElementById("dragDropContainer").style.display = "block";
-                }
-
-            }
-        }
-    }
-
-
-
     function resizeCanvasToViewport() {
         popupCanvas1.width = window.innerWidth;
         popupCanvas1.height = window.innerHeight;
         if (popup1) {
             popup1.resizeDrawingSurfaceToCanvas();
         }
+        visqueuseCanvas.width = window.innerWidth;
+        visqueuseCanvas.height = window.innerHeight;
+        if (rvisqueux) {
+            rvisqueux.resizeDrawingSurfaceToCanvas();
+        }
     }
 
 
     window.addEventListener("resize", resizeCanvasToViewport);
+
+
+    let baseToAnim;
+
+    let visqueuseToBase;
+    let slowFast;
+    var artBoard;
+    let rvisqueux = null;
+
+    function createvisqueux() {
+
+        rvisqueux = new rive.Rive({
+            src: "https://rinalduzzinathan.github.io/file-stash/rive/demo_geo_fluide_visqueuse3.riv",
+            canvas: document.getElementById("visqueuseCanvas"),
+            autoplay: true,
+            stateMachines: "State Machine 1",
+            layout: new rive.Layout({
+                fit: rive.Fit.Contain,
+                alignment: rive.Alignment.Center,
+            }),
+            onLoad: () => {
+                rvisqueux.resizeDrawingSurfaceToCanvas();
+                // Récupère les inputs (dont les triggers)
+                console.log(rvisqueux);
+                const inputs = rvisqueux.stateMachineInputs('State Machine 1');
+                baseToAnim = inputs.find(i => i.name === 'baseToAnim');
+                visqueuseToBase = inputs.find(i => i.name === 'visqueuseToBase');
+                slowFast = inputs.find(i => i.name === 'slowFast');
+               
+                riveEventCheck(rvisqueux); // ✅ déplacer ici
+
+
+            },
+        });
+    }
+
 
 
 
@@ -163,54 +178,27 @@ window.addEventListener('DOMContentLoaded', (event) => {
     });
 
 
-    let baseToAnim;
 
-    let visqueuseToBase;
-    let slowFast;
-    var artBoard;
+    function riveEventCheck(riveInstance) {
+        if (riveInstance) {
+            riveInstance.on(rive.EventType.RiveEvent, onRiveEventReceived);
+            function onRiveEventReceived(riveEvent) {
+                const eventData = riveEvent.data;
+                console.log("Event data:", eventData);
+                if (eventData.name == "startCircles") {
+                    popupCanvas1.style.visibility = "hidden";
 
-    const rvisqueux = new rive.Rive({
-        src: "https://rinalduzzinathan.github.io/file-stash/rive/visqueuseFix.riv",
-        canvas: document.getElementById("visqueuseCanvas"),
-        autoplay: true,
-        stateMachines: "State Machine 1",
-        onLoad: () => {
-            rvisqueux.resizeDrawingSurfaceToCanvas();
-            // Récupère les inputs (dont les triggers)
-            console.log(rvisqueux);
-            const inputs = rvisqueux.stateMachineInputs('State Machine 1');
-            baseToAnim = inputs.find(i => i.name === 'baseToAnim');
-            visqueuseToBase = inputs.find(i => i.name === 'visqueuseToBase');
+                }
 
-            slowFast = inputs.find(i => i.name === 'slowFast');
-            console.log(inputs);
+                if (eventData.name == "close1") {
+                    visqueuseCanvas.style.visibility = "visible";
+                    document.getElementById("dragDropContainer").style.display = "block";
+                    createvisqueux()
+                }
 
-
-        },
-    });
-
-
-    let toPlaymobiles, toEscape, toPhoto;
-
-
-    const rPlay = new rive.Rive({
-        src: "https://rinalduzzinathan.github.io/file-stash/rive/playmobil.riv",
-        canvas: document.getElementById("riveCanvasPlay"),
-        autoplay: true,
-        stateMachines: "State Machine 1",
-        onLoad: () => {
-            rPlay.resizeDrawingSurfaceToCanvas();
-            // Récupère les inputs (dont les triggers)
-            const inputs = rPlay.stateMachineInputs('State Machine 1');
-            toEscape = inputs.find(i => i.name === 'toEscape');
-            toPlaymobiles = inputs.find(i => i.name === 'toPlaymobiles');
-            toPhoto = inputs.find(i => i.name === 'toPhoto');
-
-        },
-    });
-
-
-
+            }
+        }
+    }
 
 
     const showAnimationButton = document.getElementById('showAnimationButton');
@@ -223,14 +211,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
 
-
-
     showRiveCircles.addEventListener('click', () => {
 
 
 
         popupCanvas1.style.visibility = "visible";
         createpopup1();
+        
 
 
         showRiveCircles.style.visibility = "hidden";
@@ -253,24 +240,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
         showAnimationButton.style.visibility = "visible"
         souffle1.style.visibility = "visible";
         souffle2.style.visibility = "visible";
-
-        RectangleJaune2.style.visibility = "visible";
-        setTimeout(() => {
-            document.getElementById('souffle1').classList.add('show');
-        }, 1000); // 2000 ms = 2 secondes
-        setTimeout(() => {
-            document.getElementById('souffle2').classList.add('show');
-        }, 1800); // 2000 ms = 2 secondes
-
-        // Supprime et redémarre l'animation proprement
-        consignes2.classList.remove("defilement");
-
-        // Forcer le reflow : indispensable pour relancer proprement l'animation
-        void consignes2.offsetWidth;
-
-        // Puis on la relance
-        consignes2.classList.add("defilement");
-
         activeColorChange = true;
 
     })
@@ -279,7 +248,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
         activeColorChange = false;
         document.body.style.backgroundColor = "white";
-        RectangleJaune2.style.visibility = "hidden";
         volcanCircle.style.visibility = "visible";
         explication.style.visibility = "hidden";
         souffle1.style.visibility = "hidden";
