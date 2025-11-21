@@ -19,7 +19,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300&display=swap"
         rel="stylesheet">
-    <script src="https://unpkg.com/@rive-app/canvas"></script>
+    <script src="https://unpkg.com/@rive-app/webgl2"></script>
     <script src="volcan.js"defer ></script>
     
     <link rel="stylesheet" href="../css_global/style.css">
@@ -31,9 +31,7 @@
 </head>
 
 <body>
-    <button class="homebutton" div id="menuButton">
-         <img src="../image/homeIcon.svg" alt="menu" width="24" height="24">
-    </button>
+    
     <canvas id="riveCanvasVolcan"></canvas>
     <canvas id="riveCanvasPlay"></canvas>
     <canvas id="visqueuseCanvas"></canvas>
@@ -43,8 +41,11 @@
     <div class="background-grid"></div>
 
     <div id="volcanCircle"></div>
-    <button id="startBouton" class="startBouton">prêt ?</button>
-    <button id="boutonRestart" class="restartBouton centerTop">recommencer</button>
+    <button class="homebutton" div id="menuButton">
+         <img src="../image/homeIcon.svg" alt="menu" width="24" height="24">
+    </button>
+    <button id="startBouton" class="startBouton ">prêt ?</button>
+    <button id="boutonRestart" class="restartBouton ">recommencer</button>
     <div id="timer" class="timer verticalCenter"></div>
     <div id="titre" class="titre "> Le souffle de la Terre dépend de la nature de sa lave</div>
 

@@ -4,7 +4,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     //boutons
     const startBouton = document.getElementById("startBouton");
     const boutonRestart = document.getElementById("boutonRestart");
-    let menuBtn = document.getElementById("menuButton");
+    const menuBtn = document.getElementById("menuButton");
     const showSouffleTest = document.getElementById('showSouffleTest');
     const showRiveCircles = document.getElementById('showRiveCircles');
 
@@ -30,10 +30,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
     //boutons
-    menuBtn.style.visibility = "hidden"
+    menuBtn.style.visibility = "hidden";
     boutonRestart.style.visibility = "hidden";
-    showRiveCircles.style.visibility = "visible"
-    showSouffleTest.style.visibility = "hidden"
+    showRiveCircles.style.visibility = "visible";
+    showSouffleTest.style.visibility = "hidden";
 
 
     //canvas
@@ -59,7 +59,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     var remplirTableau = false;
     var finTableau = false;
     let activeColorChange = false;  // contrôle si la couleur doit changer en live
-
+    let colorJaune = false;
 
 
     function changerCouleurSelonIntensite(intensity) {
@@ -222,7 +222,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 if (eventData.name == "close2") {
 
                     popupCanvas1.style.visibility = "hidden";
-                    activeColorChange = false;
+                    //colorJaune= true;
                     document.body.style.backgroundColor = "white";
                     volcanCircle.style.visibility = "visible";
                     activeColorChange = false;
@@ -273,7 +273,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
         volcanImage.style.visibility = 'hidden';
         soundRectangle.style.visibility = 'hidden';
         menuBtn.style.visibility = "visible";
-        console.log("startBouton clicked");
         riveCanvasVolcan.style.visibility = "visible";
         volcanCircle.style.visibility = "hidden";
         if (toBase) toBase.fire();
@@ -400,6 +399,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     }
 
                     return { r, g, b };
+                }
+
+                if (colorJaune) {
+                    document.body.style.backgroundColor = "#FDFF60" ;
                 }
 
 

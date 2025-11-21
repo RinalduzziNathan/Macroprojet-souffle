@@ -9,7 +9,7 @@
 
 #volcanImage {
     position: absolute;
-    top: 10%;
+    top: 18%;
     left: 22%;
     z-index: 4;
     width: 800px;
@@ -23,8 +23,8 @@ body {
 /* New Rectangle */
 #soundRectangle {
     position: absolute;
-    top: 80%;
-    left: 49%;
+    top: 85%;
+    left: 50%;
     transform: translateX(-50%);
     width: 300px;
     background-color: red;
@@ -65,7 +65,7 @@ body {
 
 #volcanCircle {
     position: absolute;
-    top: 79%;
+    top: 85%;
     /* Position where you want it */
     left: 50%;
     /* Position where you want it */
