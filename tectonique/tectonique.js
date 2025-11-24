@@ -16,6 +16,8 @@ const riveCanvasDiverge = document.getElementById("riveCanvasDiverge");
 const riveCanvasConverge = document.getElementById("riveCanvasConverge");
 const riveCanvas = document.getElementById("riveCanvas");
 const canvas = document.getElementById("output_canvas");
+const popupCanvas1 = document.getElementById("popupCanvas1");
+
 
 //textes
 const titre = document.getElementById("titre")
@@ -51,7 +53,6 @@ const bigcontigauche = document.getElementById('bigcontigauche');
 const bigoceandroite = document.getElementById('bigoceandroite');
 const bigoceangauche = document.getElementById('bigoceangauche');
 //autre
-const RectangleJaune = document.getElementById("RectangleJaune");
 const RectangleJauneV2 = document.getElementById("RectangleJauneV2");
 const ctx = canvas.getContext("2d");
 
@@ -94,7 +95,6 @@ textVolcanEff.style.visibility = "hidden";
 textVolcanExp.style.visibility = "hidden";
 
 //autre
-RectangleJaune.style.visibility = "hidden";
 RectangleJauneV2.style.visibility = "hidden";
 
 //canvas
@@ -104,6 +104,8 @@ canvas.style.visibility = "hidden"
 riveCanvas.style.visibility = "hidden";
 riveCanvasConverge.style.visibility = "hidden";
 riveCanvasDiverge.style.visibility = "hidden";
+popupCanvas1.style.visibility = "hidden";
+
 //images
 contidroite.style.visibility = "hidden";
 contigauche.style.visibility = "hidden";
@@ -135,6 +137,53 @@ rightHandStates = [];
 leftHandStates = [];
 distances = [];
 DistanceIsCalculated = false;
+
+let popup1 = null;
+
+function createpopup1() {
+    popup1 = new rive.Rive({
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/popup_tecto_1.riv",
+        canvas: document.getElementById("popupCanvas1"),
+        autoplay: true,
+        stateMachines: "State Machine 1",
+        layout: new rive.Layout({
+            fit: rive.Fit.Contain,
+            alignment: rive.Alignment.Center,
+        }),
+        onLoad: () => {
+            popup1.resizeDrawingSurfaceToCanvas();
+            riveEventCheck(popup1);
+        },
+    });
+
+}
+
+
+function resizeCanvasToViewport() {
+    popupCanvas1.width = window.innerWidth;
+    popupCanvas1.height = window.innerHeight;
+    if (popup1) {
+        popup1.resizeDrawingSurfaceToCanvas();
+    }
+}
+
+
+function riveEventCheck(riveInstance) {
+    if (riveInstance) {
+        riveInstance.on(rive.EventType.RiveEvent, onRiveEventReceived);
+        function onRiveEventReceived(riveEvent) {
+            const eventData = riveEvent.data;
+            console.log("Event data:", eventData);
+            if (eventData.name == "close4") {
+                popupCanvas1.style.visibility = "hidden";
+                riveCanvasTecto.style.visibility = "visible";
+            }
+
+        }
+    }
+}
+
+ window.addEventListener("resize", resizeCanvasToViewport);
 
 
 let rConverge = new rive.Rive({
@@ -289,13 +338,12 @@ function cleanRiveAnimation() {
 let poingsMains;
 
 const rMains = new rive.Rive({
-    src: "https://rinalduzzinathan.github.io/file-stash/rive/tectomains.riv",
+    src: "https://rinalduzzinathan.github.io/file-stash/rive/schema_tecto_1.riv",
     canvas: document.getElementById("riveCanvasTecto"),
     autoplay: true,
     stateMachines: "State Machine 1",
     onLoad: () => {
         const inputs = rMains.stateMachineInputs("State Machine 1");
-        poingsMains = inputs.find(i => i.name === "poingsMains");
         rMains.resizeDrawingSurfaceToCanvas();
     }
 
@@ -349,14 +397,9 @@ async function startGestureRecognition() {
     await tf.setBackend("webgl");
 
     showNext.addEventListener('click', () => {
-
+        createpopup1();
         showNext.style.visibility = "hidden";
-
-        RectangleJaune.style.animation = "none";
-        RectangleJaune.offsetHeight; // trick pour forcer le reflow
-        RectangleJaune.style.animation = null;
-
-        RectangleJaune.style.visibility = "visible";
+        popupCanvas1.style.visibility = "visible";
 
         showNextClicked = true;
         titre.style.visibility = "hidden";
@@ -365,20 +408,11 @@ async function startGestureRecognition() {
         texteMains.style.visibility = "visible";
         detectionActive = true;
 
-        setTimeout(() => {
-            if (!showNext2Clicked) {
-                riveCanvasTecto.style.visibility = "visible";
-                if (poingsMains) poingsMains.fire();
-            }
-
-        }, 4000);
-
     })
 
     showNext2.addEventListener('click', () => {
         showNext2Clicked = true;
         riveCanvasTecto.style.visibility = "hidden"
-        RectangleJaune.style.visibility = "hidden"
         RectangleJauneV2.style.animation = "none";
         RectangleJauneV2.offsetHeight; // trick pour forcer le reflow
         RectangleJauneV2.style.animation = null;
