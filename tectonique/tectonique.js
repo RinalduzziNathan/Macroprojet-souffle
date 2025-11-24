@@ -383,13 +383,12 @@ const rMains = new rive.Rive({
 let toFleches;
 
 const rFleches = new rive.Rive({
-    src: "https://rinalduzzinathan.github.io/file-stash/rive/tectofleches.riv",
+    src: "https://rinalduzzinathan.github.io/file-stash/rive/schema_tecto_2.riv",
     canvas: document.getElementById("riveCanvasTectoFleches"),
     autoplay: true,
     stateMachines: "State Machine 1",
     onLoad: () => {
         const inputs = rFleches.stateMachineInputs("State Machine 1");
-        toFleches = inputs.find(i => i.name === "toFleches");
         rFleches.resizeDrawingSurfaceToCanvas();
     }
 
@@ -441,6 +440,7 @@ async function startGestureRecognition() {
     })
 
     showNext2.addEventListener('click', () => {
+        createpopup2();
         popupCanvas1.style.visibility = "hidden";
         showNext2Clicked = true;
         riveCanvasTecto.style.visibility = "hidden"
@@ -460,8 +460,6 @@ async function startGestureRecognition() {
         document.getElementById("oceangauche").style.display = "none";
 
         riveCanvasTectoFleches.style.visibility = "visible";
-        if (toFleches) toFleches.fire();
-
     })
 
 
