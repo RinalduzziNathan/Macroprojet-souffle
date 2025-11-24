@@ -1,7 +1,6 @@
 
 //boutons
 let menuBtn = document.getElementById("menuButton");
-const startBouton = document.getElementById("startBouton");
 const showAnimationButton = document.getElementById('showAnimationButton');
 const showNext = document.getElementById('showNext');
 const showNext2 = document.getElementById('showNext2');
@@ -18,14 +17,11 @@ const riveCanvas = document.getElementById("riveCanvas");
 const canvas = document.getElementById("output_canvas");
 const popupCanvas1 = document.getElementById("popupCanvas1");
 const popupCanvas2 = document.getElementById("popupCanvas2");
+const popupCanvas3 = document.getElementById("popupCanvas3");
 
 
 //textes
 const titre = document.getElementById("titre")
-const annonce1 = document.getElementById("annonce1");
-const annonce2 = document.getElementById("annonce2");
-const annonce3 = document.getElementById("annonce3");
-const annonce4 = document.getElementById("annonce4");
 
 const texteMains = document.getElementById("texteMains");
 const texteConvOO = document.getElementById("texteConvOO");
@@ -67,9 +63,6 @@ const legendeVolcan = document.getElementById('legendeVolcan')
 //video
 const video = document.getElementById("video");
 
-
-
-
 //boutons
 menuBtn.style.visibility = "hidden"
 showNext.style.visibility = "visible"
@@ -84,10 +77,6 @@ texteConvTO.style.visibility = "hidden";
 texteDivOO.style.visibility = "hidden";
 texteDivTT.style.visibility = "hidden";
 texteDivTO.style.visibility = "hidden";
-annonce1.style.visibility = "hidden";
-annonce2.style.visibility = "hidden";
-annonce3.style.visibility = "hidden";
-annonce4.style.visibility = "hidden";
 textLithoConti.style.visibility = "hidden";
 textLithoOce.style.visibility = "hidden";
 textAstheno.style.visibility = "hidden";
@@ -105,6 +94,8 @@ riveCanvasConverge.style.visibility = "hidden";
 riveCanvasDiverge.style.visibility = "hidden";
 popupCanvas1.style.visibility = "hidden";
 popupCanvas2.style.visibility = "hidden";
+popupCanvas3.style.visibility = "hidden";
+
 
 //images
 contidroite.style.visibility = "hidden";
@@ -178,6 +169,24 @@ function createpopup2() {
 
 }
 
+function createpopup3() {
+    popup3 = new rive.Rive({
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/popup_tecto_3.riv",
+        canvas: document.getElementById("popupCanvas3"),
+        autoplay: true,
+        stateMachines: "State Machine 1",
+        layout: new rive.Layout({
+            fit: rive.Fit.Contain,
+            alignment: rive.Alignment.Center,
+        }),
+        onLoad: () => {
+            popup3.resizeDrawingSurfaceToCanvas();
+            riveEventCheck(popup3);
+        },
+    });
+
+}
+
 
 
 function resizeCanvasToViewport() {
@@ -190,6 +199,11 @@ function resizeCanvasToViewport() {
     popupCanvas2.height = window.innerHeight;
     if (popup2) {
         popup2.resizeDrawingSurfaceToCanvas();
+    }
+    popupCanvas3.width = window.innerWidth;
+    popupCanvas3.height = window.innerHeight;
+    if (popup3) {
+        popup3.resizeDrawingSurfaceToCanvas();
     }
 }
 
@@ -207,6 +221,12 @@ function riveEventCheck(riveInstance) {
 
             if (eventData.name == "closeB") {
                 popupCanvas2.style.visibility = "hidden";
+            }
+
+            if (eventData.name == "close4") {
+                popupCanvas3.style.visibility = "hidden";
+                document.body.style.backgroundColor = "#fcff32ff"
+                startBoutonAction();
             }
 
         }
@@ -464,40 +484,12 @@ async function startGestureRecognition() {
 
 
     showAnimationButton.addEventListener("click", () => {
+        createpopup3();
+        popupCanvas3.style.visibility = "visible";
         tectoRectangle.style.visibility = "visible";
         popupCanvas2.style.visibility = "hidden";
-
         showAnimationButton.style.visibility = "hidden";
-
-        document.getElementById("startBouton").style.visibility = "visible";
         riveCanvasTectoFleches.style.visibility = "hidden";
-
-        setTimeout(() => {
-            if (!TimerIsRunning) {
-                annonce1.style.visibility = "visible";
-            }
-        }, 500);
-
-        setTimeout(() => {
-            if (!TimerIsRunning) {
-                annonce2.style.visibility = "visible";
-            }
-        }, 1000);
-
-        setTimeout(() => {
-            if (!TimerIsRunning) {
-                annonce3.style.visibility = "visible";
-            }
-
-        }, 1500);
-
-        setTimeout(() => {
-            if (!TimerIsRunning) {
-                annonce4.style.visibility = "visible";
-            }
-
-        }, 2000);
-
 
     });
 
@@ -506,14 +498,7 @@ async function startGestureRecognition() {
     menuBtn.addEventListener("click", () => {
         window.location.href = "../hub/hub.html";
     });
-    startBouton.addEventListener("click", () => {
-        menuBtn.style.visibility = "visible";
-        startBoutonAction();
-        annonce1.style.visibility = "hidden";
-        annonce2.style.visibility = "hidden";
-        annonce3.style.visibility = "hidden";
-        annonce4.style.visibility = "hidden";
-    });
+
 
     boutonRestart.addEventListener("click", () => {
         console.log("Restarting...");
@@ -837,7 +822,6 @@ startGestureRecognition();
 
 
 function startBoutonAction() {
-    startBouton.style.visibility = "hidden";
     timerDisplay.classList.remove("hidden");
     riveCanvasTectoFleches.style.visibility = "hidden";
 
