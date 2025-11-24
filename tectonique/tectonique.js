@@ -1,9 +1,7 @@
 
 //boutons
-let menuBtn = document.getElementById("menuButton");
-const showAnimationButton = document.getElementById('showAnimationButton');
+const menuBtn = document.getElementById("menuButton");
 const showNext = document.getElementById('showNext');
-const showNext2 = document.getElementById('showNext2');
 const boutonRestart = document.getElementById("boutonRestart")
 
 
@@ -64,10 +62,9 @@ const legendeVolcan = document.getElementById('legendeVolcan')
 const video = document.getElementById("video");
 
 //boutons
-menuBtn.style.visibility = "hidden"
-showNext.style.visibility = "visible"
-showNext2.style.visibility = "hidden"
-showAnimationButton.style.visibility = "hidden"
+menuBtn.style.visibility = "hidden";
+showNext.style.visibility = "visible";
+
 
 //textes
 texteMains.style.visibility = "hidden";
@@ -217,15 +214,34 @@ function riveEventCheck(riveInstance) {
             if (eventData.name == "closeA") {
                 popupCanvas1.style.visibility = "hidden";
                 riveCanvasTecto.style.visibility = "hidden";
+                createpopup2();
+                popupCanvas2.style.visibility = "visible";
+
+                showNextClicked = false;
+                tectoRectangle.style.visibility = "hidden";
+                titre.style.visibility = "hidden";
+                showNext.style.visibility = "hidden"
+                texteMains.style.visibility = "hidden";
+                document.getElementById("contidroite").style.display = "none";
+                document.getElementById("contigauche").style.display = "none";
+                document.getElementById("oceandroite").style.display = "none";
+                document.getElementById("oceangauche").style.display = "none";
+
+                riveCanvasTectoFleches.style.visibility = "visible";
             }
 
             if (eventData.name == "closeB") {
                 popupCanvas2.style.visibility = "hidden";
+                createpopup3();
+                popupCanvas3.style.visibility = "visible";
+                tectoRectangle.style.visibility = "visible";
+                riveCanvasTectoFleches.style.visibility = "hidden";
             }
 
             if (eventData.name == "close4") {
                 popupCanvas3.style.visibility = "hidden";
                 document.body.style.backgroundColor = "#fcff32ff"
+                menuBtn.style.visibility = "visible";
                 startBoutonAction();
             }
 
@@ -233,7 +249,7 @@ function riveEventCheck(riveInstance) {
     }
 }
 
- window.addEventListener("resize", resizeCanvasToViewport);
+window.addEventListener("resize", resizeCanvasToViewport);
 
 
 let rConverge = new rive.Rive({
@@ -452,47 +468,11 @@ async function startGestureRecognition() {
         riveCanvasTecto.style.visibility = "visible";
         showNextClicked = true;
         titre.style.visibility = "hidden";
-        showNext2.style.visibility = "visible"
         canvas.style.visibility = "visible"
         texteMains.style.visibility = "visible";
         detectionActive = true;
 
     })
-
-    showNext2.addEventListener('click', () => {
-        createpopup2();
-        popupCanvas1.style.visibility = "hidden";
-        showNext2Clicked = true;
-        riveCanvasTecto.style.visibility = "hidden"
-        popupCanvas2.style.visibility = "visible";
-
-        showNextClicked = false;
-        tectoRectangle.style.visibility = "hidden";
-        titre.style.visibility = "hidden";
-        showNext.style.visibility = "hidden"
-        showNext2.style.visibility = "hidden"
-        riveCanvasTecto.style.visibility = "hidden";
-        showAnimationButton.style.visibility = "visible";
-        texteMains.style.visibility = "hidden";
-        document.getElementById("contidroite").style.display = "none";
-        document.getElementById("contigauche").style.display = "none";
-        document.getElementById("oceandroite").style.display = "none";
-        document.getElementById("oceangauche").style.display = "none";
-
-        riveCanvasTectoFleches.style.visibility = "visible";
-    })
-
-
-    showAnimationButton.addEventListener("click", () => {
-        createpopup3();
-        popupCanvas3.style.visibility = "visible";
-        tectoRectangle.style.visibility = "visible";
-        popupCanvas2.style.visibility = "hidden";
-        showAnimationButton.style.visibility = "hidden";
-        riveCanvasTectoFleches.style.visibility = "hidden";
-
-    });
-
 
 
     menuBtn.addEventListener("click", () => {
