@@ -3,6 +3,7 @@
 const menuBtn = document.getElementById("menuButton");
 const showNext = document.getElementById('showNext');
 const showNext2 = document.getElementById('showNext2');
+const boutonRestart = document.getElementById("boutonRestart");
 
 
 //canvas
@@ -41,6 +42,7 @@ const videoElement = document.getElementById('video');
 menuBtn.style.visibility = "hidden"
 showNext.style.visibility = "visible";
 showNext2.style.visibility = "hidden";
+boutonRestart.style.visibility = "hidden";
 
 //canvas
 riveCanvasMains.style.visibility = "hidden";
@@ -52,6 +54,7 @@ tempsValeur.style.visibility = "hidden";
 
 
 let showNext2Clicked = false;
+let blink = false;
 let showNext1Clicked = false;
 
 
@@ -71,7 +74,9 @@ function createRiveInstance() {
         onLoad: () => {
             const inputs = riveInstance.stateMachineInputs("State Machine 1");
             triggerBlink = inputs.find(i => i.name === "terre");
+            toBase = inputs.find(i => i.name === 'toBase');
             resizeCanvasToViewport();
+            riveEventCheck(riveInstance);
         },
     });
 }
@@ -114,7 +119,24 @@ function resizeCanvasToViewport() {
 
 window.addEventListener("resize", resizeCanvasToViewport);
 
+function riveEventCheck(riveInstance) {
+        if (riveInstance) {
+            riveInstance.on(rive.EventType.RiveEvent, onRiveEventReceived);
+            function onRiveEventReceived(riveEvent) {
+                const eventData = riveEvent.data;
+                console.log("Event data:", eventData);
+                if (eventData.name == "restart") {
+                    boutonRestart.style.visibility = "visible";
 
+                }
+
+                if (eventData.name == "startBlink") {
+                    blink = true;
+                }
+
+            }
+        }
+    }
 
 showNext.addEventListener('click', () => {
     createYeux();
@@ -143,9 +165,16 @@ showNext2.addEventListener('click', () => {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);  // Efface tout le canvas
 
-
-
 })
+
+boutonRestart.addEventListener("click", function () {
+        createRiveInstance();
+        if (toBase) toBase.fire();
+        boutonRestart.style.visibility = "hidden";
+        blink = false;
+
+    });
+
 
 
 let blinkThreshold = 0.0035;
@@ -169,13 +198,12 @@ async function detectBlink() {
             const eyeOpen = Math.abs(eyeTop.y - eyeBottom.y);
 
             if (eyeOpen < blinkThreshold && previousEyeOpen >= blinkThreshold) {
-                if (showNext2Clicked) {
-                    if (currentImageIndex < 27) {
+                if (blink ){
+                   
                         setTimeout(() => {
                             currentImageIndex++;
                             if (riveInstance) triggerBlink.fire();
-                            //changeImageCrossfade(imageSequence[currentImageIndex]);
-                        }, 300);}
+                        }, 300);
                  }else if (showNext1Clicked) {
                         const text = 'Clignement détecté';
                         const textWidth = ctx.measureText(text).width;
