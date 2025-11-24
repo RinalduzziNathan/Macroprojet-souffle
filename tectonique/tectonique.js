@@ -1,42 +1,140 @@
 
+//boutons
+let menuBtn = document.getElementById("menuButton");
+const startBouton = document.getElementById("startBouton");
+const showAnimationButton = document.getElementById('showAnimationButton');
+const showNext = document.getElementById('showNext');
+const showNext2 = document.getElementById('showNext2');
+const boutonRestart = document.getElementById("boutonRestart")
+
+
+//canvas
+const handCanvas = document.getElementById("handCanvas");
+const riveCanvasTecto = document.getElementById("riveCanvasTecto");
+const riveCanvasTectoFleches = document.getElementById("riveCanvasTectoFleches");
+const riveCanvasDiverge = document.getElementById("riveCanvasDiverge");
+const riveCanvasConverge = document.getElementById("riveCanvasConverge");
+const riveCanvas = document.getElementById("riveCanvas");
+const canvas = document.getElementById("output_canvas");
+
+//textes
+const titre = document.getElementById("titre")
+const annonce1 = document.getElementById("annonce1");
+const annonce2 = document.getElementById("annonce2");
+const annonce3 = document.getElementById("annonce3");
+const annonce4 = document.getElementById("annonce4");
+
+const texteMains = document.getElementById("texteMains");
+const texteConvOO = document.getElementById("texteConvOO");
+const texteConvTT = document.getElementById("texteConvTT");
+const texteConvTO = document.getElementById("texteConvTO");
+const texteDivOO = document.getElementById("texteDivOO");
+const texteDivTT = document.getElementById("texteDivTT");
+const texteDivTO = document.getElementById("texteDivTO");
+
+const timerDisplay = document.getElementById("timerDisplay");
+
+const textLithoConti = document.getElementById('textLithoConti')
+const textLithoOce = document.getElementById('textLithoOce')
+const textAstheno = document.getElementById('textAstheno')
+const textVolcanEff = document.getElementById('textVolcanEff')
+const textVolcanExp = document.getElementById('textVolcanExp')
+
+
+//images
+const contidroite = document.getElementById('contidroite');
+const contigauche = document.getElementById('contigauche');
+const oceandroite = document.getElementById('oceandroite');
+const oceangauche = document.getElementById('oceangauche');
+const bigcontidroite = document.getElementById('bigcontidroite');
+const bigcontigauche = document.getElementById('bigcontigauche');
+const bigoceandroite = document.getElementById('bigoceandroite');
+const bigoceangauche = document.getElementById('bigoceangauche');
+//autre
+const RectangleJaune = document.getElementById("RectangleJaune");
+const RectangleJauneV2 = document.getElementById("RectangleJauneV2");
+const ctx = canvas.getContext("2d");
+
+//objets dessines
+const tectoRectangle = document.getElementById('tectoRectangle');
+
+const legendeLithoConti = document.getElementById('legendeLithoConti')
+const legendeLithoOce = document.getElementById('legendeLithoOce')
+const legendeAstheno = document.getElementById('legendeAstheno')
+const legendeVolcan = document.getElementById('legendeVolcan')
+
+//video
+const video = document.getElementById("video");
+
+
+
+
+//boutons
+menuBtn.style.visibility = "hidden"
+showNext.style.visibility = "visible"
+showNext2.style.visibility = "hidden"
+showAnimationButton.style.visibility = "hidden"
+
+//textes
+texteMains.style.visibility = "hidden";
+texteConvOO.style.visibility = "hidden";
+texteConvTT.style.visibility = "hidden";
+texteConvTO.style.visibility = "hidden";
+texteDivOO.style.visibility = "hidden";
+texteDivTT.style.visibility = "hidden";
+texteDivTO.style.visibility = "hidden";
+annonce1.style.visibility = "hidden";
+annonce2.style.visibility = "hidden";
+annonce3.style.visibility = "hidden";
+annonce4.style.visibility = "hidden";
+textLithoConti.style.visibility = "hidden";
+textLithoOce.style.visibility = "hidden";
+textAstheno.style.visibility = "hidden";
+textVolcanEff.style.visibility = "hidden";
+textVolcanExp.style.visibility = "hidden";
+
+//autre
+RectangleJaune.style.visibility = "hidden";
+RectangleJauneV2.style.visibility = "hidden";
+
+//canvas
+riveCanvasTecto.style.visibility = "hidden";
+riveCanvasTectoFleches.style.visibility = "hidden";
+canvas.style.visibility = "hidden"
+riveCanvas.style.visibility = "hidden";
+riveCanvasConverge.style.visibility = "hidden";
+riveCanvasDiverge.style.visibility = "hidden";
+//images
+contidroite.style.visibility = "hidden";
+contigauche.style.visibility = "hidden";
+oceandroite.style.visibility = "hidden";
+oceangauche.style.visibility = "hidden";
+
+//objets dessinés
+tectoRectangle.style.visibility = "hidden";
+
+legendeLithoConti.style.visibility = "hidden";
+legendeLithoOce.style.visibility = "hidden";
+legendeAstheno.style.visibility = "hidden";
+legendeVolcan.style.visibility = "hidden";
+
+
+
+let showNextClicked = false;
+let previousDistance = null;
 let TimerStarted = false;
 let TimerOver = false;
 let TimerIsRunning = false;
 let DistanceIsCalculated = false;
 let detectionActive = false;
-let menuBtn = document.getElementById("menuButton");
-menuBtn.style.visibility = "hidden"
-const RectangleJaune = document.getElementById("RectangleJaune");
-RectangleJaune.style.visibility = "hidden";
-
-const RectangleJauneV2 = document.getElementById("RectangleJauneV2");
-RectangleJauneV2.style.visibility = "hidden";
-const texteMains = document.getElementById("texteMains");
-texteMains.style.visibility = "hidden";
-
-const texteConvOO = document.getElementById("texteConvOO");
-texteConvOO.style.visibility = "hidden";
-const texteConvTT = document.getElementById("texteConvTT");
-texteConvTT.style.visibility = "hidden";
-const texteConvTO = document.getElementById("texteConvTO");
-texteConvTO.style.visibility = "hidden";
-const texteDivOO = document.getElementById("texteDivOO");
-texteDivOO.style.visibility = "hidden";
-const texteDivTT = document.getElementById("texteDivTT");
-texteDivTT.style.visibility = "hidden";
-const texteDivTO = document.getElementById("texteDivTO");
-texteDivTO.style.visibility = "hidden";
-
-const annonce1 = document.getElementById("annonce1");
-annonce1.style.visibility = "hidden";
-const annonce2 = document.getElementById("annonce2");
-annonce2.style.visibility = "hidden";
-const annonce3 = document.getElementById("annonce3");
-annonce3.style.visibility = "hidden";
-const annonce4 = document.getElementById("annonce4");
-annonce4.style.visibility = "hidden";
-
 var showNext2Clicked = false;
+let distances = [];
+let rightHandStates = []; // "open" or "fist"
+let leftHandStates = [];
+rightHandStates = [];
+leftHandStates = [];
+distances = [];
+DistanceIsCalculated = false;
 
 
 let rConverge = new rive.Rive({
@@ -108,8 +206,6 @@ rDiverge.on(rive.EventType.RiveEvent, (event) => {
 
     }
 });
-
-
 
 function cleanRiveAnimation() {
     if (rDiverge && rConverge) {
@@ -224,78 +320,6 @@ const rFleches = new rive.Rive({
 
 
 async function startGestureRecognition() {
-
-    const handCanvas = document.getElementById("handCanvas");
-    const riveCanvasTecto = document.getElementById("riveCanvasTecto");
-    riveCanvasTecto.style.visibility = "hidden";
-    const riveCanvasTectoFleches = document.getElementById("riveCanvasTectoFleches");
-    riveCanvasTectoFleches.style.visibility = "hidden";
-    const riveCanvasDiverge = document.getElementById("riveCanvasDiverge");
-    const riveCanvasConverge = document.getElementById("riveCanvasConverge");
-    const riveCanvas = document.getElementById("riveCanvas");
-    //const ctx = handCanvas.getContext("2d");
-    const startBouton = document.getElementById("startBouton");
-    const boutonRestart = document.getElementById("boutonRestart")
-    const contidroite = document.getElementById('contidroite');
-    const contigauche = document.getElementById('contigauche');
-    const oceandroite = document.getElementById('oceandroite');
-    const oceangauche = document.getElementById('oceangauche');
-    contidroite.style.visibility = "hidden";
-    contigauche.style.visibility = "hidden";
-    oceandroite.style.visibility = "hidden";
-    oceangauche.style.visibility = "hidden";
-
-    const bigcontidroite = document.getElementById('bigcontidroite');
-    const bigcontigauche = document.getElementById('bigcontigauche');
-    const bigoceandroite = document.getElementById('bigoceandroite');
-    const bigoceangauche = document.getElementById('bigoceangauche');
-    const tectoRectangle = document.getElementById('tectoRectangle');
-
-    const legendeLithoConti = document.getElementById('legendeLithoConti')
-    const legendeLithoOce = document.getElementById('legendeLithoOce')
-    const legendeAstheno = document.getElementById('legendeAstheno')
-    const legendeVolcan = document.getElementById('legendeVolcan')
-
-    const textLithoConti = document.getElementById('textLithoConti')
-    const textLithoOce = document.getElementById('textLithoOce')
-    const textAstheno = document.getElementById('textAstheno')
-    const textVolcanEff = document.getElementById('textVolcanEff')
-    const textVolcanExp = document.getElementById('textVolcanExp')
-
-
-    legendeLithoConti.style.visibility = "hidden";
-    legendeLithoOce.style.visibility = "hidden";
-    legendeAstheno.style.visibility = "hidden";
-    textLithoConti.style.visibility = "hidden";
-    textLithoOce.style.visibility = "hidden";
-    textAstheno.style.visibility = "hidden";
-    textVolcanEff.style.visibility = "hidden";
-    textVolcanExp.style.visibility = "hidden";
-    legendeVolcan.style.visibility = "hidden";
-
-
-
-
-    tectoRectangle.style.visibility = "hidden";
-    const video = document.getElementById("video");
-    const canvas = document.getElementById("output_canvas");
-    canvas.style.visibility = "hidden"
-    const ctx = canvas.getContext("2d");
-    let distances = [];
-    riveCanvas.style.visibility = "hidden";
-    riveCanvasConverge.style.visibility = "hidden";
-    riveCanvasDiverge.style.visibility = "hidden";
-    const titre = document.getElementById("titre")
-    const showNext = document.getElementById('showNext');
-    showNext.style.visibility = "visible"
-    const showNext2 = document.getElementById('showNext2');
-    showNext2.style.visibility = "hidden"
-    let showNextClicked = false;
-    const showAnimationButton = document.getElementById('showAnimationButton');
-    showAnimationButton.style.visibility = "hidden"
-
-
-    let previousDistance = null;
 
     // Get both canvases
     //const canvasConverge = document.getElementById("riveCanvasConverge");
@@ -752,14 +776,7 @@ function hideAllPlaques() {
 
 startGestureRecognition();
 
-const startBouton = document.getElementById("startBouton");
-const timerDisplay = document.getElementById("timerDisplay");
-let rightHandStates = []; // "open" or "fist"
-let leftHandStates = [];
-rightHandStates = [];
-leftHandStates = [];
-distances = [];
-DistanceIsCalculated = false;
+
 
 function startBoutonAction() {
     startBouton.style.visibility = "hidden";
