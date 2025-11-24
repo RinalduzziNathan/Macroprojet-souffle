@@ -17,6 +17,7 @@ const riveCanvasConverge = document.getElementById("riveCanvasConverge");
 const riveCanvas = document.getElementById("riveCanvas");
 const canvas = document.getElementById("output_canvas");
 const popupCanvas1 = document.getElementById("popupCanvas1");
+const popupCanvas2 = document.getElementById("popupCanvas2");
 
 
 //textes
@@ -53,7 +54,6 @@ const bigcontigauche = document.getElementById('bigcontigauche');
 const bigoceandroite = document.getElementById('bigoceandroite');
 const bigoceangauche = document.getElementById('bigoceangauche');
 //autre
-const RectangleJauneV2 = document.getElementById("RectangleJauneV2");
 const ctx = canvas.getContext("2d");
 
 //objets dessines
@@ -95,7 +95,6 @@ textVolcanEff.style.visibility = "hidden";
 textVolcanExp.style.visibility = "hidden";
 
 //autre
-RectangleJauneV2.style.visibility = "hidden";
 
 //canvas
 riveCanvasTecto.style.visibility = "hidden";
@@ -105,6 +104,7 @@ riveCanvas.style.visibility = "hidden";
 riveCanvasConverge.style.visibility = "hidden";
 riveCanvasDiverge.style.visibility = "hidden";
 popupCanvas1.style.visibility = "hidden";
+popupCanvas2.style.visibility = "hidden";
 
 //images
 contidroite.style.visibility = "hidden";
@@ -158,12 +158,38 @@ function createpopup1() {
 
 }
 
+let popup2 = null;
+
+function createpopup2() {
+    popup2 = new rive.Rive({
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/popup_tecto_2.riv",
+        canvas: document.getElementById("popupCanvas2"),
+        autoplay: true,
+        stateMachines: "State Machine 1",
+        layout: new rive.Layout({
+            fit: rive.Fit.Contain,
+            alignment: rive.Alignment.Center,
+        }),
+        onLoad: () => {
+            popup2.resizeDrawingSurfaceToCanvas();
+            riveEventCheck(popup2);
+        },
+    });
+
+}
+
+
 
 function resizeCanvasToViewport() {
     popupCanvas1.width = window.innerWidth;
     popupCanvas1.height = window.innerHeight;
     if (popup1) {
         popup1.resizeDrawingSurfaceToCanvas();
+    }
+    popupCanvas2.width = window.innerWidth;
+    popupCanvas2.height = window.innerHeight;
+    if (popup2) {
+        popup2.resizeDrawingSurfaceToCanvas();
     }
 }
 
@@ -174,9 +200,13 @@ function riveEventCheck(riveInstance) {
         function onRiveEventReceived(riveEvent) {
             const eventData = riveEvent.data;
             console.log("Event data:", eventData);
-            if (eventData.name == "close4") {
+            if (eventData.name == "closeA") {
                 popupCanvas1.style.visibility = "hidden";
-                riveCanvasTecto.style.visibility = "visible";
+                riveCanvasTecto.style.visibility = "hidden";
+            }
+
+            if (eventData.name == "closeB") {
+                popupCanvas2.style.visibility = "hidden";
             }
 
         }
@@ -400,7 +430,7 @@ async function startGestureRecognition() {
         createpopup1();
         showNext.style.visibility = "hidden";
         popupCanvas1.style.visibility = "visible";
-
+        riveCanvasTecto.style.visibility = "visible";
         showNextClicked = true;
         titre.style.visibility = "hidden";
         showNext2.style.visibility = "visible"
@@ -411,13 +441,11 @@ async function startGestureRecognition() {
     })
 
     showNext2.addEventListener('click', () => {
+        popupCanvas1.style.visibility = "hidden";
         showNext2Clicked = true;
         riveCanvasTecto.style.visibility = "hidden"
-        RectangleJauneV2.style.animation = "none";
-        RectangleJauneV2.offsetHeight; // trick pour forcer le reflow
-        RectangleJauneV2.style.animation = null;
+        popupCanvas2.style.visibility = "visible";
 
-        RectangleJauneV2.style.visibility = "visible";
         showNextClicked = false;
         tectoRectangle.style.visibility = "hidden";
         titre.style.visibility = "hidden";
@@ -439,7 +467,7 @@ async function startGestureRecognition() {
 
     showAnimationButton.addEventListener("click", () => {
         tectoRectangle.style.visibility = "visible";
-        RectangleJauneV2.style.visibility = "hidden"
+
 
 
 
@@ -782,7 +810,7 @@ async function startGestureRecognition() {
     }
 
     function drawHand(landmarks) {
-        ctx.fillStyle = "red"; // Set fill color to red
+        ctx.fillStyle = "#00FF00"; // Set fill color to red
         for (let i = 0; i < landmarks.length; i++) {
             const { x, y } = landmarks[i];
             ctx.beginPath();
