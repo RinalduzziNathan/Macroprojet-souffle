@@ -465,9 +465,7 @@ async function startGestureRecognition() {
 
     showAnimationButton.addEventListener("click", () => {
         tectoRectangle.style.visibility = "visible";
-
-
-
+        popupCanvas2.style.visibility = "hidden";
 
         showAnimationButton.style.visibility = "hidden";
 

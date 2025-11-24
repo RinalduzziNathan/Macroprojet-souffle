@@ -36,8 +36,19 @@ canvas {
 }
 
 #riveCanvasTecto {
-    top :10%;
+    top :60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 100vw;
+    height: auto;
+    z-index: 5;
+}
+
+#riveCanvasTectoFleches {
+    top :60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 130vw;
     height: auto;
     z-index: 5;
 }
