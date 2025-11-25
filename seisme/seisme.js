@@ -115,6 +115,9 @@ async function startGestureRecognition() {
             popup2.resizeDrawingSurfaceToCanvas();
         }
     }
+    function rechargePage() {
+        location.reload();
+    }
 
 
     function riveEventCheck(riveInstance) {
@@ -137,7 +140,7 @@ async function startGestureRecognition() {
                     popupCanvas2.style.visibility = "hidden";
                     menuBtn.style.visibility = "visible";
                     startBoutonAction();
-                    
+
                     startBoutonClicked = true;
 
 
@@ -479,7 +482,7 @@ async function startGestureRecognition() {
 
         // Étape 3 : Rouge → Blanc (5s plus tard au total)
         setTimeout(() => {
-            document.body.style.backgroundColor = "#FDFF60";             
+            document.body.style.backgroundColor = "#FDFF60";
 
         }, 5000);
     }

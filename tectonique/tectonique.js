@@ -183,6 +183,10 @@ function createpopup3() {
     });
 
 }
+function rechargePage() {
+    location.reload();
+}
+
 
 
 

@@ -178,6 +178,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
         });
     }
 
+    function rechargePage() {
+        location.reload();
+    }
+
+
     function resizeCanvasToViewport() {
         popupCanvas1.width = window.innerWidth;
         popupCanvas1.height = window.innerHeight;
@@ -402,7 +407,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 }
 
                 if (colorJaune) {
-                    document.body.style.backgroundColor = "#FDFF60" ;
+                    document.body.style.backgroundColor = "#FDFF60";
                 }
 
 
