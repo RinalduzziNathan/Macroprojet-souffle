@@ -50,21 +50,21 @@ function riveEventCheck(riveInstance) {
             console.log("Event data:", eventData);
             if (eventData.name == "clicPangee") {
 
-                window.open("../pangee/pangeenew.html", "_blank");
+                window.open("../pangee/pangee.html", "_blank");
                 rechargePage();
             }
             else if (eventData.name == "clicVolcan") {
-                window.open("../volcan/volcannvx.html", "_blank");
+                window.open("../volcan/volcan.html", "_blank");
                 rechargePage();
             }
             else if (eventData.name == "clicTecto") {
 
-                window.open("../tectonique/tectoniquenvx.html", "_blank");
+                window.open("../tectonique/tectonique.html", "_blank");
                 rechargePage();
             }
             else if (eventData.name == "clicSeisme") {
 
-                window.open("../seismeNVX/seismenewtest.html", "_blank");
+                window.open("../seisme/seisme.html", "_blank");
                 rechargePage
             }
         }

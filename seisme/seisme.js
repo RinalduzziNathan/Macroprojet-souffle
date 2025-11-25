@@ -137,6 +137,7 @@ async function startGestureRecognition() {
                     popupCanvas2.style.visibility = "hidden";
                     menuBtn.style.visibility = "visible";
                     startBoutonAction();
+                    
                     startBoutonClicked = true;
 
 
