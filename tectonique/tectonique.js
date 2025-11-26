@@ -2,7 +2,6 @@
 //boutons
 const menuBtn = document.getElementById("menuButton");
 const showNext = document.getElementById('showNext');
-const boutonRestart = document.getElementById("boutonRestart")
 
 
 //canvas
@@ -152,7 +151,7 @@ function createpopup3() {
 let rConverge = null;
 function createConverge() {
     rConverge = new rive.Rive({
-        src: "https://rinalduzzinathan.github.io/file-stash/rive/demogeo_tectonique_convergence3.riv",
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/demogeo_tectonique_convergence5.riv",
         canvas: document.getElementById("riveCanvasConverge"),
         autoplay: true,
         stateMachines: "State Machine 1",
@@ -253,10 +252,19 @@ function riveEventCheck(riveInstance) {
                
             }
 
-            if (eventData.name == "EndAnim") {
-                boutonRestart.style.visibility = "visible";
-                
+             if (eventData.name == "recommencer") {
+                startBoutonAction();
+                console.log("recommencerbouton");
+                DistanceIsCalculated = false;
+                rightHandStates = []; // "open" or "fist"
+                leftHandStates = [];
+                rightHandStates = [];
+                leftHandStates = [];
+                distances = [];
+               
             }
+
+             
 
 
 
@@ -284,78 +292,6 @@ let rDiverge = new rive.Rive({
         rDiverge.resizeDrawingSurfaceToCanvas();
     }
 });
-
-
-
-rDiverge.on(rive.EventType.RiveEvent, (event) => {
-    const data = event.data;
-    if (data.type === rive.RiveEventType.General) {
-        boutonRestart.style.visibility = "visible";
-      
-    }
-});
-
-function cleanRiveAnimation() {
-    if (rDiverge && rConverge) {
-
-
-        riveCanvasDiverge.style.visibility = "hidden";
-        riveCanvasConverge.style.visibility = "hidden";
-        console.log("Cleaning up Rive instances");
-        // Détruit l'ancienne instance
-        rDiverge.cleanup();
-        rConverge.cleanup();
-
-        rConverge = new rive.Rive({
-        src: "https://rinalduzzinathan.github.io/file-stash/rive/demogeo_tectonique_convergence3.riv",
-        canvas: document.getElementById("riveCanvasConverge"),
-        autoplay: true,
-        stateMachines: "State Machine 1",
-        layout: new rive.Layout({
-            fit: rive.Fit.Contain,
-            alignment: rive.Alignment.Center,
-        }),
-        onLoad: () => {
-            const inputs = rConverge.stateMachineInputs("State Machine 1");
-            baseToCC = inputs.find(i => i.name === "baseToCC");
-            baseToCO = inputs.find(i => i.name === "baseToCO");
-            baseToOO = inputs.find(i => i.name === "baseToOO");
-            baseToOC = inputs.find(i => i.name === "baseToOC");
-
-            rConverge.resizeDrawingSurfaceToCanvas();
-            riveEventCheck(rConverge);
-        }
-    });
-        rDiverge = new rive.Rive({
-            src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_divergence.riv",
-            canvas: document.getElementById("riveCanvasDiverge"),
-            autoplay: true,
-            stateMachines: "State Machine 1",
-            onLoad: () => {
-                const inputs = rDiverge.stateMachineInputs("State Machine 1");
-                DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
-                DIVbaseToCO = inputs.find(i => i.name === "DIVbaseToCO");
-                DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
-                DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
-
-
-
-            }
-        });
-       
-        rDiverge.on(rive.EventType.RiveEvent, (event) => {
-            const data = event.data;
-            if (data.type === rive.RiveEventType.General) {
-                boutonRestart.style.visibility = "visible";
-                
-
-            }
-        });
-
-
-    }
-
-}
 
 
 let poingsMains;
@@ -413,8 +349,6 @@ async function startGestureRecognition() {
         canvas.height = video.videoHeight;
     });
 
-    boutonRestart.style.visibility = "hidden";
-
 
     await tf.setBackend("webgl");
 
@@ -434,31 +368,6 @@ async function startGestureRecognition() {
 
     menuBtn.addEventListener("click", () => {
         window.location.href = "../hub/hub.html";
-    });
-
-
-    boutonRestart.addEventListener("click", () => {
-        console.log("Restarting...");
-        document.getElementById("bigcontidroite").style.display = "none";
-        document.getElementById("bigoceandroite").style.display = "none";
-        document.getElementById("bigcontigauche").style.display = "none";
-        document.getElementById("bigoceangauche").style.display = "none";
-        //resetAnim();
-        cleanRiveAnimation();
-        DistanceIsCalculated = false;
-        rightHandStates = []; // "open" or "fist"
-        leftHandStates = [];
-        rightHandStates = [];
-        leftHandStates = [];
-        distances = [];
-        //cleanRiveAnimation();
-
-        boutonRestart.style.visibility = "hidden";
-        timerDisplay.classList.remove("hidden");
-        startBoutonAction();
-        createConverge();
-
-
     });
 
 
