@@ -20,22 +20,9 @@ const popupCanvas3 = document.getElementById("popupCanvas3");
 
 //textes
 const titre = document.getElementById("titre")
-
 const texteMains = document.getElementById("texteMains");
-const texteConvOO = document.getElementById("texteConvOO");
-const texteConvTT = document.getElementById("texteConvTT");
-const texteConvTO = document.getElementById("texteConvTO");
-const texteDivOO = document.getElementById("texteDivOO");
-const texteDivTT = document.getElementById("texteDivTT");
-const texteDivTO = document.getElementById("texteDivTO");
-
 const timerDisplay = document.getElementById("timerDisplay");
 
-const textLithoConti = document.getElementById('textLithoConti')
-const textLithoOce = document.getElementById('textLithoOce')
-const textAstheno = document.getElementById('textAstheno')
-const textVolcanEff = document.getElementById('textVolcanEff')
-const textVolcanExp = document.getElementById('textVolcanExp')
 
 
 //images
@@ -51,12 +38,7 @@ const bigoceangauche = document.getElementById('bigoceangauche');
 const ctx = canvas.getContext("2d");
 
 //objets dessines
-const tectoRectangle = document.getElementById('tectoRectangle');
 
-const legendeLithoConti = document.getElementById('legendeLithoConti')
-const legendeLithoOce = document.getElementById('legendeLithoOce')
-const legendeAstheno = document.getElementById('legendeAstheno')
-const legendeVolcan = document.getElementById('legendeVolcan')
 
 //video
 const video = document.getElementById("video");
@@ -68,17 +50,7 @@ showNext.style.visibility = "visible";
 
 //textes
 texteMains.style.visibility = "hidden";
-texteConvOO.style.visibility = "hidden";
-texteConvTT.style.visibility = "hidden";
-texteConvTO.style.visibility = "hidden";
-texteDivOO.style.visibility = "hidden";
-texteDivTT.style.visibility = "hidden";
-texteDivTO.style.visibility = "hidden";
-textLithoConti.style.visibility = "hidden";
-textLithoOce.style.visibility = "hidden";
-textAstheno.style.visibility = "hidden";
-textVolcanEff.style.visibility = "hidden";
-textVolcanExp.style.visibility = "hidden";
+
 
 //autre
 
@@ -101,12 +73,6 @@ oceandroite.style.visibility = "hidden";
 oceangauche.style.visibility = "hidden";
 
 //objets dessinés
-tectoRectangle.style.visibility = "hidden";
-
-legendeLithoConti.style.visibility = "hidden";
-legendeLithoOce.style.visibility = "hidden";
-legendeAstheno.style.visibility = "hidden";
-legendeVolcan.style.visibility = "hidden";
 
 
 
@@ -165,7 +131,7 @@ function createpopup2() {
     });
 
 }
-
+let popup3 = null;
 function createpopup3() {
     popup3 = new rive.Rive({
         src: "https://rinalduzzinathan.github.io/file-stash/rive/popup_tecto_3.riv",
@@ -183,6 +149,32 @@ function createpopup3() {
     });
 
 }
+let rConverge = null;
+function createConverge() {
+    rConverge = new rive.Rive({
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/demogeo_tectonique_convergence3.riv",
+        canvas: document.getElementById("riveCanvasConverge"),
+        autoplay: true,
+        stateMachines: "State Machine 1",
+        layout: new rive.Layout({
+            fit: rive.Fit.Contain,
+            alignment: rive.Alignment.Center,
+        }),
+        onLoad: () => {
+            const inputs = rConverge.stateMachineInputs("State Machine 1");
+            baseToCC = inputs.find(i => i.name === "baseToCC");
+            baseToCO = inputs.find(i => i.name === "baseToCO");
+            baseToOO = inputs.find(i => i.name === "baseToOO");
+            baseToOC = inputs.find(i => i.name === "baseToOC");
+
+            rConverge.resizeDrawingSurfaceToCanvas();
+            riveEventCheck(rConverge);
+        }
+    });
+}
+
+
+
 function rechargePage() {
     location.reload();
 }
@@ -206,6 +198,11 @@ function resizeCanvasToViewport() {
     if (popup3) {
         popup3.resizeDrawingSurfaceToCanvas();
     }
+    riveCanvasConverge.width = window.innerWidth;
+    riveCanvasConverge.height = window.innerHeight;
+    if (rConverge) {
+        rConverge.resizeDrawingSurfaceToCanvas();
+    }
 }
 
 
@@ -222,7 +219,6 @@ function riveEventCheck(riveInstance) {
                 popupCanvas2.style.visibility = "visible";
 
                 showNextClicked = false;
-                tectoRectangle.style.visibility = "hidden";
                 titre.style.visibility = "hidden";
                 showNext.style.visibility = "hidden"
                 texteMains.style.visibility = "hidden";
@@ -238,16 +234,31 @@ function riveEventCheck(riveInstance) {
                 popupCanvas2.style.visibility = "hidden";
                 createpopup3();
                 popupCanvas3.style.visibility = "visible";
-                tectoRectangle.style.visibility = "visible";
                 riveCanvasTectoFleches.style.visibility = "hidden";
+                texteMains.style.visibility = "hidden";
             }
 
             if (eventData.name == "close4") {
+                createConverge();
                 popupCanvas3.style.visibility = "hidden";
                 document.body.style.backgroundColor = "#fcff32ff"
                 menuBtn.style.visibility = "visible";
-                startBoutonAction();
+                
+                texteMains.style.visibility = "hidden";
+                riveCanvasConverge.style.visibility = "visible";
+
             }
+            if (eventData.name == "startTimer") {
+                startBoutonAction();
+               
+            }
+
+            if (eventData.name == "EndAnim") {
+                boutonRestart.style.visibility = "visible";
+                
+            }
+
+
 
         }
     }
@@ -256,21 +267,6 @@ function riveEventCheck(riveInstance) {
 window.addEventListener("resize", resizeCanvasToViewport);
 
 
-let rConverge = new rive.Rive({
-    src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_convergence.riv",
-    canvas: document.getElementById("riveCanvasConverge"),
-    autoplay: true,
-    stateMachines: "State Machine 1",
-    onLoad: () => {
-        const inputs = rConverge.stateMachineInputs("State Machine 1");
-        baseToCC = inputs.find(i => i.name === "baseToCC");
-        baseToCO = inputs.find(i => i.name === "baseToCO");
-        baseToOO = inputs.find(i => i.name === "baseToOO");
-        baseToOC = inputs.find(i => i.name === "baseToOC");
-
-        rConverge.resizeDrawingSurfaceToCanvas();
-    }
-});
 
 // Load divergence Rive
 let rDiverge = new rive.Rive({
@@ -289,40 +285,13 @@ let rDiverge = new rive.Rive({
     }
 });
 
-rConverge.on(rive.EventType.RiveEvent, (event) => {
-    const data = event.data;
-    if (data.type === rive.RiveEventType.General) {
-        boutonRestart.style.visibility = "visible";
-        texteConvOO.style.visibility = "hidden";
-        texteConvTT.style.visibility = "hidden";
-        texteConvTO.style.visibility = "hidden";
-        texteDivOO.style.visibility = "hidden";
-        texteDivTT.style.visibility = "hidden";
-        texteDivTO.style.visibility = "hidden";
-        textVolcanEff.style.visibility = "hidden";
-        textVolcanExp.style.visibility = "hidden";
-        legendeVolcan.style.visibility = "hidden";
 
-
-    }
-});
 
 rDiverge.on(rive.EventType.RiveEvent, (event) => {
     const data = event.data;
     if (data.type === rive.RiveEventType.General) {
         boutonRestart.style.visibility = "visible";
-        texteConvOO.style.visibility = "hidden";
-        texteConvTT.style.visibility = "hidden";
-        texteConvTO.style.visibility = "hidden";
-
-        texteDivOO.style.visibility = "hidden";
-        texteDivTT.style.visibility = "hidden";
-        texteDivTO.style.visibility = "hidden";
-
-        textVolcanEff.style.visibility = "hidden";
-        textVolcanExp.style.visibility = "hidden";
-        legendeVolcan.style.visibility = "hidden";
-
+      
     }
 });
 
@@ -338,21 +307,25 @@ function cleanRiveAnimation() {
         rConverge.cleanup();
 
         rConverge = new rive.Rive({
-            src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_convergence.riv",
-            canvas: document.getElementById("riveCanvasConverge"),
-            autoplay: true,
-            stateMachines: "State Machine 1",
-            onLoad: () => {
-                const inputs = rConverge.stateMachineInputs("State Machine 1");
-                baseToCC = inputs.find(i => i.name === "baseToCC");
-                baseToCO = inputs.find(i => i.name === "baseToCO");
-                baseToOO = inputs.find(i => i.name === "baseToOO");
-                baseToOC = inputs.find(i => i.name === "baseToOC");
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/demogeo_tectonique_convergence3.riv",
+        canvas: document.getElementById("riveCanvasConverge"),
+        autoplay: true,
+        stateMachines: "State Machine 1",
+        layout: new rive.Layout({
+            fit: rive.Fit.Contain,
+            alignment: rive.Alignment.Center,
+        }),
+        onLoad: () => {
+            const inputs = rConverge.stateMachineInputs("State Machine 1");
+            baseToCC = inputs.find(i => i.name === "baseToCC");
+            baseToCO = inputs.find(i => i.name === "baseToCO");
+            baseToOO = inputs.find(i => i.name === "baseToOO");
+            baseToOC = inputs.find(i => i.name === "baseToOC");
 
-
-            }
-
-        });
+            rConverge.resizeDrawingSurfaceToCanvas();
+            riveEventCheck(rConverge);
+        }
+    });
         rDiverge = new rive.Rive({
             src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_divergence.riv",
             canvas: document.getElementById("riveCanvasDiverge"),
@@ -369,32 +342,12 @@ function cleanRiveAnimation() {
 
             }
         });
-        rConverge.on(rive.EventType.RiveEvent, (event) => {
-            const data = event.data;
-            if (data.type === rive.RiveEventType.General) {
-                boutonRestart.style.visibility = "visible";
-                texteConvOO.style.visibility = "hidden";
-                texteConvTT.style.visibility = "hidden";
-                texteConvTO.style.visibility = "hidden";
-
-                texteDivOO.style.visibility = "hidden";
-                texteDivTT.style.visibility = "hidden";
-                texteDivTO.style.visibility = "hidden";
-
-            }
-        });
-
+       
         rDiverge.on(rive.EventType.RiveEvent, (event) => {
             const data = event.data;
             if (data.type === rive.RiveEventType.General) {
                 boutonRestart.style.visibility = "visible";
-                texteConvOO.style.visibility = "hidden";
-                texteConvTT.style.visibility = "hidden";
-                texteConvTO.style.visibility = "hidden";
-
-                texteDivOO.style.visibility = "hidden";
-                texteDivTT.style.visibility = "hidden";
-                texteDivTO.style.visibility = "hidden";
+                
 
             }
         });
@@ -503,6 +456,7 @@ async function startGestureRecognition() {
         boutonRestart.style.visibility = "hidden";
         timerDisplay.classList.remove("hidden");
         startBoutonAction();
+        createConverge();
 
 
     });
@@ -628,14 +582,7 @@ async function startGestureRecognition() {
 
         if (TimerIsRunning) {
 
-            legendeLithoConti.style.visibility = "visible";
-            legendeLithoOce.style.visibility = "visible";
-            legendeAstheno.style.visibility = "visible";
-            textLithoConti.style.visibility = "visible";
-            textLithoOce.style.visibility = "visible";
-            textAstheno.style.visibility = "visible";
-
-
+            
             function onHandsDetected(hand1, hand2) {
                 const dist = Math.sqrt(
                     Math.pow(hand1.x - hand2.x, 2)
@@ -713,22 +660,16 @@ async function startGestureRecognition() {
                     switch (postureKey) {
                         case "fist_fist":
                             DIVbaseToCC.fire();
-                            texteDivTT.style.visibility = "visible";
                             break;
 
                         case "fist_open":
                             DIVbaseToOC.fire();
-                            texteDivTO.style.visibility = "visible";
                             break;
                         case "open_fist":
                             DIVbaseToCO.fire();
-                            texteDivTO.style.visibility = "visible";
                             break;
                         case "open_open":
                             DIVbaseToOO.fire();
-                            texteDivOO.style.visibility = "visible";
-                            textVolcanEff.style.visibility = "visible";
-                            legendeVolcan.style.visibility = "visible";
                             break;
                         default: console.log("Unknown posture key:", postureKey); break;
                     }
@@ -740,25 +681,15 @@ async function startGestureRecognition() {
                     switch (postureKey) {
                         case "fist_fist":
                             baseToCC.fire();
-                            texteConvTT.style.visibility = "visible";
                             break;
                         case "fist_open":
                             baseToOC.fire();
-                            texteConvTO.style.visibility = "visible";
-                            textVolcanExp.style.visibility = "visible";
-                            legendeVolcan.style.visibility = "visible";
                             break;
                         case "open_fist":
                             baseToCO.fire();
-                            texteConvTO.style.visibility = "visible";
-                            textVolcanExp.style.visibility = "visible";
-                            legendeVolcan.style.visibility = "visible";
                             break;
                         case "open_open":
                             baseToOO.fire();
-                            texteConvOO.style.visibility = "visible";
-                            textVolcanExp.style.visibility = "visible";
-                            legendeVolcan.style.visibility = "visible";
                             break;
                         default: console.log("Unknown posture key:", postureKey); break;
                     }

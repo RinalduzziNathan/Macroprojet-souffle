@@ -1,35 +1,35 @@
 
 
 #contidroite {
-    z-index: 1;
+    z-index: 21;
     width: 300px;
     height: auto;
     /* Optional, makes it responsive */
 }
 
 #contigauche {
-    z-index: 1;
+    z-index: 21;
     width: 300px;
     height: auto;
     /* Optional, makes it responsive */
 }
 
 #oceandroite {
-    z-index: 1;
+    z-index: 21;
     width: 300px;
     height: auto;
     /* Optional, makes it responsive */
 }
 
 #oceangauche {
-    z-index: 1;
+    z-index: 21;
     width: 300px;
     height: auto;
     /* Optional, makes it responsive */
 }
 
 #bigcontidroite {
-    z-index: 10;
+    z-index: 21;
     width: 300px;
     height: auto;
     /* Optional, makes it responsive */
@@ -37,7 +37,7 @@
 }
 
 #bigcontigauche {
-    z-index: 10;
+    z-index: 21;
     width: 300px;
     height: auto;
     /* Optional, makes it responsive */
@@ -45,7 +45,7 @@
 }
 
 #bigoceandroite {
-    z-index: 10;
+    z-index: 21;
     width: 300px;
     height: auto;
     /* Optional, makes it responsive */
@@ -53,7 +53,7 @@
 }
 
 #bigoceangauche {
-    z-index: 10;
+    z-index: 21;
     width: 300px;
     height: auto;
     /* Optional, makes it responsive */
@@ -61,260 +61,5 @@
 }
 
 
-#tectoRectangle {
-    position: absolute;
-    top: 90%;
-    /* Position where you want it */
-    left: 25%;
-    /* Position where you want it */
-    width: 1050px;
-    /* Initial small size */
-    height: 1050px;
-    background-color: white;
-    /* White fill */
-    border: 2.5px solid black;
-    /* Black border */
-    transform: translate(-50%, -50%);
-    z-index: 0;
-    /* Make sure it's above other elements */
-    rotate: 30deg;
-
-}
-
-#legendeLithoConti {
-    position: absolute;
-    top: 82%;
-    left: 5%;
-    width: 80px;
-    height: 30px;
-    background-color: #CD6A5C;
-    border: 2.5px solid black;
-    transform: translate(-50%, -50%);
-    z-index: 20;
-
-}
-
-#legendeLithoOce {
-    position: absolute;
-    top: 88%;
-    left: 5%;
-    width: 80px;
-    height: 30px;
-    background-color: #BDCCD4;
-    border: 2.5px solid black;
-    transform: translate(-50%, -50%);
-    z-index: 20;
-
-}
-
-#legendeAstheno {
-    position: absolute;
-    top: 94%;
-    left: 5%;
-    width: 80px;
-    height: 30px;
-    background-color: #A5614E;
-    border: 2.5px solid black;
-    transform: translate(-50%, -50%);
-    z-index: 20;
-
-}
-
-#legendeVolcan {
-    position: absolute;
-    top: 76%; /* Ajuste selon ton besoin */
-    left: 5%; /* Ajuste selon ton besoin */
-    width: 25px;
-    height: 25px;
-    background-color: red;
-    border-radius: 50%;
-
-    transform: translate(-50%, -50%);
-    z-index: 20;
-}
-
-#textLithoConti {
-
-    position: absolute;
-    top: 80%;
-    left: 9%;
-    font-size: 20px;
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: normal;
-    font-variation-settings: "wdth" 100;
-    z-index: 20;    
-}
-
-#textVolcanEff {
-
-    position: absolute;
-    top: 74%;
-    left: 9%;
-    font-size: 20px;
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: normal;
-    font-variation-settings: "wdth" 100;
-    z-index: 20;    
-}
-
-#textVolcanExp {
-
-    position: absolute;
-    top: 74%;
-    left: 9%;
-    font-size: 20px;
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: normal;
-    font-variation-settings: "wdth" 100;
-    z-index: 20;    
-}
-
-#textLithoOce {
-
-    position: absolute;
-    top: 86%;
-    left: 9%;
-    font-size: 20px;
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: normal;
-    font-variation-settings: "wdth" 100;
-    z-index: 20;    
-}
-
-#textAstheno {
-
-    position: absolute;
-    top: 92%;
-    left: 9%;
-    font-size: 20px;
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: normal;
-    font-variation-settings: "wdth" 100;
-    z-index: 20;    
-}
-
-#texteDivOO {
-    text-align: center;
-    position: absolute;
-    top: 3%;
-    left: 3%;
-    background: rgba(255, 255, 255, 0.7);
-    padding: 10px 15px;
-    border-radius: 10px;
-    font-size: 28px;
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 200;
-    line-height: 1;
-    display: inline-block;
-    text-align: left;
-    word-wrap: break-word;
-    z-index: 12;
-}
-
-#texteDivTO {
-    text-align: center;
-    position: absolute;
-    top: 3%;
-    left: 3%;
-    background: rgba(255, 255, 255, 0.7);
-    padding: 10px 15px;
-    border-radius: 10px;
-    font-size: 28px;
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 200;
-    line-height: 1;
-    display: inline-block;
-    text-align: left;
-    word-wrap: break-word;
-    z-index: 12;
-}
-
-#texteDivTT {
-    text-align: center;
-    position: absolute;
-    top: 3%;
-    left: 3%;
-    background: rgba(255, 255, 255, 0.7);
-    padding: 10px 15px;
-    border-radius: 10px;
-    font-size: 28px;
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 200;
-    line-height: 1;
-    display: inline-block;
-    text-align: left;
-    word-wrap: break-word;
-    z-index: 12;
-}
-
-#texteConvOO {
-    text-align: center;
-    position: absolute;
-    top: 3%;
-    left: 3%;
-    background: rgba(255, 255, 255, 0.7);
-    padding: 10px 15px;
-    border-radius: 10px;
-    font-size: 28px;
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 200;
-    line-height: 1;
-    display: inline-block;
-    text-align: left;
-    word-wrap: break-word;
-    z-index: 12;
-}
-
-#texteConvTO {
-    text-align: center;
-    position: absolute;
-    top: 3%;
-    left: 3%;
-    background: rgba(255, 255, 255, 0.7);
-    padding: 10px 15px;
-    border-radius: 10px;
-    font-size: 28px;
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 200;
-    line-height: 1;
-    display: inline-block;
-    text-align: left;
-    word-wrap: break-word;
-    z-index: 12;
-}
-
-#texteConvTT {
-    text-align: center;
-    position: absolute;
-    top: 3%;
-    left: 3%;
-    background: rgba(255, 255, 255, 0.7);
-    padding: 10px 15px;
-    border-radius: 10px;
-    font-size: 28px;
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 200;
-    line-height: 1;
-    display: inline-block;
-    text-align: left;
-    word-wrap: break-word;
-    z-index: 12;
-}
 
 
