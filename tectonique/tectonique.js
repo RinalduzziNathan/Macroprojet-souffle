@@ -151,7 +151,7 @@ function createpopup3() {
 let rConverge = null;
 function createConverge() {
     rConverge = new rive.Rive({
-        src: "https://rinalduzzinathan.github.io/file-stash/rive/demogeo_tectonique_convergence5.riv",
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/demogeo_tectonique_convergence6.riv",
         canvas: document.getElementById("riveCanvasConverge"),
         autoplay: true,
         stateMachines: "State Machine 1",
