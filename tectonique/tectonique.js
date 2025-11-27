@@ -151,7 +151,7 @@ function createpopup3() {
 let rConverge = null;
 function createConverge() {
     rConverge = new rive.Rive({
-        src: "https://rinalduzzinathan.github.io/file-stash/rive/demogeo_tectonique_convergence6.riv",
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/demogeo_tectonique_convergence7.riv",
         canvas: document.getElementById("riveCanvasConverge"),
         autoplay: true,
         stateMachines: "State Machine 1",
@@ -248,22 +248,16 @@ function riveEventCheck(riveInstance) {
 
             }
             if (eventData.name == "startTimer") {
-                startBoutonAction();
-               
-            }
-
-             if (eventData.name == "recommencer") {
-                startBoutonAction();
-                console.log("recommencerbouton");
+                startBoutonAction();    
                 DistanceIsCalculated = false;
                 rightHandStates = []; // "open" or "fist"
                 leftHandStates = [];
                 rightHandStates = [];
                 leftHandStates = [];
                 distances = [];
-               
             }
 
+         
              
 
 
@@ -340,6 +334,7 @@ async function startGestureRecognition() {
     canvas.height = video.videoHeight;
 
     window.addEventListener("resize", () => {
+        
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     });
