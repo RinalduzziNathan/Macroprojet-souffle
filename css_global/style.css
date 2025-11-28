@@ -1,97 +1,112 @@
 
 canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: auto;
+    top :50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
 }
 
 #monCanvas {
-    width: 1366;
-    height: 768;
+    top :50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: auto;
     z-index: 15;
 }
 
 
 #riveCanvas {
-    top : 2%;
-    left : -5%;
-    width: 112%;
-    height: 768;
+    top :50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
+    width: 100vw;
+    height: auto;
     z-index: 1;
 }
 
 #riveCanvasVolcan {
-    left : -5%;
-    width: 112%;
+    top :50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
+   width: 100vw;
+    height: auto;
     z-index: 1;
 }
 
 #riveCanvasMains {
-    top: -3%;
-    width: 1366;
-    height: 768;
+    top :50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
+    width: 100vw;
+    height: auto;
     z-index: 15;
 }
 
 #riveCanvasTecto {
-    top :60%;
+    top :50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    position: fixed;
     width: 100vw;
     height: auto;
     z-index: 5;
 }
 
 #riveCanvasTectoFleches {
-    top :60%;
+    top :50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    position: fixed;
     width: 130vw;
     height: auto;
     z-index: 5;
 }
 
 #riveCanvasDino {
-   
-    left:-3%;
-    width: 105%;
+   top :50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
+   width: 100vw;
     height: auto;
     z-index: -1;
 }
 
 #riveCanvasCube {
-    top: -10%;
-    left:-7%;
-    width: 115%;
+    top :50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
+    width: 100vw;
     height: auto;
     z-index: -1;
 }
 
 #riveCanvasPlay {
-    left:-3%;
-    width: 105%;
+    top :50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
+    width: 100vw;
     height: auto;
     z-index: 20;
 }
 
 
-#riveCanvasDiverge{
-    top : 3%;
-    width: 1366;
-    height: 768;
-    z-index: 1;
-}
+
 
 #handCanvas {
+    position: absolute;
     pointer-events: none;
     z-index: 4;
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100vw;
-    height: 100vh;
+    height: auto;
     /* optional, make sure it stays on top */
 }
 
@@ -99,17 +114,22 @@ canvas {
 
     pointer-events: none;
     position: absolute;
-    width: 100%;
+    width: 100vw;
     top:50%;
     left: 50%;
     height: auto;
     display: block;
     transform: translate(-50%, -50%) scaleX(-1);
     z-index: 13;
+   
 
 }
 
 #video {
+    top :50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
     width: 100vw;
     height: auto;
     display: none;
@@ -137,31 +157,6 @@ body {
     background-size: 20px 20px;
     z-index: -1;
   }
-
-
-
-#expandingCircle {
-    position: absolute;
-    top: 0px;
-    /* Position where you want it */
-    left: 0px;
-    /* Position where you want it */
-    width: 250px;
-    /* Initial small size */
-    height: 250px;
-    /* Initial small size */
-    border-radius: 50%;
-    /* Make it a circle */
-    background-color: white;
-    /* White fill */
-    border: 2.5px solid black;
-    /* Black border */
-    z-index: 1;
-    /* Make sure it's above other elements */
-    transition: all 1s ease;
-    /* Smooth animation */
-}
-
 
 
 
@@ -252,7 +247,7 @@ body {
 }
 
 .timer {
-    margin-top: 70px;
+    margin-top: 10%;
     color: black;
     font-family: "ZCOOL QingKe HuangYou", sans-serif;
     font-weight: 400;
@@ -345,169 +340,6 @@ body {
     z-index: 12;
 }
 
-.annonce {
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-weight: 700;
-    color: rgb(255, 255, 0);
-    font-size: 230px;
-    margin: 0;
-    line-height: 0.8;
-    display: inline-block;
-    text-align: left;
-}
-
-.tu {
-    position: absolute;
-    top: 2%;
-    left: 2%;
-    z-index: 10;
-}
-
-.as {
-    position: absolute;
-    top: 2%;
-    left: 23%;
-    z-index: 10;
-}
 
 
-.cinq {
-    position: absolute;
-    top: 36%;
-    left: 23%;
-    z-index: 10;
-}
-
-.secondes {
-    position: absolute;
-    top: 70%;
-    left: 23%;
-    z-index: 10;
-}
-
-
-#RectangleJaune {
-    position: absolute;
-    top: 33%;
-    left: 100%; /* Commence en dehors de l'écran, à droite */
-    transform: translateX(0);
-    width: auto; /* S’adapte à la taille du texte */
-    background-color: rgb(255, 255, 0);
-    height: 250px;
-    z-index: 51;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    padding: 0 200px; /* un peu d’espace autour du texte */
-    animation: glissement 6.9s cubic-bezier(.22,.68,.77,.36)
-}
-  
-#consignes {
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-weight: 200;
-    color: black;
-    font-size: 165px;
-    margin: 0;
-}
-  
-  @keyframes glissement {
-    0% {
-      transform: translateX(0);
-      opacity: 0;
-    }
-    10% {
-      opacity: 1;
-    }
-    90% {
-      opacity: 1;
-    }
-    100% {
-      transform: translateX(-200%);
-      opacity: 0;
-    }
-}
-
-#RectangleJauneV2 {
-    position: absolute;
-    top: 33%;
-    left: 100%; /* Commence en dehors de l'écran, à droite */
-    transform: translateX(0);
-    width: auto; /* S’adapte à la taille du texte */
-    background-color: rgb(255, 255, 0);
-    height: 250px;
-    z-index: 51;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    padding: 0 200px; /* un peu d’espace autour du texte */
-    animation: glissement 20s cubic-bezier(0.30, -0.05, 0.22, 1.05) forwards;
-}
-  
-#consignesV2 {
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-weight: 200;
-    color: black;
-    font-size: 165px;
-    margin: 0;
-}
-  
-  @keyframes glissement {
-    0% {
-      transform: translateX(0);
-      opacity: 0;
-    }
-    10% {
-      opacity: 1;
-    }
-    90% {
-      opacity: 1;
-    }
-    100% {
-      transform: translateX(-200%);
-      opacity: 0;
-    }
-}
-
-#RectangleJaune2 {
-    position: absolute;
-    top: 33%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 1450px;
-    background-color: rgb(255, 255, 0);
-    height: 250px;
-    z-index: 1;
-    overflow: hidden; /* Masque ce qui sort du rectangle */
-}
-  
-#banniere {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-}
-  
-#consignes2 {
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-weight: 200;
-    color: black;
-    font-size: 165px;
-    margin: 0;
-    padding-left: 100%;
-    white-space: nowrap;
-}
-  
-  /* Animation déplacée dans une classe à part */
-.defilement {
-    animation: defilement 13s linear infinite;
-}
-  
-@keyframes defilement {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-100%);
-    }
-}
 

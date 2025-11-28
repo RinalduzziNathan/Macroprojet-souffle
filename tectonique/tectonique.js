@@ -172,6 +172,31 @@ function createConverge() {
     });
 }
 
+let rDiverge = null;
+function createDiverge() {
+    rDiverge = new rive.Rive({
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/demogeo_tectonique_divergence4.riv",
+        canvas: document.getElementById("riveCanvasDiverge"),
+        autoplay: true,
+        stateMachines: "State Machine 1",
+        layout: new rive.Layout({
+            fit: rive.Fit.Contain,
+            alignment: rive.Alignment.Center,
+        }),
+        onLoad: () => {
+            const inputs = rDiverge.stateMachineInputs("State Machine 1");
+            console.log(inputs);
+            DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
+            DIVbaseToCO = inputs.find(i => i.name === "DIVbaseToCO");
+            DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
+            DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
+
+            rDiverge.resizeDrawingSurfaceToCanvas();
+            riveEventCheck(rDiverge);
+        }
+    });
+}
+
 
 
 function rechargePage() {
@@ -201,6 +226,11 @@ function resizeCanvasToViewport() {
     riveCanvasConverge.height = window.innerHeight;
     if (rConverge) {
         rConverge.resizeDrawingSurfaceToCanvas();
+    }
+    riveCanvasDiverge.width = window.innerWidth;
+    riveCanvasDiverge.height = window.innerHeight;
+    if (rDiverge) {
+        rDiverge.resizeDrawingSurfaceToCanvas();
     }
 }
 
@@ -239,12 +269,14 @@ function riveEventCheck(riveInstance) {
 
             if (eventData.name == "close4") {
                 createConverge();
+                createDiverge();
                 popupCanvas3.style.visibility = "hidden";
                 document.body.style.backgroundColor = "#fcff32ff"
                 menuBtn.style.visibility = "visible";
                 
                 texteMains.style.visibility = "hidden";
                 riveCanvasConverge.style.visibility = "visible";
+                riveCanvasDiverge.style.visibility = "visible";
 
             }
             if (eventData.name == "startTimer") {
@@ -268,24 +300,6 @@ function riveEventCheck(riveInstance) {
 
 window.addEventListener("resize", resizeCanvasToViewport);
 
-
-
-// Load divergence Rive
-let rDiverge = new rive.Rive({
-    src: "https://rinalduzzinathan.github.io/file-stash/rive/tectonique_divergence.riv",
-    canvas: document.getElementById("riveCanvasDiverge"),
-    autoplay: true,
-    stateMachines: "State Machine 1",
-    onLoad: () => {
-        const inputs = rDiverge.stateMachineInputs("State Machine 1");
-        DIVbaseToCC = inputs.find(i => i.name === "DIVbaseToCC");
-        DIVbaseToCO = inputs.find(i => i.name === "DIVbaseToCO");
-        DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
-        DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
-
-        rDiverge.resizeDrawingSurfaceToCanvas();
-    }
-});
 
 
 let poingsMains;
@@ -558,7 +572,9 @@ async function startGestureRecognition() {
                 const endAvg = avg(secondHalf);
                 const postureKey = `${dominantLeft}_${dominantRight}`; // e.g. "open_fist"
                 if (endAvg > startAvg + 0.01) {
+                    
                     // divergence
+                    riveCanvasConverge.style.visibility = "hidden";
                     riveCanvasDiverge.style.visibility = "visible";
                     console.log(postureKey + " divergence");
                     switch (postureKey) {
@@ -582,6 +598,8 @@ async function startGestureRecognition() {
 
                     console.log(postureKey + " convergence");
                     riveCanvasConverge.style.visibility = "visible";
+                    riveCanvasDiverge.style.visibility = "hidden";
+                    //riveCanvasConverge.style.visibility = "hidden";
                     switch (postureKey) {
                         case "fist_fist":
                             baseToCC.fire();

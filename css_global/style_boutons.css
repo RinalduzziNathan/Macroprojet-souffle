@@ -1,8 +1,8 @@
 .homebutton {
     position: fixed;
     background-color: rgb(255, 255, 255);
-    top: 10px;
-    left: 10px;
+    top: 1%;
+    left: 1%;
     border: 3px solid #00FF00;
     box-shadow:5px 5px 5px rgba(140, 140, 140, 0.5);
     border-radius: 80px;
@@ -23,8 +23,8 @@
 
 .showButton {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 5%;
+    right: 2%;
     padding: 10px 40px;
     background-color: white;
     color: #00FF00;
