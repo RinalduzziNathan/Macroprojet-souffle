@@ -43,18 +43,26 @@ canvas {
 #riveCanvasPlay  { z-index: 8; }
 
 #handCanvas {
+    
     pointer-events: none;
     z-index: 4;
 }
 
 #output_canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100vw;   /* plein écran */
+    height: auto;  /* plein écran */
+
+    margin: 0;
+    padding: 0;
+
     pointer-events: none;
     z-index: 13;
-    transform: translate(-50%, -50%) scaleX(-1);
-    top: 50%;
-    left: 50%;
-    width: auto;
-    height: auto;
+
+    transform: scaleX(-1); /* tu gardes le mirroring */
 }
 
 /* vidéo cachée mais fixée pour éviter débordement */
