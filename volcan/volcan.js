@@ -15,12 +15,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const popupCanvas1 = document.getElementById("popupCanvas1");
     const popupCanvas2 = document.getElementById("popupCanvas2");
 
-    //images
-    const volcanCircle = document.getElementById("volcanCircle");
-    const volcanImage = document.getElementById("volcanImage");
-
-    //objets
-    const soundRectangle = document.getElementById("soundRectangle");
 
     //textes
     const titre = document.getElementById("titre");
@@ -44,12 +38,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     visqueuseCanvas.style.visibility = "hidden";
 
 
-    //Images
-    volcanCircle.style.visibility = "hidden";
-    volcanImage.style.visibility = "hidden";
-
-    //objets
-    soundRectangle.style.visibility = "hidden";
     //textes
     texteEruptionEffusive.style.visibility = "hidden";
     texteEruptionExplosive.style.visibility = "hidden";
@@ -230,12 +218,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     popupCanvas2.style.visibility = "hidden";
                     //colorJaune= true;
                     document.body.style.backgroundColor = "white";
-                    volcanCircle.style.visibility = "visible";
                     activeColorChange = false;
                     riveCanvasVolcan.style.visibility = "hidden";
-                    volcanImage.style.visibility = 'visible';
-                    soundRectangle.style.visibility = 'visible';
                     startBouton.style.visibility = 'visible';
+                    riveCanvasVolcan.style.visibility = "visible";
+                    createvolcan();
                 }
 
                 if (eventData.name == "EndAnim") {
@@ -257,9 +244,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
         createpopup1();
         showRiveCircles.style.visibility = "hidden";
         titre.style.visibility = "hidden";
-        volcanImage.style.visibility = "hidden";
-        soundRectangle.style.visibility = "hidden";
-        volcanCircle.style.visibility = "hidden";
     })
 
 
@@ -275,12 +259,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
     startBouton.addEventListener("click", function () {
-        createvolcan();
-        volcanImage.style.visibility = 'hidden';
-        soundRectangle.style.visibility = 'hidden';
+        
         menuBtn.style.visibility = "visible";
-        riveCanvasVolcan.style.visibility = "visible";
-        volcanCircle.style.visibility = "hidden";
+        
         if (toBase) toBase.fire();
 
 
@@ -357,18 +338,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
             const dataArray = new Uint8Array(analyser.frequencyBinCount);
             var intensityArray = []
 
-            // Get the rectangle element
-            // Get the rectangle element
-            const soundRectangle = document.getElementById("soundRectangle");
-
-            // Check if soundRectangle exists
-            if (!soundRectangle) {
-                console.error("soundRectangle element not found.");
-                return;
-            }
-
-            // Get initial top position from CSS
-            const initialTop = parseInt(window.getComputedStyle(soundRectangle).top, 10);
 
             function draw() {
                 requestAnimationFrame(draw);
@@ -421,18 +390,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     bCurrent = lerp(bCurrent, targetColor.b, 0.7);
 
                     document.body.style.backgroundColor = `rgb(${Math.round(rCurrent)}, ${Math.round(gCurrent)}, ${Math.round(bCurrent)})`;
-                }
-
-                if (intensity !== null && intensity !== undefined && !isNaN(intensity)) {
-                    let newHeight = 100 + intensity * 4;
-                    soundRectangle.style.height = `${newHeight}px`;
-
-                    let newTop = initialTop - intensity; // Use dynamic initialTop
-                    soundRectangle.style.top = `${newTop}px`;
-                } else {
-                    console.error("Invalid intensity value:", intensity);
-                    soundRectangle.style.height = '100px';
-                    soundRectangle.style.top = `${initialTop}px`;
                 }
 
                 if (remplirTableau == true) {
