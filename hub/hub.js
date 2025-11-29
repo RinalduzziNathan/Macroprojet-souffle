@@ -65,7 +65,7 @@ function riveEventCheck(riveInstance) {
             else if (eventData.name == "clicSeisme") {
 
                 window.open("../seisme/seisme.html", "_blank");
-                rechargePage
+                rechargePage();
             }
         }
     }

@@ -227,6 +227,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 if (eventData.name == "close2") {
 
                     popupCanvas1.style.visibility = "hidden";
+                    popupCanvas2.style.visibility = "hidden";
                     //colorJaune= true;
                     document.body.style.backgroundColor = "white";
                     volcanCircle.style.visibility = "visible";
