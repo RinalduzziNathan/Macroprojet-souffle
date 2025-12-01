@@ -562,8 +562,10 @@ async function startGestureRecognition() {
             function analyzeDistanceChange() {
                 const len = distances.length;
 
-                if (len < 4) console.log("pas assez donnes"); // pas assez de données
-
+                if (len < 4) {
+                    
+                    console.log("pas assez donnes"); // pas assez de données
+                }
                 const firstHalf = distances.slice(0, len / 2);
                 const secondHalf = distances.slice(len / 2);
                 distances = []; // reset distances for next calculation
@@ -572,7 +574,6 @@ async function startGestureRecognition() {
                 const endAvg = avg(secondHalf);
                 const postureKey = `${dominantLeft}_${dominantRight}`; // e.g. "open_fist"
                 if (endAvg > startAvg + 0.01) {
-                    
                     // divergence
                     riveCanvasConverge.style.visibility = "hidden";
                     riveCanvasDiverge.style.visibility = "visible";
