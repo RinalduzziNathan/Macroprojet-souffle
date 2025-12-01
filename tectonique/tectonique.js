@@ -151,7 +151,7 @@ function createpopup3() {
 let rConverge = null;
 function createConverge() {
     rConverge = new rive.Rive({
-        src: "https://rinalduzzinathan.github.io/file-stash/rive/demogeo_tectonique_convergence7.riv",
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/demogeo_tectonique_convergence8.riv",
         canvas: document.getElementById("riveCanvasConverge"),
         autoplay: true,
         stateMachines: "State Machine 1",
@@ -165,6 +165,7 @@ function createConverge() {
             baseToCO = inputs.find(i => i.name === "baseToCO");
             baseToOO = inputs.find(i => i.name === "baseToOO");
             baseToOC = inputs.find(i => i.name === "baseToOC");
+            baseToDonnees = inputs.find(i => i.name === "baseToDonnees");
 
             rConverge.resizeDrawingSurfaceToCanvas();
             riveEventCheck(rConverge);
@@ -563,7 +564,9 @@ async function startGestureRecognition() {
                 const len = distances.length;
 
                 if (len < 4) {
-                    
+                    riveCanvasConverge.style.visibility = "visible";
+                    riveCanvasDiverge.style.visibility = "hidden";
+                    baseToDonnees.fire();
                     console.log("pas assez donnes"); // pas assez de données
                 }
                 const firstHalf = distances.slice(0, len / 2);
