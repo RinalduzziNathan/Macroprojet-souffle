@@ -92,8 +92,21 @@ distances = [];
 DistanceIsCalculated = false;
 
 let popup1 = null;
-
+let rMains = null;
 function createpopup1() {
+
+    rMains = new rive.Rive({
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/schema_tecto_1.riv",
+        canvas: document.getElementById("riveCanvasTecto"),
+        autoplay: true,
+        stateMachines: "State Machine 1",
+        onLoad: () => {
+            const inputs = rMains.stateMachineInputs("State Machine 1");
+            rMains.resizeDrawingSurfaceToCanvas();
+        }
+
+
+    });
     popup1 = new rive.Rive({
         src: "https://rinalduzzinathan.github.io/file-stash/rive/popup_tecto_1.riv",
         canvas: document.getElementById("popupCanvas1"),
@@ -112,8 +125,24 @@ function createpopup1() {
 }
 
 let popup2 = null;
-
+let rFleches = null;
 function createpopup2() {
+    riveInstanceUnsibscribe(popup1);
+
+    rMains.cleanup();
+    rMains = null;
+    rFleches = new rive.Rive({
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/schema_tecto_2.riv",
+        canvas: document.getElementById("riveCanvasTectoFleches"),
+        autoplay: true,
+        stateMachines: "State Machine 1",
+        onLoad: () => {
+            const inputs = rFleches.stateMachineInputs("State Machine 1");
+            rFleches.resizeDrawingSurfaceToCanvas();
+        }
+
+
+    });
     popup2 = new rive.Rive({
         src: "https://rinalduzzinathan.github.io/file-stash/rive/popup_tecto_2.riv",
         canvas: document.getElementById("popupCanvas2"),
@@ -132,6 +161,10 @@ function createpopup2() {
 }
 let popup3 = null;
 function createpopup3() {
+    riveInstanceUnsibscribe(popup2);
+
+    rFleches.cleanup();
+    rFleches = null;
     popup3 = new rive.Rive({
         src: "https://rinalduzzinathan.github.io/file-stash/rive/popup_tecto_3.riv",
         canvas: document.getElementById("popupCanvas3"),
@@ -208,6 +241,7 @@ function rechargePage() {
 
 
 function resizeCanvasToViewport() {
+    console.log("resize canvases");
     popupCanvas1.width = window.innerWidth;
     popupCanvas1.height = window.innerHeight;
     if (popup1) {
@@ -235,67 +269,87 @@ function resizeCanvasToViewport() {
     }
 }
 
+function riveInstanceUnsibscribe(riveInstance) {
+    if (riveInstance) {
+        riveInstance.off(rive.EventType.RiveEvent, onRiveEventReceived);
+    }
+}
 
+const onRiveEventReceived = (riveEvent) => {
+    const eventData = riveEvent.data;
+    console.log("Event data:", eventData);
+    if (eventData.name == "closeA") {
+        console.log("BABABABABA")
+
+
+        popupCanvas1.style.visibility = "hidden";
+        riveCanvasTecto.style.visibility = "hidden";
+        setTimeout(function () {
+            createpopup2();
+        }, 250);
+        popupCanvas2.style.visibility = "visible";
+
+        showNextClicked = false;
+        titre.style.visibility = "hidden";
+        showNext.style.visibility = "hidden"
+        texteMains.style.visibility = "hidden";
+        document.getElementById("contidroite").style.display = "none";
+        document.getElementById("contigauche").style.display = "none";
+        document.getElementById("oceandroite").style.display = "none";
+        document.getElementById("oceangauche").style.display = "none";
+
+        riveCanvasTectoFleches.style.visibility = "visible";
+
+    }
+
+    if (eventData.name == "closeB") {
+        console.log("BTBTBTBTBTB")
+        popupCanvas2.style.visibility = "hidden";
+
+        setTimeout(function () {
+            createpopup3();
+        }, 250);
+        popupCanvas3.style.visibility = "visible";
+        riveCanvasTectoFleches.style.visibility = "hidden";
+        texteMains.style.visibility = "hidden";
+    }
+
+    if (eventData.name == "close4") {
+        console.log("tatatata")
+        setTimeout(function () {
+            createConverge();
+            createDiverge();
+        }, 250);
+
+        popupCanvas3.style.visibility = "hidden";
+        document.body.style.backgroundColor = "#fcff32ff"
+        menuBtn.style.visibility = "visible";
+
+        texteMains.style.visibility = "hidden";
+        riveCanvasConverge.style.visibility = "visible";
+        riveCanvasDiverge.style.visibility = "visible";
+
+    }
+    if (eventData.name == "startTimer") {
+        startBoutonAction();
+        DistanceIsCalculated = false;
+        rightHandStates = []; // "open" or "fist"
+        leftHandStates = [];
+        rightHandStates = [];
+        leftHandStates = [];
+        distances = [];
+    }
+
+
+
+
+
+
+}
 function riveEventCheck(riveInstance) {
     if (riveInstance) {
         riveInstance.on(rive.EventType.RiveEvent, onRiveEventReceived);
-        function onRiveEventReceived(riveEvent) {
-            const eventData = riveEvent.data;
-            console.log("Event data:", eventData);
-            if (eventData.name == "closeA") {
-                popupCanvas1.style.visibility = "hidden";
-                riveCanvasTecto.style.visibility = "hidden";
-                createpopup2();
-                popupCanvas2.style.visibility = "visible";
 
-                showNextClicked = false;
-                titre.style.visibility = "hidden";
-                showNext.style.visibility = "hidden"
-                texteMains.style.visibility = "hidden";
-                document.getElementById("contidroite").style.display = "none";
-                document.getElementById("contigauche").style.display = "none";
-                document.getElementById("oceandroite").style.display = "none";
-                document.getElementById("oceangauche").style.display = "none";
-
-                riveCanvasTectoFleches.style.visibility = "visible";
-            }
-
-            if (eventData.name == "closeB") {
-                popupCanvas2.style.visibility = "hidden";
-                createpopup3();
-                popupCanvas3.style.visibility = "visible";
-                riveCanvasTectoFleches.style.visibility = "hidden";
-                texteMains.style.visibility = "hidden";
-            }
-
-            if (eventData.name == "close4") {
-                createConverge();
-                createDiverge();
-                popupCanvas3.style.visibility = "hidden";
-                document.body.style.backgroundColor = "#fcff32ff"
-                menuBtn.style.visibility = "visible";
-                
-                texteMains.style.visibility = "hidden";
-                riveCanvasConverge.style.visibility = "visible";
-                riveCanvasDiverge.style.visibility = "visible";
-
-            }
-            if (eventData.name == "startTimer") {
-                startBoutonAction();    
-                DistanceIsCalculated = false;
-                rightHandStates = []; // "open" or "fist"
-                leftHandStates = [];
-                rightHandStates = [];
-                leftHandStates = [];
-                distances = [];
-            }
-
-         
-             
-
-
-
-        }
     }
 }
 
@@ -305,33 +359,9 @@ window.addEventListener("resize", resizeCanvasToViewport);
 
 let poingsMains;
 
-const rMains = new rive.Rive({
-    src: "https://rinalduzzinathan.github.io/file-stash/rive/schema_tecto_1.riv",
-    canvas: document.getElementById("riveCanvasTecto"),
-    autoplay: true,
-    stateMachines: "State Machine 1",
-    onLoad: () => {
-        const inputs = rMains.stateMachineInputs("State Machine 1");
-        rMains.resizeDrawingSurfaceToCanvas();
-    }
-
-
-});
 
 let toFleches;
 
-const rFleches = new rive.Rive({
-    src: "https://rinalduzzinathan.github.io/file-stash/rive/schema_tecto_2.riv",
-    canvas: document.getElementById("riveCanvasTectoFleches"),
-    autoplay: true,
-    stateMachines: "State Machine 1",
-    onLoad: () => {
-        const inputs = rFleches.stateMachineInputs("State Machine 1");
-        rFleches.resizeDrawingSurfaceToCanvas();
-    }
-
-
-});
 
 
 async function startGestureRecognition() {
@@ -349,7 +379,7 @@ async function startGestureRecognition() {
     canvas.height = video.videoHeight;
 
     window.addEventListener("resize", () => {
-        
+
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     });
@@ -501,7 +531,7 @@ async function startGestureRecognition() {
 
         if (TimerIsRunning) {
 
-            
+
             function onHandsDetected(hand1, hand2) {
                 const dist = Math.sqrt(
                     Math.pow(hand1.x - hand2.x, 2)
@@ -686,3 +716,38 @@ function startBoutonAction() {
     }, 100);
 }
 
+// Attache le listener global pour keydown
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'n') {
+        console.log("clean popu1")
+
+        if (popup1) {
+            popup1.cleanup()
+            popup1 = null;
+        }
+
+
+        if (popup2) {
+            popup2.cleanup()
+            popup2 = null;
+        }
+        if (popup3) {
+            popup3.cleanup()
+            popup3 = null;
+
+        }
+
+        if (rMains) {
+            rMains.cleanup()
+            rMains = null;
+        }
+
+        if (rFleches) {
+            rFleches.cleanup()
+            rFleches = null;
+
+        }
+
+    }
+
+});

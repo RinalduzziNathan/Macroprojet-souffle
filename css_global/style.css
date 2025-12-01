@@ -134,6 +134,7 @@ canvas {
 
 .titre {
     font-family: "Bricolage Grotesque", sans-serif;
+    pointer-events: none;
     font-size: 165px;
     margin: 0;
     line-height: 0.8;

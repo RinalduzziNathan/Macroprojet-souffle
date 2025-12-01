@@ -84,7 +84,7 @@ let yeux = null;
 
 function createYeux() {
     yeux = new rive.Rive({
-        src: "https://rinalduzzinathan.github.io/file-stash/rive/pangee_yeux.riv",
+        src: "https://rinalduzzinathan.github.io/file-stash/rive/pangee_yeux2.riv",
         canvas: document.getElementById("riveCanvasMains"),
         autoplay: true,
         stateMachines: "State Machine 1",
