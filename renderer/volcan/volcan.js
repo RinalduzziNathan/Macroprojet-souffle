@@ -68,7 +68,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     function createpopup1() {
         popup1 = new rive.Rive({
-            src: "https://rinalduzzinathan.github.io/file-stash/rive/popup_volcan_1.riv",
+            src: "../rive/popup_volcan_1.riv",
             canvas: document.getElementById("popupCanvas1"),
             autoplay: true,
             stateMachines: "State Machine 1",
