@@ -62,6 +62,11 @@ let riveInstance = null;
 let triggerBlink;
 
 function createRiveInstance() {
+
+    riveInstanceUnsibscribe(yeux);
+
+    yeux.cleanup();
+    yeux = null;
     riveInstance = new rive.Rive({
         src: "https://rinalduzzinathan.github.io/file-stash/rive/demogeo_pangee.riv",
         canvas: canvasTimelapse,
@@ -93,7 +98,7 @@ function createYeux() {
             alignment: rive.Alignment.Center,
         }),
         onLoad: () => {
-           resizeCanvasToViewport();
+            resizeCanvasToViewport();
         },
     });
 }
@@ -116,27 +121,37 @@ function resizeCanvasToViewport() {
     }
 }
 
+function riveInstanceUnsibscribe(riveInstance) {
+    if (riveInstance) {
+        riveInstance.off(rive.EventType.RiveEvent, onRiveEventReceived);
+    }
+}
+
 
 window.addEventListener("resize", resizeCanvasToViewport);
 
-function riveEventCheck(riveInstance) {
-        if (riveInstance) {
-            riveInstance.on(rive.EventType.RiveEvent, onRiveEventReceived);
-            function onRiveEventReceived(riveEvent) {
-                const eventData = riveEvent.data;
-                console.log("Event data:", eventData);
-                if (eventData.name == "restart") {
-                    boutonRestart.style.visibility = "visible";
+const onRiveEventReceived = (riveEvent) => {
+    const eventData = riveEvent.data;
+    console.log("Event data:", eventData);
+    if (eventData.name == "restart") {
+        boutonRestart.style.visibility = "visible";
 
-                }
-
-                if (eventData.name == "startBlink") {
-                    blink = true;
-                }
-
-            }
-        }
     }
+
+    if (eventData.name == "startBlink") {
+        blink = true;
+    }
+
+}
+
+
+
+function riveEventCheck(riveInstance) {
+    if (riveInstance) {
+        riveInstance.on(rive.EventType.RiveEvent, onRiveEventReceived);
+
+    }
+}
 
 showNext.addEventListener('click', () => {
     createYeux();
@@ -168,12 +183,12 @@ showNext2.addEventListener('click', () => {
 })
 
 boutonRestart.addEventListener("click", function () {
-        createRiveInstance();
-        if (toBase) toBase.fire();
-        boutonRestart.style.visibility = "hidden";
-        blink = false;
+    createRiveInstance();
+    if (toBase) toBase.fire();
+    boutonRestart.style.visibility = "hidden";
+    blink = false;
 
-    });
+});
 
 
 
@@ -198,32 +213,32 @@ async function detectBlink() {
             const eyeOpen = Math.abs(eyeTop.y - eyeBottom.y);
 
             if (eyeOpen < blinkThreshold && previousEyeOpen >= blinkThreshold) {
-                if (blink ){
-                   
-                        setTimeout(() => {
-                            currentImageIndex++;
-                            if (riveInstance) triggerBlink.fire();
-                        }, 300);
-                 }else if (showNext1Clicked) {
-                        const text = 'Clignement détecté';
-                        const textWidth = ctx.measureText(text).width;
-                        const textHeight = 30; // taille font
+                if (blink) {
 
-                        // Taille visible CSS du canvas (doit correspondre au style)
-                        const cssWidth = 1400;
-                        const cssHeight = 800;
+                    setTimeout(() => {
+                        currentImageIndex++;
+                        if (riveInstance) triggerBlink.fire();
+                    }, 300);
+                } else if (showNext1Clicked) {
+                    const text = 'Clignement détecté';
+                    const textWidth = ctx.measureText(text).width;
+                    const textHeight = 30; // taille font
 
-                        const x = Math.random() * (cssWidth - textWidth);
-                        const y = Math.random() * (cssHeight - textHeight) + textHeight;
+                    // Taille visible CSS du canvas (doit correspondre au style)
+                    const cssWidth = 1400;
+                    const cssHeight = 800;
 
-                        ctx.fillText(text, x, y);
-                    }
+                    const x = Math.random() * (cssWidth - textWidth);
+                    const y = Math.random() * (cssHeight - textHeight) + textHeight;
+
+                    ctx.fillText(text, x, y);
                 }
-
-
-                previousEyeOpen = eyeOpen;
             }
-        });
+
+
+            previousEyeOpen = eyeOpen;
+        }
+    });
 
     const camera = new Camera(videoElement, {
         onFrame: async () => {
