@@ -1,0 +1,42 @@
+{
+  "name": "macroprojet-souffle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "build": {
+    "appId": "com.example.app",
+    "directories": {
+      "buildResources": "assets"
+    },
+    "files": [
+      "main/**/*",
+      "renderer/**/*"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RinalduzziNathan/Macroprojet-souffle.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/RinalduzziNathan/Macroprojet-souffle/issues"
+  },
+  "homepage": "https://github.com/RinalduzziNathan/Macroprojet-souffle#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "electron": "^39.2.4",
+    "electron-builder": "^26.0.12",
+    "vite": "^7.2.6",
+    "wait-on": "^9.0.3"
+  },
+  "dependencies": {
+    "@rive-app/webgl2": "^2.32.2"
+  }
+}
