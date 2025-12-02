@@ -1,6 +1,6 @@
 
-
 async function startGestureRecognition() {
+
 
     //boutons
     const menuBtn = document.getElementById("menuButton");
@@ -66,6 +66,8 @@ async function startGestureRecognition() {
     let startBoutonClicked = false;
 
     let popup1 = null;
+    let exit1;
+    let exit2;
 
     function createpopup1() {
         popup1 = new rive.Rive({
@@ -78,6 +80,8 @@ async function startGestureRecognition() {
                 alignment: rive.Alignment.Center,
             }),
             onLoad: () => {
+                const inputs = popup1.stateMachineInputs("State Machine 1");
+                exit1= inputs.find(i => i.name === 'exit');
                 popup1.resizeDrawingSurfaceToCanvas();
                 riveEventCheck(popup1); // ✅ déplacer ici
             },
@@ -97,6 +101,8 @@ async function startGestureRecognition() {
                 alignment: rive.Alignment.Center,
             }),
             onLoad: () => {
+                const inputs = popup2.stateMachineInputs("State Machine 1");
+                exit2= inputs.find(i => i.name === 'exit');
                 popup2.resizeDrawingSurfaceToCanvas();
                 riveEventCheck(popup2); // ✅ déplacer ici
             },
@@ -129,7 +135,9 @@ async function startGestureRecognition() {
                 if (eventData.name == "close3") {
                     popupCanvas1.style.visibility = "hidden";
                     popupCanvas2.style.visibility = "visible";
+                    if (exit1) exit1.fire();
                     createpopup2();
+                    
                     document.body.style.backgroundColor = "#FDFF60";
                     riveCanvas.style.visibility = "visible";
                     if (toFond) toFond.fire();
@@ -139,6 +147,7 @@ async function startGestureRecognition() {
                 if (eventData.name == "closeC") {
                     popupCanvas2.style.visibility = "hidden";
                     menuBtn.style.visibility = "visible";
+                    if (exit2) exit2.fire();
                     startBoutonAction();
 
                     startBoutonClicked = true;
