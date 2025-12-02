@@ -81,6 +81,7 @@ function createRiveInstance() {
     });
 }
 let yeux = null;
+let exit1;
 
 function createYeux() {
     yeux = new rive.Rive({
@@ -93,6 +94,8 @@ function createYeux() {
             alignment: rive.Alignment.Center,
         }),
         onLoad: () => {
+            const inputs = yeux.stateMachineInputs("State Machine 1");
+            exit1= inputs.find(i => i.name === 'exit');
            resizeCanvasToViewport();
         },
     });
@@ -153,6 +156,7 @@ menuBtn.addEventListener("click", () => {
 
 showNext2.addEventListener('click', () => {
     document.body.style.backgroundColor = "#fcff32ff"
+    if (exit1) exit1.fire();
 
     createRiveInstance();
     showNext1Clicked = false;

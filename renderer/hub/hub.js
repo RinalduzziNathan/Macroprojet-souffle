@@ -7,7 +7,7 @@ createRiveInstance();
 
 function createRiveInstance() {
     riveInstance = new rive.Rive({
-        src: "../rive/hub.riv",
+        src: "../rive/demogeo_accueil.riv",
         canvas: canvas,
         autoplay: true,
         stateMachines: "State Machine 1",
