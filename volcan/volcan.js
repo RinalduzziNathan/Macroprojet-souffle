@@ -65,6 +65,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
     let popup1 = null;
+    let exit1;
+    let exit2;
 
     function createpopup1() {
         popup1 = new rive.Rive({
@@ -77,6 +79,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 alignment: rive.Alignment.Center,
             }),
             onLoad: () => {
+                const inputs = popup1.stateMachineInputs("State Machine 1");
+                exit1= inputs.find(i => i.name === 'exit');
                 popup1.resizeDrawingSurfaceToCanvas();
                 riveEventCheck(popup1); // ✅ déplacer ici
             },
@@ -87,6 +91,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let popup2 = null;
 
     function createpopup2() {
+
         popup2 = new rive.Rive({
             src: "https://rinalduzzinathan.github.io/file-stash/rive/popup_volcan_2.riv",
             canvas: document.getElementById("popupCanvas2"),
@@ -97,6 +102,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 alignment: rive.Alignment.Center,
             }),
             onLoad: () => {
+                const inputs = popup2.stateMachineInputs("State Machine 1");
+                exit2= inputs.find(i => i.name === 'exit');
                 popup2.resizeDrawingSurfaceToCanvas();
                 riveEventCheck(popup2); // ✅ déplacer ici
             },
@@ -111,6 +118,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let rvisqueux = null;
 
     function createvisqueux() {
+
+        riveInstanceUnsibscribe(popup2);
+
+        popup2 = null;
 
         rvisqueux = new rive.Rive({
             src: "https://rinalduzzinathan.github.io/file-stash/rive/demo_geo_fluide_visqueuse3.riv",
@@ -194,46 +205,58 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
+    function riveInstanceUnsibscribe(riveInstance) {
+        if (riveInstance) {
+            riveInstance.off(rive.EventType.RiveEvent, onRiveEventReceived);
+        }
+    }
+
+
+    const onRiveEventReceived = (riveEvent) => {
+        const eventData = riveEvent.data;
+        console.log("Event data:", eventData);
+        if (eventData.name == "startCircles") {
+            popupCanvas1.style.visibility = "hidden";
+
+        }
+
+        if (eventData.name == "close1") {
+            visqueuseCanvas.style.visibility = "visible";
+            document.getElementById("dragDropContainer").style.display = "block";
+            createvisqueux()
+            if (exit1) exit1.fire();
+        }
+
+        if (eventData.name == "close2") {
+
+            popupCanvas1.style.visibility = "hidden";
+            popupCanvas2.style.visibility = "hidden";
+            //colorJaune= true;
+            document.body.style.backgroundColor = "white";
+            activeColorChange = false;
+            riveCanvasVolcan.style.visibility = "hidden";
+            startBouton.style.visibility = 'visible';
+            riveCanvasVolcan.style.visibility = "visible";
+            createvolcan();
+            if (exit2) exit2.fire();
+        }
+
+        if (eventData.name == "EndAnim") {
+
+            boutonRestart.style.visibility = "visible";
+            if (toBase) toBase.fire();
+            texteEruptionExplosive.style.visibility = "hidden";
+            texteEruptionEffusive.style.visibility = "hidden";
+        }
+
+
+    }
+
 
     function riveEventCheck(riveInstance) {
         if (riveInstance) {
             riveInstance.on(rive.EventType.RiveEvent, onRiveEventReceived);
-            function onRiveEventReceived(riveEvent) {
-                const eventData = riveEvent.data;
-                console.log("Event data:", eventData);
-                if (eventData.name == "startCircles") {
-                    popupCanvas1.style.visibility = "hidden";
 
-                }
-
-                if (eventData.name == "close1") {
-                    visqueuseCanvas.style.visibility = "visible";
-                    document.getElementById("dragDropContainer").style.display = "block";
-                    createvisqueux()
-                }
-
-                if (eventData.name == "close2") {
-
-                    popupCanvas1.style.visibility = "hidden";
-                    popupCanvas2.style.visibility = "hidden";
-                    //colorJaune= true;
-                    document.body.style.backgroundColor = "white";
-                    activeColorChange = false;
-                    riveCanvasVolcan.style.visibility = "hidden";
-                    startBouton.style.visibility = 'visible';
-                    riveCanvasVolcan.style.visibility = "visible";
-                    createvolcan();
-                }
-
-                if (eventData.name == "EndAnim") {
-
-                    boutonRestart.style.visibility = "visible";
-                    if (toBase) toBase.fire();
-                    texteEruptionExplosive.style.visibility = "hidden";
-                    texteEruptionEffusive.style.visibility = "hidden";
-                }
-
-            }
         }
     }
 
@@ -259,9 +282,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
     startBouton.addEventListener("click", function () {
-        
+
         menuBtn.style.visibility = "visible";
-        
+
         if (toBase) toBase.fire();
 
 
