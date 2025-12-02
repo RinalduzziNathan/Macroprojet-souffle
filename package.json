@@ -17,6 +17,7 @@
       "renderer/**/*"
     ]
   },
+  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/RinalduzziNathan/Macroprojet-souffle.git"
