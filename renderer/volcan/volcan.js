@@ -80,7 +80,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             }),
             onLoad: () => {
                 const inputs = popup1.stateMachineInputs("State Machine 1");
-                exit1= inputs.find(i => i.name === 'exit');
+                exit1 = inputs.find(i => i.name === 'exit');
                 popup1.resizeDrawingSurfaceToCanvas();
                 riveEventCheck(popup1); // ✅ déplacer ici
             },
@@ -103,7 +103,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             }),
             onLoad: () => {
                 const inputs = popup2.stateMachineInputs("State Machine 1");
-                exit2= inputs.find(i => i.name === 'exit');
+                exit2 = inputs.find(i => i.name === 'exit');
                 popup2.resizeDrawingSurfaceToCanvas();
                 riveEventCheck(popup2); // ✅ déplacer ici
             },
@@ -114,6 +114,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let baseToAnim;
     let visqueuseToBase;
     let slowFast;
+    let vrai;
+    let faux;
+
     var artBoard;
     let rvisqueux = null;
 
@@ -140,6 +143,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 baseToAnim = inputs.find(i => i.name === 'baseToAnim');
                 visqueuseToBase = inputs.find(i => i.name === 'visqueuseToBase');
                 slowFast = inputs.find(i => i.name === 'slowFast');
+                vrai = inputs.find(i => i.name === 'vrai');
+                faux = inputs.find(i => i.name === 'faux');
 
                 riveEventCheck(rvisqueux); // ✅ déplacer ici
 
@@ -350,6 +355,30 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }, 100); // mise à jour toutes les 100 ms
     }
 
+    function shakeCanvas() {
+        const canvas = document.getElementById('visqueuseCanvas');
+        if (canvas) {
+            if (faux) faux.fire();
+            canvas.classList.remove('shake'); // Supprime la classe si déjà là
+            void canvas.offsetWidth;          // Force le reflow
+            canvas.classList.add('shake');    // Ajoute la classe pour l’animation
+            setTimeout(() => {
+                canvas.classList.remove('shake'); // Nettoie après l’anim
+            }, 300);
+        }
+    }
+
+    function bouncePage() {
+        const canvas = document.getElementById('visqueuseCanvas');
+        if (canvas) {
+            if (vrai) vrai.fire();
+            canvas.classList.add('bounce');
+            setTimeout(() => {
+                canvas.classList.remove('bounce');
+            }, 600); // Durée de l'animation
+        }
+    }
+
 
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
@@ -500,32 +529,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
         .catch(err => console.error("Microphone access error: ", err));
 
 
-
-
-});
-
-function shakeCanvas() {
-    const canvas = document.getElementById('visqueuseCanvas');
-    if (canvas) {
-        canvas.classList.remove('shake'); // Supprime la classe si déjà là
-        void canvas.offsetWidth;          // Force le reflow
-        canvas.classList.add('shake');    // Ajoute la classe pour l’animation
-        setTimeout(() => {
-            canvas.classList.remove('shake'); // Nettoie après l’anim
-        }, 300);
-    }
-}
-
-function bouncePage() {
-    const canvas = document.getElementById('visqueuseCanvas');
-    if (canvas) {
-        canvas.classList.add('bounce');
-        setTimeout(() => {
-            canvas.classList.remove('bounce');
-        }, 600); // Durée de l'animation
-    }
-}
-
 const draggables = document.querySelectorAll(".draggable");
 const dropTargets = document.querySelectorAll(".dropTarget");
 const resultMessage = document.getElementById("resultMessage");
@@ -561,6 +564,7 @@ dropTargets.forEach(target => {
         if (target.id === draggedTarget) {
             resultMessage.textContent = "Vrai !";
             resultMessage.style.color = "black";
+
             bouncePage()
             showSouffleTest.style.visibility = "visible";
 
@@ -569,6 +573,7 @@ dropTargets.forEach(target => {
             resultMessage.style.color = "black";
             shakeCanvas();
 
+
         }
 
         // Optionnel : reset message après quelques secondes
@@ -576,3 +581,8 @@ dropTargets.forEach(target => {
     });
 
 });
+
+});
+
+
+
