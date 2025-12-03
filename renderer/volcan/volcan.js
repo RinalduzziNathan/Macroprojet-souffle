@@ -158,6 +158,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let baseToEffu;
     let baseToExplo;
     let toBase;
+    let recommencer;
 
     let volcan = null;
 
@@ -165,7 +166,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
         volcan = new rive.Rive({
-            src: "../rive/demogeo_volcan.riv",
+            src: "../rive/demogeo_volcan2.riv",
             canvas: document.getElementById("riveCanvasVolcan"),
             autoplay: true,
             stateMachines: "State Machine 1",
@@ -176,6 +177,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 baseToEffu = inputs.find(i => i.name === 'baseToEffu');
                 baseToExplo = inputs.find(i => i.name === 'baseToExplo');
                 toBase = inputs.find(i => i.name === 'toBase');
+                recommencer = inputs.find(i => i.name === 'recommencer');
                 riveEventCheck(volcan); // ✅ déplacer ici
 
             },
@@ -242,17 +244,25 @@ window.addEventListener('DOMContentLoaded', (event) => {
             riveCanvasVolcan.style.visibility = "hidden";
             startBouton.style.visibility = 'visible';
             riveCanvasVolcan.style.visibility = "visible";
+            document.body.style.backgroundColor = "#fcff32ff"
             createvolcan();
             if (exit2) exit2.fire();
         }
 
         if (eventData.name == "EndAnim") {
-
             boutonRestart.style.visibility = "visible";
-            if (toBase) toBase.fire();
             texteEruptionExplosive.style.visibility = "hidden";
             texteEruptionEffusive.style.visibility = "hidden";
         }
+
+        if (eventData.name == "recommencer") {
+            if (recommencer) recommencer.fire();
+        }
+
+
+
+
+
 
 
     }
@@ -293,17 +303,22 @@ window.addEventListener('DOMContentLoaded', (event) => {
         if (toBase) toBase.fire();
 
 
-        startTimer();
+        setTimeout(() => {
+            startTimer();
+        }, 1000);
         startBouton.style.visibility = "hidden";
 
     });
 
     boutonRestart.addEventListener("click", function () {
-        createvolcan();
+
         console.log("REstartBouton clicked");
         if (toBase) toBase.fire();
         //if (toPlaymobiles) toPlaymobiles.fire();
-        startTimer();
+        setTimeout(() => {
+            startTimer();
+        }, 3000);
+
         boutonRestart.style.visibility = "hidden";
 
     });
@@ -529,58 +544,58 @@ window.addEventListener('DOMContentLoaded', (event) => {
         .catch(err => console.error("Microphone access error: ", err));
 
 
-const draggables = document.querySelectorAll(".draggable");
-const dropTargets = document.querySelectorAll(".dropTarget");
-const resultMessage = document.getElementById("resultMessage");
+    const draggables = document.querySelectorAll(".draggable");
+    const dropTargets = document.querySelectorAll(".dropTarget");
+    const resultMessage = document.getElementById("resultMessage");
 
-draggables.forEach(draggable => {
-    draggable.addEventListener("dragstart", (e) => {
-        e.dataTransfer.setData("text/plain", draggable.dataset.target);
-        draggable.classList.add("dragging");
+    draggables.forEach(draggable => {
+        draggable.addEventListener("dragstart", (e) => {
+            e.dataTransfer.setData("text/plain", draggable.dataset.target);
+            draggable.classList.add("dragging");
+        });
+
+        draggable.addEventListener("dragend", () => {
+            draggable.classList.remove("dragging");
+        });
     });
 
-    draggable.addEventListener("dragend", () => {
-        draggable.classList.remove("dragging");
+    dropTargets.forEach(target => {
+        target.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            target.classList.add("drag-over");
+        });
+
+        target.addEventListener("dragleave", () => {
+            target.classList.remove("drag-over");
+        });
+
+
+        target.addEventListener("drop", (e) => {
+            e.preventDefault();
+            target.classList.remove("drag-over");
+
+            const draggedTarget = e.dataTransfer.getData("text/plain");
+
+            if (target.id === draggedTarget) {
+                resultMessage.textContent = "Vrai !";
+                resultMessage.style.color = "black";
+
+                bouncePage()
+                showSouffleTest.style.visibility = "visible";
+
+            } else {
+                resultMessage.textContent = "Faux.";
+                resultMessage.style.color = "black";
+                shakeCanvas();
+
+
+            }
+
+            // Optionnel : reset message après quelques secondes
+            setTimeout(() => resultMessage.textContent = "", 2000);
+        });
+
     });
-});
-
-dropTargets.forEach(target => {
-    target.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        target.classList.add("drag-over");
-    });
-
-    target.addEventListener("dragleave", () => {
-        target.classList.remove("drag-over");
-    });
-
-
-    target.addEventListener("drop", (e) => {
-        e.preventDefault();
-        target.classList.remove("drag-over");
-
-        const draggedTarget = e.dataTransfer.getData("text/plain");
-
-        if (target.id === draggedTarget) {
-            resultMessage.textContent = "Vrai !";
-            resultMessage.style.color = "black";
-
-            bouncePage()
-            showSouffleTest.style.visibility = "visible";
-
-        } else {
-            resultMessage.textContent = "Faux.";
-            resultMessage.style.color = "black";
-            shakeCanvas();
-
-
-        }
-
-        // Optionnel : reset message après quelques secondes
-        setTimeout(() => resultMessage.textContent = "", 2000);
-    });
-
-});
 
 });
 
