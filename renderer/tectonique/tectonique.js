@@ -1,6 +1,8 @@
 
 //boutons
 const menuBtn = document.getElementById("menuButton");
+const menuBtnLeft = document.getElementById("menuButtonLeft");
+
 const showNext = document.getElementById('showNext');
 
 
@@ -44,6 +46,7 @@ const video = document.getElementById("video");
 
 //boutons
 menuBtn.style.visibility = "hidden";
+menuBtnLeft.style.visibility = "visible"
 showNext.style.visibility = "visible";
 
 
@@ -324,6 +327,7 @@ const onRiveEventReceived = (riveEvent) => {
         popupCanvas3.style.visibility = "hidden";
         document.body.style.backgroundColor = "#fcff32ff"
         menuBtn.style.visibility = "visible";
+        menuBtnLeft.style.visibility = "hidden"
 
         texteMains.style.visibility = "hidden";
         riveCanvasConverge.style.visibility = "visible";
@@ -407,6 +411,9 @@ async function startGestureRecognition() {
 
 
     menuBtn.addEventListener("click", () => {
+        window.location.href = "../hub/hub.html";
+    });
+    menuBtnLeft.addEventListener("click", () => {
         window.location.href = "../hub/hub.html";
     });
 

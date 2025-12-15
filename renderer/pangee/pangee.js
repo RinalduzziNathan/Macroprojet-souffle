@@ -1,6 +1,7 @@
 //boutons
 
 const menuBtn = document.getElementById("menuButton");
+const menuBtnLeft = document.getElementById("menuButtonLeft");
 const showNext = document.getElementById('showNext');
 const showNext2 = document.getElementById('showNext2');
 const boutonRestart = document.getElementById("boutonRestart");
@@ -40,6 +41,7 @@ const videoElement = document.getElementById('video');
 //boutons
 
 menuBtn.style.visibility = "hidden"
+menuBtnLeft.style.visibility = "visible"
 showNext.style.visibility = "visible";
 showNext2.style.visibility = "hidden";
 boutonRestart.style.visibility = "hidden";
@@ -154,6 +156,10 @@ menuBtn.addEventListener("click", () => {
     window.location.href = "../hub/hub.html";
 });
 
+menuBtnLeft.addEventListener("click", () => {
+    window.location.href = "../hub/hub.html";
+});
+
 showNext2.addEventListener('click', () => {
     document.body.style.backgroundColor = "#fcff32ff"
     if (exit1) exit1.fire();
@@ -161,6 +167,7 @@ showNext2.addEventListener('click', () => {
     createRiveInstance();
     showNext1Clicked = false;
     menuBtn.style.visibility = "visible";
+    menuBtnLeft.style.visibility = "hidden";
     showNext2Clicked = true;
     titre.style.visibility = "hidden";
     riveCanvasMains.style.visibility = "hidden";

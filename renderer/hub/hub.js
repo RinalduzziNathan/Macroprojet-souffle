@@ -62,6 +62,13 @@ function riveEventCheck(riveInstance) {
                 // Open target in the same page
                 window.location.href = "../seisme/seisme.html";
             }
+
+            else if (eventData.name == "clicCredits") {
+                // Open target in the same page
+                window.location.href = "credits.html";
+            }
+
+            
         }
     }
 }

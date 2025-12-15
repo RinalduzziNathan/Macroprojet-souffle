@@ -5,6 +5,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const startBouton = document.getElementById("startBouton");
     const boutonRestart = document.getElementById("boutonRestart");
     const menuBtn = document.getElementById("menuButton");
+    const menuBtnLeft = document.getElementById("menuButtonLeft");
+
     const showSouffleTest = document.getElementById('showSouffleTest');
     const showRiveCircles = document.getElementById('showRiveCircles');
 
@@ -24,6 +26,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     //boutons
     menuBtn.style.visibility = "hidden";
+    menuBtnLeft.style.visibility = "visible"
     boutonRestart.style.visibility = "hidden";
     showRiveCircles.style.visibility = "visible";
     showSouffleTest.style.visibility = "hidden";
@@ -292,6 +295,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     startBouton.addEventListener("click", function () {
 
         menuBtn.style.visibility = "visible";
+        menuBtnLeft.style.visibility = "hidden"
 
         if (toBase) toBase.fire();
 
@@ -319,6 +323,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
     menuBtn.addEventListener("click", () => {
         window.location.href = "../hub/hub.html";
     });
+    menuBtnLeft.addEventListener("click", () => {
+        window.location.href = "../hub/hub.html";
+    });
+
 
 
 

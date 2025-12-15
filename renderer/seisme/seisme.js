@@ -4,6 +4,7 @@ async function startGestureRecognition() {
 
     //boutons
     const menuBtn = document.getElementById("menuButton");
+    const menuBtnLeft = document.getElementById("menuButtonLeft");
     const boutonRestart = document.getElementById("boutonRestart")
     const showNext = document.getElementById('showNext');
 
@@ -27,6 +28,7 @@ async function startGestureRecognition() {
 
     //boutons
     menuBtn.style.visibility = "hidden"
+    menuBtnLeft.style.visibility = "visible"
     showNext.style.visibility = "visible"
     boutonRestart.style.visibility = "hidden";
 
@@ -140,6 +142,7 @@ async function startGestureRecognition() {
                 if (eventData.name == "closeC") {
                     popupCanvas2.style.visibility = "hidden";
                     menuBtn.style.visibility = "visible";
+                    menuBtnLeft.style.visibility = "hidden";
                     if (exit2) exit2.fire();
                     startBoutonAction();
                     if (toBase) toBase.fire();
@@ -497,6 +500,10 @@ async function startGestureRecognition() {
     }
 
     menuBtn.addEventListener("click", () => {
+        window.location.href = "../hub/hub.html";
+    });
+
+    menuBtnLeft.addEventListener("click", () => {
         window.location.href = "../hub/hub.html";
     });
 

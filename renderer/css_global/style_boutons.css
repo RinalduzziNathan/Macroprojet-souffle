@@ -8,6 +8,20 @@
     border-radius: 80px;
     padding: 15px 15px;
     cursor: pointer;
+    z-index: 30;
+    transition: 0.3s;
+    font-size: 19px;
+
+}.homebuttonLeft {
+    position: fixed;
+    background-color: rgb(255, 255, 255);
+    top: 1%;
+    left: 93%;
+    border: 3px solid #00FF00;
+    box-shadow:5px 5px 5px rgba(140, 140, 140, 0.5);
+    border-radius: 80px;
+    padding: 15px 15px;
+    cursor: pointer;
     z-index: 20;
     transition: 0.3s;
     font-size: 19px;
@@ -20,6 +34,13 @@
     color: #ffffff;
     transition: 0.3s;
 }
+.homebuttonLeft:hover {
+    padding: 20px 20px;
+    background-color: #00FF00;
+    color: #ffffff;
+    transition: 0.3s;
+}
+
 
 .showButton {
     position: fixed;
@@ -90,8 +111,8 @@
     position: absolute;
     line-height: 0.9;
     background-color: white;
-    top: 15%;
-    left: 50%;
+    top: 18%;
+    left: 17%;
     transform: translate(-50%, -50%);
     display: inline-block;
     padding: 30px 80px;
@@ -106,7 +127,7 @@
     font-weight: 700;
     font-style: normal;
     font-variation-settings: "wdth" 100;
-    font-size: 90px;
+    font-size: 35px;
     cursor: pointer;
     z-index: 20;
     transition: 0.5s;
