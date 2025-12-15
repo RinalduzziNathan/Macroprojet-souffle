@@ -19,8 +19,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     //textes
     const titre = document.getElementById("titre");
     const timerDisplay = document.getElementById("timer");
-    const texteEruptionEffusive = document.getElementById("texteEruptionEffusive");
-    const texteEruptionExplosive = document.getElementById("texteEruptionExplosive");
+
 
 
     //boutons
@@ -36,11 +35,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     popupCanvas2.style.visibility = "hidden";
     riveCanvasVolcan.style.visibility = "hidden";
     visqueuseCanvas.style.visibility = "hidden";
-
-
-    //textes
-    texteEruptionEffusive.style.visibility = "hidden";
-    texteEruptionExplosive.style.visibility = "hidden";
 
 
 
@@ -166,7 +160,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
         volcan = new rive.Rive({
-            src: "../rive/demogeo_volcan2.riv",
+            src: "../rive/demogeo_volcan3.riv",
             canvas: document.getElementById("riveCanvasVolcan"),
             autoplay: true,
             stateMachines: "State Machine 1",
@@ -251,8 +245,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
         if (eventData.name == "EndAnim") {
             boutonRestart.style.visibility = "visible";
-            texteEruptionExplosive.style.visibility = "hidden";
-            texteEruptionEffusive.style.visibility = "hidden";
+  
         }
 
         if (eventData.name == "recommencer") {
@@ -518,11 +511,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     if (trend > 0.09) {
                         if (baseToExplo) baseToExplo.fire();
                         //if (toEscape) toEscape.fire();
-                        texteEruptionExplosive.style.visibility = "visible";
+            
                     }
                     if (trend < 0.09 && trend > -0.09) {
                         if (baseToEffu) baseToEffu.fire();
-                        texteEruptionEffusive.style.visibility = "visible";
+              
                         //if (toPhoto) toPhoto.fire();
 
                     }

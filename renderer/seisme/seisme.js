@@ -17,9 +17,7 @@ async function startGestureRecognition() {
 
     //textes
     const titre = document.getElementById("titre")
-    const texteDecalage = document.getElementById("texteDecalage");
-    const texteInverse = document.getElementById("texteInverse");
-    const texteNormale = document.getElementById("texteNormale");
+
 
     //video
 
@@ -37,11 +35,6 @@ async function startGestureRecognition() {
     riveCanvasCube.style.visibility = "hidden";
     popupCanvas1.style.visibility = "hidden";
     popupCanvas2.style.visibility = "hidden";
-
-    //textes
-    texteDecalage.style.visibility = "hidden";
-    texteInverse.style.visibility = "hidden";
-    texteNormale.style.visibility = "hidden";
 
     //autre
     const ctx = canvas.getContext("2d");
@@ -81,7 +74,7 @@ async function startGestureRecognition() {
             }),
             onLoad: () => {
                 const inputs = popup1.stateMachineInputs("State Machine 1");
-                exit1= inputs.find(i => i.name === 'exit');
+                exit1 = inputs.find(i => i.name === 'exit');
                 popup1.resizeDrawingSurfaceToCanvas();
                 riveEventCheck(popup1); // ✅ déplacer ici
             },
@@ -102,7 +95,7 @@ async function startGestureRecognition() {
             }),
             onLoad: () => {
                 const inputs = popup2.stateMachineInputs("State Machine 1");
-                exit2= inputs.find(i => i.name === 'exit');
+                exit2 = inputs.find(i => i.name === 'exit');
                 popup2.resizeDrawingSurfaceToCanvas();
                 riveEventCheck(popup2); // ✅ déplacer ici
             },
@@ -137,7 +130,7 @@ async function startGestureRecognition() {
                     popupCanvas2.style.visibility = "visible";
                     if (exit1) exit1.fire();
                     createpopup2();
-                    
+
                     document.body.style.backgroundColor = "#FDFF60";
                     riveCanvas.style.visibility = "visible";
                     if (toFond) toFond.fire();
@@ -149,6 +142,7 @@ async function startGestureRecognition() {
                     menuBtn.style.visibility = "visible";
                     if (exit2) exit2.fire();
                     startBoutonAction();
+                    if (toBase) toBase.fire();
 
                     startBoutonClicked = true;
 
@@ -179,11 +173,11 @@ async function startGestureRecognition() {
 
     });
 
-    let baseToDecalage, toBase, baseToInverse, baseToNormale, toFond;
+    let baseToDecalage, toBase, baseToInverse, baseToNormale, baseToDonnes, toFond;
 
 
     const r = new rive.Rive({
-        src: "../rive/seismeperspective2.riv",
+        src: "../rive/demogeo_seisme2.riv",
         canvas: document.getElementById("riveCanvas"),
         autoplay: true,
         stateMachines: "State Machine 1",
@@ -193,6 +187,7 @@ async function startGestureRecognition() {
             baseToNormale = inputs.find(i => i.name === "baseToNormale");
             baseToInverse = inputs.find(i => i.name === "baseToInverse");
             baseToDecalage = inputs.find(i => i.name === "baseToDecalage");
+            baseToDonnes = inputs.find(i => i.name === "baseToDonnes");
             toBase = inputs.find(i => i.name === "toBase");
             toFond = inputs.find(i => i.name === "toFond");
 
@@ -226,13 +221,8 @@ async function startGestureRecognition() {
         if (data.type === rive.RiveEventType.General) {
             console.log("Event reçu : " + data.name);
             boutonRestart.style.visibility = "visible";
-            messageResultat.style.visibility = "hidden";
-            texteNormale.style.visibility = "hidden";
-            texteInverse.style.visibility = "hidden";
-            texteDecalage.style.visibility = "hidden";
 
 
-            if (toBase) toBase.fire();
         }
     });
 
@@ -264,7 +254,11 @@ async function startGestureRecognition() {
         const len = distances.length;
         if (len < 4) {
             console.log("Pas assez de données");
-            return;
+            if (toBase) toBase.fire();
+            setTimeout(() => {
+                baseToDonnes.fire();
+            }, 50);
+
         }
 
         const firstHalf = distances.slice(0, len / 2);
@@ -281,16 +275,12 @@ async function startGestureRecognition() {
             setTimeout(() => {
                 baseToNormale.fire();
             }, 50);
-            texteNormale.style.visibility = "visible";
         } else if (endAvg < startAvg - 0.01 && !detecterCroisementDepuisOrdre()) {
 
             if (toBase) toBase.fire();
             setTimeout(() => {
                 baseToInverse.fire();
             }, 50);
-
-            texteInverse.style.visibility = "visible";
-
         }
         if (detecterCroisementDepuisOrdre()) {
 
@@ -300,7 +290,6 @@ async function startGestureRecognition() {
                 baseToDecalage.fire();
             }, 50);
 
-            texteDecalage.style.visibility = "visible";
         }
     }
 
@@ -349,7 +338,7 @@ async function startGestureRecognition() {
 
         if ((!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) && !animationEnCours && startBoutonClicked) {
             console.log("passe peut")
-            if (toBase) toBase.fire();
+            //if (toBase) toBase.fire();
             animationEnCours = false;
             return;
 
@@ -430,11 +419,19 @@ async function startGestureRecognition() {
     DistanceIsCalculated = false;
 
     function startBoutonAction() {
+        setTimeout(() => {
+            timerCompute();
+            console.log("timer 1");
+        }, 700);
+        console.log("timer 2");
+    }
+
+    function timerCompute() {
 
         riveCanvas.style.visibility = "visible";
 
-        timerDisplay.classList.remove("hidden");
         let startTime = Date.now();
+        
 
         TimerStarted = true;
         TimerOver = false;
@@ -442,10 +439,13 @@ async function startGestureRecognition() {
         distances = [];
         ordreMains = [];
 
+       
 
+        // Arrête le timer après 5 secondes
         const interval = setInterval(() => {
             const elapsed = (Date.now() - startTime) / 1000;
             timerDisplay.innerText = `${elapsed.toFixed(1)}s`;
+             timerDisplay.classList.remove("hidden");
 
             if (elapsed >= 5) {
                 TimerIsRunning = false;
@@ -515,6 +515,7 @@ async function startGestureRecognition() {
         boutonRestart.style.visibility = "hidden";
         timerDisplay.classList.remove("hidden");
         startBoutonAction();
+        if (toBase) toBase.fire();
     });
 
 
