@@ -131,6 +131,8 @@ async function startGestureRecognition() {
                     popupCanvas1.style.visibility = "hidden";
                     popupCanvas2.style.visibility = "visible";
                     if (exit1) exit1.fire();
+                    menuBtn.style.visibility = "visible";
+                    menuBtnLeft.style.visibility = "hidden";
                     createpopup2();
 
                     document.body.style.backgroundColor = "#FDFF60";
@@ -141,8 +143,7 @@ async function startGestureRecognition() {
                 }
                 if (eventData.name == "closeC") {
                     popupCanvas2.style.visibility = "hidden";
-                    menuBtn.style.visibility = "visible";
-                    menuBtnLeft.style.visibility = "hidden";
+                    
                     if (exit2) exit2.fire();
                     startBoutonAction();
                     if (toBase) toBase.fire();

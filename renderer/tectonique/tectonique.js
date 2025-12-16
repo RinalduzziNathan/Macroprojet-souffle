@@ -187,7 +187,7 @@ function createpopup3() {
 let rConverge = null;
 function createConverge() {
     rConverge = new rive.Rive({
-        src: "../rive/demogeo_tectonique_convergence8.riv",
+        src: "../rive/demogeo_tectonique_convergence1.riv",
         canvas: document.getElementById("riveCanvasConverge"),
         autoplay: true,
         stateMachines: "State Machine 1",
@@ -212,7 +212,7 @@ function createConverge() {
 let rDiverge = null;
 function createDiverge() {
     rDiverge = new rive.Rive({
-        src: "../rive/demogeo_tectonique_divergence4.riv",
+        src: "../rive/demogeo_tectonique_divergence1.riv",
         canvas: document.getElementById("riveCanvasDiverge"),
         autoplay: true,
         stateMachines: "State Machine 1",
