@@ -1,6 +1,10 @@
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
+    //tableau pour se souvenire des derniers résultats
+    let previousResults = [];
+
+
     //boutons
     const startBouton = document.getElementById("startBouton");
     const boutonRestart = document.getElementById("boutonRestart");
@@ -72,7 +76,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             autoplay: true,
             stateMachines: "State Machine 1",
             layout: new rive.Layout({
-                fit: rive.Fit.Contain,
+
                 alignment: rive.Alignment.Center,
             }),
             onLoad: () => {
@@ -248,7 +252,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
         if (eventData.name == "EndAnim") {
             boutonRestart.style.visibility = "visible";
-  
+
         }
 
         if (eventData.name == "recommencer") {
@@ -517,15 +521,29 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     console.log(trend > 0.09 ? "L'intensité augmente globalement." : "Pas d'augmentation claire.");
 
                     if (trend > 0.09) {
-                        if (baseToExplo) baseToExplo.fire();
+                        if (baseToExplo) {
+                            baseToExplo.fire();
+                            previousResults.push("explo");
+                            console.log(previousResults)
+                            if (previousResults.length >= 2 && previousResults[previousResults.length - 1] == "explo" && previousResults[previousResults.length - 2] == "explo") {
+                                console.log("Deux explo de suite, lancer popup");
+                                //lancer popup
+                            }
+                        }
                         //if (toEscape) toEscape.fire();
-            
+
                     }
                     if (trend < 0.09 && trend > -0.09) {
-                        if (baseToEffu) baseToEffu.fire();
-              
+                        if (baseToEffu) {
+                            baseToEffu.fire();
+                            previousResults.push("effu");
+                            console.log(previousResults)
+                            if (previousResults.length >= 2 && previousResults[previousResults.length - 1] == "effu" && previousResults[previousResults.length - 2] == "effu") {
+                                console.log("Deux effusions de suite, lancer popup");
+                                //lancer popup
+                            }
+                        }
                         //if (toPhoto) toPhoto.fire();
-
                     }
 
 
