@@ -126,7 +126,7 @@ canvas {
 
 .timer {
     position: fixed;
-    top: 10%;
+    top: 13%;
     left: 50%;
     transform: translateX(-50%);
     font-family: "ZCOOL QingKe HuangYou", sans-serif;
