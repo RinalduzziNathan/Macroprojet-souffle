@@ -41,6 +41,8 @@ canvas {
 #riveCanvasDiverge  { z-index: 8; }
 #visqueuseCanvas  { z-index: 1;pointer-events: none; }
 #riveCanvasPlay  { z-index: 8; }
+#popupCanvasExplosif { z-index: 24; }
+#popupCanvasEffusif { z-index: 24; }
 
 #handCanvas {
     

@@ -20,7 +20,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const visqueuseCanvas = document.getElementById("visqueuseCanvas");
     const popupCanvas1 = document.getElementById("popupCanvas1");
     const popupCanvas2 = document.getElementById("popupCanvas2");
-
+    const popupCanvasExplosif = document.getElementById("popupCanvasExplosif");
+    const popupCanvasEffusif = document.getElementById("popupCanvasEffusif");
 
     //textes
     const titre = document.getElementById("titre");
@@ -42,6 +43,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     popupCanvas2.style.visibility = "hidden";
     riveCanvasVolcan.style.visibility = "hidden";
     visqueuseCanvas.style.visibility = "hidden";
+    popupCanvasExplosif.style.visibility = "hidden";
+    popupCanvasEffusif.style.visibility = "hidden";
 
 
 
@@ -105,12 +108,75 @@ window.addEventListener('DOMContentLoaded', (event) => {
             onLoad: () => {
                 const inputs = popup2.stateMachineInputs("State Machine 1");
                 exit2 = inputs.find(i => i.name === 'exit');
+                
                 popup2.resizeDrawingSurfaceToCanvas();
+
                 riveEventCheck(popup2); // ✅ déplacer ici
             },
         });
 
     }
+
+    let rivePopupEffusif = null;
+    let lancerEffusif;
+
+    function createrivePopupEffusif() {
+        if(rivePopupEffusif){
+            lancerEffusif.fire();
+            return;
+        }
+
+        rivePopupEffusif = new rive.Rive({
+            src: "../rive/volcan_popup_effusif.riv",
+            canvas: document.getElementById("popupCanvasEffusif"),
+            autoplay: true,
+            stateMachines: "State Machine 1",
+            layout: new rive.Layout({
+                fit: rive.Fit.Contain,
+                alignment: rive.Alignment.Center,
+            }),
+            onLoad: () => {
+                const inputs = rivePopupEffusif.stateMachineInputs("State Machine 1");
+                lancerEffusif = inputs.find(i => i.name === 'lancerEffusif');
+              
+                rivePopupEffusif.resizeDrawingSurfaceToCanvas();
+                lancerEffusif.fire();
+                riveEventCheck(rivePopupEffusif); // ✅ déplacer ici
+            },
+        });
+
+    }
+
+
+    let rivePopupExplosif= null;
+    let lancerExplosif;
+
+    function createrivePopupExplosif() {
+          if(rivePopupExplosif){
+            lancerExplosif.fire();
+            return;
+        }
+
+        rivePopupExplosif = new rive.Rive({
+            src: "../rive/volcan_popup_explosif.riv",
+            canvas: document.getElementById("popupCanvasExplosif"),
+            autoplay: true,
+            stateMachines: "State Machine 1",
+            layout: new rive.Layout({
+                fit: rive.Fit.Contain,
+                alignment: rive.Alignment.Center,
+            }),
+            onLoad: () => {
+                const inputs = rivePopupExplosif.stateMachineInputs("State Machine 1");
+                lancerExplosif = inputs.find(i => i.name === 'lancerExplosif');
+                rivePopupExplosif.resizeDrawingSurfaceToCanvas();
+                lancerExplosif.fire();
+                riveEventCheck(rivePopupExplosif); // ✅ déplacer ici
+            },
+        });
+
+    }
+
 
     let baseToAnim;
     let visqueuseToBase;
@@ -123,7 +189,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     function createvisqueux() {
 
-        riveInstanceUnsibscribe(popup2);
+        riveInstanceUnsubscribe(popup2);
 
         popup2 = null;
 
@@ -167,7 +233,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
         volcan = new rive.Rive({
-            src: "../rive/demogeo_volcan3.riv",
+            src: "../rive/demogeo_volcan2.riv",
             canvas: document.getElementById("riveCanvasVolcan"),
             autoplay: true,
             stateMachines: "State Machine 1",
@@ -213,7 +279,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
-    function riveInstanceUnsibscribe(riveInstance) {
+    function riveInstanceUnsubscribe(riveInstance) {
         if (riveInstance) {
             riveInstance.off(rive.EventType.RiveEvent, onRiveEventReceived);
         }
@@ -256,7 +322,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }
 
         if (eventData.name == "recommencer") {
+            
             if (recommencer) recommencer.fire();
+        }
+
+        if (eventData.name == "closeEffusifRedondance") {
+            popupCanvasEffusif.style.visibility = "hidden";
+            //riveInstanceUnsubscribe(rivePopupEffusif);
+           // rivePopupEffusif.cleanup();
+            //rivePopupEffusif = null;
+        }
+        if (eventData.name == "closeExplosifRedondance") {
+            popupCanvasExplosif.style.visibility = "hidden";
+          //  riveInstanceUnsubscribe(rivePopupExplosif);
+          //  rivePopupExplosif.cleanup();
+           // rivePopupExplosif = null;
         }
 
 
@@ -527,6 +607,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             console.log(previousResults)
                             if (previousResults.length >= 2 && previousResults[previousResults.length - 1] == "explo" && previousResults[previousResults.length - 2] == "explo") {
                                 console.log("Deux explo de suite, lancer popup");
+                                popupCanvasExplosif.style.visibility = "visible";
+                                createrivePopupExplosif(); 
+                             
                                 //lancer popup
                             }
                         }
@@ -540,6 +623,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             console.log(previousResults)
                             if (previousResults.length >= 2 && previousResults[previousResults.length - 1] == "effu" && previousResults[previousResults.length - 2] == "effu") {
                                 console.log("Deux effusions de suite, lancer popup");
+                                popupCanvasEffusif.style.visibility = "visible";
+                                createrivePopupEffusif()
+                                
                                 //lancer popup
                             }
                         }
