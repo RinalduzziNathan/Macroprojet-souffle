@@ -52,7 +52,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     var finTableau = false;
     let activeColorChange = false;  // contrôle si la couleur doit changer en live
     let colorJaune = false;
-
+    let popupEffusif = false;
+    let popupExplosif = false;
 
     function changerCouleurSelonIntensite(intensity) {
         if (intensity < 20) {
@@ -108,7 +109,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             onLoad: () => {
                 const inputs = popup2.stateMachineInputs("State Machine 1");
                 exit2 = inputs.find(i => i.name === 'exit');
-                
+
                 popup2.resizeDrawingSurfaceToCanvas();
 
                 riveEventCheck(popup2); // ✅ déplacer ici
@@ -121,7 +122,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let lancerEffusif;
 
     function createrivePopupEffusif() {
-        if(rivePopupEffusif){
+        if (rivePopupEffusif) {
             lancerEffusif.fire();
             return;
         }
@@ -138,7 +139,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             onLoad: () => {
                 const inputs = rivePopupEffusif.stateMachineInputs("State Machine 1");
                 lancerEffusif = inputs.find(i => i.name === 'lancerEffusif');
-              
+
                 rivePopupEffusif.resizeDrawingSurfaceToCanvas();
                 lancerEffusif.fire();
                 riveEventCheck(rivePopupEffusif); // ✅ déplacer ici
@@ -148,11 +149,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
 
-    let rivePopupExplosif= null;
+    let rivePopupExplosif = null;
     let lancerExplosif;
 
     function createrivePopupExplosif() {
-          if(rivePopupExplosif){
+        if (rivePopupExplosif) {
             lancerExplosif.fire();
             return;
         }
@@ -226,6 +227,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let baseToExplo;
     let toBase;
     let recommencer;
+    let tovisible;
+    let invisibleExplosif;
+    let invisibleEffusif;
 
     let volcan = null;
 
@@ -233,7 +237,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
         volcan = new rive.Rive({
-            src: "../rive/demogeo_volcan2.riv",
+            src: "../rive/demogeo_volcan3.riv",
             canvas: document.getElementById("riveCanvasVolcan"),
             autoplay: true,
             stateMachines: "State Machine 1",
@@ -245,6 +249,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 baseToExplo = inputs.find(i => i.name === 'baseToExplo');
                 toBase = inputs.find(i => i.name === 'toBase');
                 recommencer = inputs.find(i => i.name === 'recommencer');
+                tovisible = inputs.find(i => i.name === 'tovisible');
+                invisibleExplosif = inputs.find(i => i.name === 'invisibleExplosif');
+                invisibleEffusif = inputs.find(i => i.name === 'invisibleEffusif');
                 riveEventCheck(volcan); // ✅ déplacer ici
 
             },
@@ -317,26 +324,27 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }
 
         if (eventData.name == "EndAnim") {
-            boutonRestart.style.visibility = "visible";
+            //boutonRestart.style.visibility = "visible";
 
         }
 
         if (eventData.name == "recommencer") {
-            
+
             if (recommencer) recommencer.fire();
         }
 
+
         if (eventData.name == "closeEffusifRedondance") {
             popupCanvasEffusif.style.visibility = "hidden";
-            //riveInstanceUnsubscribe(rivePopupEffusif);
-           // rivePopupEffusif.cleanup();
-            //rivePopupEffusif = null;
+            if (tovisible) tovisible.fire();
+            boutonRestart.style.visibility = "visible";
+           
         }
         if (eventData.name == "closeExplosifRedondance") {
             popupCanvasExplosif.style.visibility = "hidden";
-          //  riveInstanceUnsubscribe(rivePopupExplosif);
-          //  rivePopupExplosif.cleanup();
-           // rivePopupExplosif = null;
+            if (tovisible) tovisible.fire();
+            boutonRestart.style.visibility = "visible";
+           
         }
 
 
@@ -607,11 +615,23 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             console.log(previousResults)
                             if (previousResults.length >= 2 && previousResults[previousResults.length - 1] == "explo" && previousResults[previousResults.length - 2] == "explo") {
                                 console.log("Deux explo de suite, lancer popup");
-                                popupCanvasExplosif.style.visibility = "visible";
-                                createrivePopupExplosif(); 
-                             
+
+                                setTimeout(() => {
+                                    popupExplosif = true;
+                                    popupCanvasExplosif.style.visibility = "visible";
+                                    createrivePopupExplosif();
+                                    boutonRestart.style.visibility = "hidden";
+
+                                }, 11000);
+
+
                                 //lancer popup
                             }
+                            else {
+                                setTimeout(() => {
+                                    boutonRestart.style.visibility = "visible";
+                                }, 7000);
+                        }
                         }
                         //if (toEscape) toEscape.fire();
 
@@ -623,20 +643,43 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             console.log(previousResults)
                             if (previousResults.length >= 2 && previousResults[previousResults.length - 1] == "effu" && previousResults[previousResults.length - 2] == "effu") {
                                 console.log("Deux effusions de suite, lancer popup");
-                                popupCanvasEffusif.style.visibility = "visible";
-                                createrivePopupEffusif()
-                                
+                                setTimeout(() => {
+                                    popupEffusif = true;
+                                    popupCanvasEffusif.style.visibility = "visible";
+                                    createrivePopupEffusif()
+                                    boutonRestart.style.visibility = "hidden";
+                                }, 7000);
+
+
                                 //lancer popup
                             }
-                        }
+                            else {
+                                setTimeout(() => {
+                                    boutonRestart.style.visibility = "visible";
+                                }, 7000);
+                        }}
                         //if (toPhoto) toPhoto.fire();
                     }
+        
 
 
                     finTableau = false;
 
 
                 }
+
+                if (popupEffusif == true) {
+                    if (invisibleEffusif) invisibleEffusif.fire();
+                    console.log("invisible effusif fired");
+                    popupEffusif = false;
+                }
+
+                if (popupExplosif == true) {
+                    if (invisibleExplosif) invisibleExplosif.fire();
+                    console.log("invisible explosif fired");
+                    popupExplosif = false;
+                }
+
             }
 
 
