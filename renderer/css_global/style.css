@@ -43,6 +43,9 @@ canvas {
 #riveCanvasPlay  { z-index: 8; }
 #popupCanvasExplosif { z-index: 24; }
 #popupCanvasEffusif { z-index: 24; }
+#popupCanvasDecalage { z-index: 24; }
+#popupCanvasInverse { z-index: 24; }
+#popupCanvasNormal { z-index: 24; }
 
 #handCanvas {
     

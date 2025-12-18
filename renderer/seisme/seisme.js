@@ -1,7 +1,8 @@
 
 async function startGestureRecognition() {
 
-
+    //tableau pour se souvenire des derniers résultats
+    let previousResults = [];
     //boutons
     const menuBtn = document.getElementById("menuButton");
     const menuBtnLeft = document.getElementById("menuButtonLeft");
@@ -15,6 +16,9 @@ async function startGestureRecognition() {
     const riveCanvasCube = document.getElementById("riveCanvasCube");
     const popupCanvas1 = document.getElementById("popupCanvas1");
     const popupCanvas2 = document.getElementById("popupCanvas2");
+    const popupCanvasDecalage = document.getElementById("popupCanvasDecalage");
+    const popupCanvasInverse = document.getElementById("popupCanvasInverse");
+    const popupCanvasNormal = document.getElementById("popupCanvasNormal");
 
     //textes
     const titre = document.getElementById("titre")
@@ -37,6 +41,9 @@ async function startGestureRecognition() {
     riveCanvasCube.style.visibility = "hidden";
     popupCanvas1.style.visibility = "hidden";
     popupCanvas2.style.visibility = "hidden";
+    popupCanvasDecalage.style.visibility = "hidden";
+    popupCanvasInverse.style.visibility = "hidden";
+    popupCanvasNormal.style.visibility = "hidden";
 
     //autre
     const ctx = canvas.getContext("2d");
@@ -104,6 +111,100 @@ async function startGestureRecognition() {
         });
 
     }
+
+    let rivePopupNormal = null;
+    let lancerNormal;
+    
+    let rivePopupInverse = null;
+    let lancerInverse;
+
+    let rivePopupDecalage = null;
+    let lancerDecalage;
+
+
+    function createrivePopupNormal() {
+        if (rivePopupNormal) {
+            lancerNormal.fire();
+            return;
+        }
+
+        rivePopupNormal = new rive.Rive({
+            src: "../rive/seisme_popup_normale.riv",
+            canvas: document.getElementById("popupCanvasNormal"),
+            autoplay: true,
+            stateMachines: "State Machine 1",
+            layout: new rive.Layout({
+                fit: rive.Fit.Contain,
+                alignment: rive.Alignment.Center,
+            }),
+            onLoad: () => {
+                const inputs = rivePopupNormal.stateMachineInputs("State Machine 1");
+                lancerNormal = inputs.find(i => i.name === 'lancerNormale');
+
+                rivePopupNormal.resizeDrawingSurfaceToCanvas();
+                lancerNormal.fire();
+                riveEventCheck(rivePopupNormal); // ✅ déplacer ici
+            },
+        });
+
+    }
+
+    function createrivePopupInverse() {
+        if (rivePopupInverse) {
+            lancerInverse.fire();
+            return;
+        }
+
+        rivePopupInverse = new rive.Rive({
+            src: "../rive/seisme_popup_inverse.riv",
+            canvas: document.getElementById("popupCanvasInverse"),
+            autoplay: true,
+            stateMachines: "State Machine 1",
+            layout: new rive.Layout({
+                fit: rive.Fit.Contain,
+                alignment: rive.Alignment.Center,
+            }),
+            onLoad: () => {
+                const inputs = rivePopupInverse.stateMachineInputs("State Machine 1");
+                lancerInverse = inputs.find(i => i.name === 'lancerInverse');
+
+                rivePopupInverse.resizeDrawingSurfaceToCanvas();
+                lancerInverse.fire();
+                riveEventCheck(rivePopupInverse); // ✅ déplacer ici
+            },
+        });
+
+    }
+
+    function createrivePopupDecalage() {
+        if (rivePopupDecalage) {
+            lancerDecalage.fire();
+            return;
+        }
+
+        rivePopupDecalage = new rive.Rive({
+            src: "../rive/seisme_popup_decrochante.riv",
+            canvas: document.getElementById("popupCanvasDecalage"),
+            autoplay: true,
+            stateMachines: "State Machine 1",
+            layout: new rive.Layout({
+                fit: rive.Fit.Contain,
+                alignment: rive.Alignment.Center,
+            }),
+            onLoad: () => {
+                const inputs = rivePopupDecalage.stateMachineInputs("State Machine 1");
+                lancerDecalage = inputs.find(i => i.name === 'lancerDecalage');
+
+                rivePopupDecalage.resizeDrawingSurfaceToCanvas();
+                lancerDecalage.fire();
+                riveEventCheck(rivePopupDecalage); // ✅ déplacer ici
+            },
+        });
+
+    }
+
+
+
     function resizeCanvasToViewport() {
         popupCanvas1.width = window.innerWidth;
         popupCanvas1.height = window.innerHeight;
@@ -143,7 +244,7 @@ async function startGestureRecognition() {
                 }
                 if (eventData.name == "closeC") {
                     popupCanvas2.style.visibility = "hidden";
-                    
+
                     if (exit2) exit2.fire();
                     startBoutonAction();
                     if (toBase) toBase.fire();
@@ -151,6 +252,21 @@ async function startGestureRecognition() {
                     startBoutonClicked = true;
 
 
+                }
+
+                if (eventData.name == "closeNormaleRedondance") {
+                    popupCanvasNormal.style.visibility = "hidden";
+                    boutonRestart.style.visibility = "visible";
+                }
+
+                if (eventData.name == "closeInverseRedondance") {
+                    popupCanvasInverse.style.visibility = "hidden";
+                    boutonRestart.style.visibility = "visible";
+                }
+
+                if (eventData.name == "closeDecalageRedondance") {
+                    popupCanvasDecalage.style.visibility = "hidden";
+                    boutonRestart.style.visibility = "visible";
                 }
 
             }
@@ -278,13 +394,39 @@ async function startGestureRecognition() {
             if (toBase) toBase.fire();
             setTimeout(() => {
                 baseToNormale.fire();
+                previousResults.push("normale");
+                console.log(previousResults)
+                if (previousResults.length >= 2 && previousResults[previousResults.length - 1] == "normale" && previousResults[previousResults.length - 2] == "normale") {
+                console.log("Deux normale de suite, lancer popup");
+                setTimeout(() => {
+                    popupCanvasNormal.style.visibility = "visible";
+                    createrivePopupNormal()
+                }, 1000);
+          //lancer popup
+            }
             }, 50);
+
+            
         } else if (endAvg < startAvg - 0.01 && !detecterCroisementDepuisOrdre()) {
 
             if (toBase) toBase.fire();
             setTimeout(() => {
                 baseToInverse.fire();
+                previousResults.push("inverse");
+                console.log(previousResults)
+                if (previousResults.length >= 2 && previousResults[previousResults.length - 1] == "inverse" && previousResults[previousResults.length - 2] == "inverse") {
+                console.log("Deux inverse de suite, lancer popup");
+                setTimeout(() => {
+                    popupCanvasInverse.style.visibility = "visible";
+                    
+                    createrivePopupInverse()
+                }, 1000);
+          //lancer popup
+            }
             }, 50);
+
+
+            
         }
         if (detecterCroisementDepuisOrdre()) {
 
@@ -292,7 +434,18 @@ async function startGestureRecognition() {
             if (toBase) toBase.fire();
             setTimeout(() => {
                 baseToDecalage.fire();
+                previousResults.push("decalage");
+                console.log(previousResults)
+                if (previousResults.length >= 2 && previousResults[previousResults.length - 1] == "decalage" && previousResults[previousResults.length - 2] == "decalage") {
+                console.log("Deux decalage de suite, lancer popup");
+                setTimeout(() => {
+                    popupCanvasDecalage.style.visibility = "visible";
+                    createrivePopupDecalage()
+                }, 1000);
+          //lancer popup
+            }
             }, 50);
+
 
         }
     }
@@ -435,7 +588,7 @@ async function startGestureRecognition() {
         riveCanvas.style.visibility = "visible";
 
         let startTime = Date.now();
-        
+
 
         TimerStarted = true;
         TimerOver = false;
@@ -443,13 +596,13 @@ async function startGestureRecognition() {
         distances = [];
         ordreMains = [];
 
-       
+
 
         // Arrête le timer après 5 secondes
         const interval = setInterval(() => {
             const elapsed = (Date.now() - startTime) / 1000;
             timerDisplay.innerText = `${elapsed.toFixed(1)}s`;
-             timerDisplay.classList.remove("hidden");
+            timerDisplay.classList.remove("hidden");
 
             if (elapsed >= 5) {
                 TimerIsRunning = false;
