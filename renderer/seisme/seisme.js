@@ -49,7 +49,7 @@ async function startGestureRecognition() {
     const ctx = canvas.getContext("2d");
 
 
-
+    let popupRedondance = false;
 
     let touchDistance = 0;
     let proximityDistance = 0;
@@ -114,7 +114,7 @@ async function startGestureRecognition() {
 
     let rivePopupNormal = null;
     let lancerNormal;
-    
+
     let rivePopupInverse = null;
     let lancerInverse;
 
@@ -257,16 +257,19 @@ async function startGestureRecognition() {
                 if (eventData.name == "closeNormaleRedondance") {
                     popupCanvasNormal.style.visibility = "hidden";
                     boutonRestart.style.visibility = "visible";
+                    if (toVisible) toVisible.fire();
                 }
 
                 if (eventData.name == "closeInverseRedondance") {
                     popupCanvasInverse.style.visibility = "hidden";
                     boutonRestart.style.visibility = "visible";
+                    if (toVisible) toVisible.fire();
                 }
 
                 if (eventData.name == "closeDecalageRedondance") {
                     popupCanvasDecalage.style.visibility = "hidden";
                     boutonRestart.style.visibility = "visible";
+                    if (toVisible) toVisible.fire();
                 }
 
             }
@@ -293,7 +296,7 @@ async function startGestureRecognition() {
 
     });
 
-    let baseToDecalage, toBase, baseToInverse, baseToNormale, baseToDonnes, toFond;
+    let baseToDecalage, toBase, baseToInverse, baseToNormale, baseToDonnes, toFond, toVisible, toInvisible;
 
 
     const r = new rive.Rive({
@@ -310,6 +313,8 @@ async function startGestureRecognition() {
             baseToDonnes = inputs.find(i => i.name === "baseToDonnes");
             toBase = inputs.find(i => i.name === "toBase");
             toFond = inputs.find(i => i.name === "toFond");
+            toVisible = inputs.find(i => i.name === 'toVisible');
+            toInvisible = inputs.find(i => i.name === 'toInvisible');
 
 
             r.resizeDrawingSurfaceToCanvas();
@@ -329,7 +334,7 @@ async function startGestureRecognition() {
     r.on(rive.EventType.RiveEvent, (event) => {
         const data = event.data;
         if (data.type === rive.RiveEventType.General) {
-            boutonRestart.style.visibility = "visible";
+            //boutonRestart.style.visibility = "visible";
         }
         animationEnCours = false;
     });
@@ -340,7 +345,7 @@ async function startGestureRecognition() {
         const data = event.data;
         if (data.type === rive.RiveEventType.General) {
             console.log("Event reçu : " + data.name);
-            boutonRestart.style.visibility = "visible";
+            //boutonRestart.style.visibility = "visible";
 
 
         }
@@ -377,6 +382,10 @@ async function startGestureRecognition() {
             if (toBase) toBase.fire();
             setTimeout(() => {
                 baseToDonnes.fire();
+                previousResults.push("pasDonnées");
+                setTimeout(() => {
+                    boutonRestart.style.visibility = "visible";
+                }, 5000);
             }, 50);
 
         }
@@ -397,16 +406,25 @@ async function startGestureRecognition() {
                 previousResults.push("normale");
                 console.log(previousResults)
                 if (previousResults.length >= 2 && previousResults[previousResults.length - 1] == "normale" && previousResults[previousResults.length - 2] == "normale") {
-                console.log("Deux normale de suite, lancer popup");
-                setTimeout(() => {
-                    popupCanvasNormal.style.visibility = "visible";
-                    createrivePopupNormal()
-                }, 1000);
-          //lancer popup
-            }
+                    console.log("Deux normale de suite, lancer popup");
+                    setTimeout(() => {
+                        popupRedondance = true;
+                        if (toInvisible) toInvisible.fire();
+                        popupCanvasNormal.style.visibility = "visible";
+                        boutonRestart.style.visibility = "hidden";
+                        createrivePopupNormal()
+                    }, 6000);
+                }
+                else {
+                    setTimeout(() => {
+                        boutonRestart.style.visibility = "visible";
+                    }, 5000);
+                }
+                //lancer popup
+
             }, 50);
 
-            
+
         } else if (endAvg < startAvg - 0.01 && !detecterCroisementDepuisOrdre()) {
 
             if (toBase) toBase.fire();
@@ -415,18 +433,26 @@ async function startGestureRecognition() {
                 previousResults.push("inverse");
                 console.log(previousResults)
                 if (previousResults.length >= 2 && previousResults[previousResults.length - 1] == "inverse" && previousResults[previousResults.length - 2] == "inverse") {
-                console.log("Deux inverse de suite, lancer popup");
-                setTimeout(() => {
-                    popupCanvasInverse.style.visibility = "visible";
-                    
-                    createrivePopupInverse()
-                }, 1000);
-          //lancer popup
-            }
+                    console.log("Deux inverse de suite, lancer popup");
+                    setTimeout(() => {
+                        popupRedondance = true;
+                        if (toInvisible) toInvisible.fire();
+                        popupCanvasInverse.style.visibility = "visible";
+                        boutonRestart.style.visibility = "hidden";
+                        createrivePopupInverse()
+                    }, 6000);
+
+                }
+
+                else {
+                    setTimeout(() => {
+                        boutonRestart.style.visibility = "visible";
+                    }, 5000);
+                }
             }, 50);
 
 
-            
+
         }
         if (detecterCroisementDepuisOrdre()) {
 
@@ -437,19 +463,29 @@ async function startGestureRecognition() {
                 previousResults.push("decalage");
                 console.log(previousResults)
                 if (previousResults.length >= 2 && previousResults[previousResults.length - 1] == "decalage" && previousResults[previousResults.length - 2] == "decalage") {
-                console.log("Deux decalage de suite, lancer popup");
-                setTimeout(() => {
-                    popupCanvasDecalage.style.visibility = "visible";
-                    createrivePopupDecalage()
-                }, 1000);
-          //lancer popup
-            }
+                    console.log("Deux decalage de suite, lancer popup");
+                    setTimeout(() => {
+                        popupRedondance = true;
+                        if (toInvisible) toInvisible.fire();
+                        popupCanvasDecalage.style.visibility = "visible";
+                        boutonRestart.style.visibility = "hidden";
+                        createrivePopupDecalage()
+                    }, 6000);
+                    //lancer popup
+                }
+
+                else {
+                    setTimeout(() => {
+                        boutonRestart.style.visibility = "visible";
+                    }, 5000);
+                }
             }, 50);
 
 
         }
-    }
 
+
+    }
 
     await tf.setBackend("webgl");
     console.log("Backend actif :", tf.getBackend());
