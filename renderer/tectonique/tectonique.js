@@ -101,6 +101,8 @@ rightHandStates = [];
 leftHandStates = [];
 distances = [];
 DistanceIsCalculated = false;
+divergenceRedondance = false;
+convergenceRedondance = false;
 
 let popup1 = null;
 let rMains = null;
@@ -253,11 +255,11 @@ function createrivePopupDiv() {
 
 }
 
-
+let baseToCC, baseToCO, baseToOO, baseToOC, baseToDonnees, toVisibleCONV, toInvisibleCONVCC, toInvisibleCONVCO, toInvisibleCONVOC, toInvisibleCONVOO;
 let rConverge = null;
 function createConverge() {
     rConverge = new rive.Rive({
-        src: "../rive/demogeo_tectonique_convergence1.riv",
+        src: "../rive/demogeo_tectonique_convergence2.riv",
         canvas: document.getElementById("riveCanvasConverge"),
         autoplay: true,
         stateMachines: "State Machine 1",
@@ -272,6 +274,12 @@ function createConverge() {
             baseToOO = inputs.find(i => i.name === "baseToOO");
             baseToOC = inputs.find(i => i.name === "baseToOC");
             baseToDonnees = inputs.find(i => i.name === "baseToDonnees");
+            toVisibleCONV = inputs.find(i => i.name === "toVisibleCONV");
+            toInvisibleCONVCC = inputs.find(i => i.name === "toInvisibleCONVCC");
+            toInvisibleCONVCO = inputs.find(i => i.name === "toInvisibleCONVCO");
+            toInvisibleCONVOC = inputs.find(i => i.name === "toInvisibleCONVOC");
+            toInvisibleCONVOO = inputs.find(i => i.name === "toInvisibleCONVOO");
+
 
             rConverge.resizeDrawingSurfaceToCanvas();
             riveEventCheck(rConverge);
@@ -279,10 +287,12 @@ function createConverge() {
     });
 }
 
+let DIVbaseToCC, DIVbaseToCO, DIVbaseToOO, DIVbaseToOC, toVisible, toInvisibleCC, toInvisibleCO, toInvisibleOC, toInvisibleOO;
+
 let rDiverge = null;
 function createDiverge() {
     rDiverge = new rive.Rive({
-        src: "../rive/demogeo_tectonique_divergence1.riv",
+        src: "../rive/demogeo_tectonique_divergence2.riv",
         canvas: document.getElementById("riveCanvasDiverge"),
         autoplay: true,
         stateMachines: "State Machine 1",
@@ -297,7 +307,11 @@ function createDiverge() {
             DIVbaseToCO = inputs.find(i => i.name === "DIVbaseToCO");
             DIVbaseToOO = inputs.find(i => i.name === "DIVbaseToOO");
             DIVbaseToOC = inputs.find(i => i.name === "DIVbaseToOC");
-
+            toVisible = inputs.find(i => i.name === "toVisible");
+            toInvisibleCC = inputs.find(i => i.name === "toInvisibleCC");
+            toInvisibleCO = inputs.find(i => i.name === "toInvisibleCO");
+            toInvisibleOC = inputs.find(i => i.name === "toInvisibleOC");
+            toInvisibleOO = inputs.find(i => i.name === "toInvisibleOO");
             rDiverge.resizeDrawingSurfaceToCanvas();
             riveEventCheck(rDiverge);
         }
@@ -429,11 +443,13 @@ const onRiveEventReceived = (riveEvent) => {
     }
 
     if (eventData.name == "closeConvergenceRedondance") {
+        if (toVisibleCONV) toVisibleCONV.fire();
         popupCanvasConv.style.visibility = "hidden";
     }
 
 
     if (eventData.name == "closeDivergenceRedondance") {
+        if (toVisible) toVisible.fire();
         popupCanvasDiv.style.visibility = "hidden";
     }
 
@@ -709,31 +725,61 @@ async function startGestureRecognition() {
                     riveCanvasConverge.style.visibility = "hidden";
                     riveCanvasDiverge.style.visibility = "visible";
                     console.log(postureKey + " divergence");
-                    switch (postureKey) {
-                        case "fist_fist":
-                            DIVbaseToCC.fire();
-                            break;
-
-                        case "fist_open":
-                            DIVbaseToOC.fire();
-                            break;
-                        case "open_fist":
-                            DIVbaseToCO.fire();
-                            break;
-                        case "open_open":
-                            DIVbaseToOO.fire();
-                            break;
-                        default: console.log("Unknown posture key:", postureKey); break;
-                    }
 
                     if (previousResults.length >= 2 && previousResults[previousResults.length - 1] == "DIV" && previousResults[previousResults.length - 2] == "DIV") {
-                        console.log("Deux CONV de suite, lancer popup");
+                        console.log("Deux DIV de suite, lancer popup");
+                        divergenceRedondance = true;
+
                         setTimeout(() => {
 
                             popupCanvasDiv.style.visibility = "visible";
                             createrivePopupDiv()
-                        }, 1000);
+                        }, 5000);
                     }
+
+                    switch (postureKey) {
+                        case "fist_fist":
+                            DIVbaseToCC.fire();
+                            if (divergenceRedondance) {
+                                setTimeout(() => {
+                                    if (toInvisibleCC) toInvisibleCC.fire();
+                                    divergenceRedondance = false;
+                                }, 5000);
+                            }
+                            break;
+
+                        case "fist_open":
+                            DIVbaseToOC.fire();
+                            if (divergenceRedondance) {
+                                setTimeout(() => {
+                                  if (toInvisibleOC) toInvisibleOC.fire();
+                                divergenceRedondance = false;  
+                                }, 5000);
+                                
+                            }
+                            break;
+                        case "open_fist":
+                            DIVbaseToCO.fire();
+                            if (divergenceRedondance) {
+                                setTimeout(() => {
+                                    if (toInvisibleCO) toInvisibleCO.fire();
+                                    divergenceRedondance = false;
+                                }, 5000);
+                            }
+                            break;
+                        case "open_open":
+                            DIVbaseToOO.fire();
+                            if (divergenceRedondance) {
+                                setTimeout(() => {
+                                    if (toInvisibleOO) toInvisibleOO.fire();
+                                    divergenceRedondance = false;
+                                }, 5000);
+                            }
+                            break;
+                        default: console.log("Unknown posture key:", postureKey); break;
+                    }
+
+
                 } else if (endAvg < startAvg - 0.01) {
                     // convergence
                     previousResults.push("CONV");
@@ -742,30 +788,58 @@ async function startGestureRecognition() {
                     riveCanvasConverge.style.visibility = "visible";
                     riveCanvasDiverge.style.visibility = "hidden";
                     //riveCanvasConverge.style.visibility = "hidden";
-                    switch (postureKey) {
-                        case "fist_fist":
-                            baseToCC.fire();
-                            break;
-                        case "fist_open":
-                            baseToOC.fire();
-                            break;
-                        case "open_fist":
-                            baseToCO.fire();
-                            break;
-                        case "open_open":
-                            baseToOO.fire();
-                            break;
-                        default: console.log("Unknown posture key:", postureKey); break;
-                    }
 
-                    if (previousResults.length >= 2 && previousResults[previousResults.length - 1] == "CONV" && previousResults[previousResults.length - 2] == "CONV") {
+                     if (previousResults.length >= 2 && previousResults[previousResults.length - 1] == "CONV" && previousResults[previousResults.length - 2] == "CONV") {
                         console.log("Deux CONV de suite, lancer popup");
+                        convergenceRedondance = true;
                         setTimeout(() => {
 
                             popupCanvasConv.style.visibility = "visible";
                             createrivePopupConv()
-                        }, 1000);
+                        }, 5000);
                     }
+
+                    switch (postureKey) {
+                        case "fist_fist":
+                            baseToCC.fire();
+                            if (convergenceRedondance) {
+                                setTimeout(() => {
+                                    if (toInvisibleCONVCC) toInvisibleCONVCC.fire();
+                                    convergenceRedondance = false;
+                                }, 5000);
+                            }
+                            break;
+                        case "fist_open":
+                            baseToOC.fire();
+                            if (convergenceRedondance) {
+                                setTimeout(() => {
+                                    if (toInvisibleCONVOC) toInvisibleCONVOC.fire();
+                                    convergenceRedondance = false;
+                                }, 5000);
+                            }
+                            break;
+                        case "open_fist":
+                            baseToCO.fire();
+                            if (convergenceRedondance) {
+                                setTimeout(() => {
+                                    if (toInvisibleCONVCO) toInvisibleCONVCO.fire();
+                                    convergenceRedondance = false;
+                                }, 5000);
+                            }
+                            break;
+                        case "open_open":
+                            baseToOO.fire();
+                            if (convergenceRedondance) {
+                                setTimeout(() => {
+                                    if (toInvisibleCONVOO) toInvisibleCONVOO.fire();
+                                    convergenceRedondance = false;
+                                }, 5000);
+                            }
+                            break;
+                        default: console.log("Unknown posture key:", postureKey); break;
+                    }
+
+                   
                 }
 
             }
