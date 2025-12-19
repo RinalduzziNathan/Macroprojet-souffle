@@ -1,3 +1,5 @@
+//tableau pour se souvenire des derniers résultats
+let previousResults = [];
 
 //boutons
 const menuBtn = document.getElementById("menuButton");
@@ -17,6 +19,9 @@ const canvas = document.getElementById("output_canvas");
 const popupCanvas1 = document.getElementById("popupCanvas1");
 const popupCanvas2 = document.getElementById("popupCanvas2");
 const popupCanvas3 = document.getElementById("popupCanvas3");
+const popupCanvasConv = document.getElementById("popupCanvasConv");
+const popupCanvasDiv = document.getElementById("popupCanvasDiv");
+
 
 
 //textes
@@ -66,6 +71,9 @@ riveCanvasDiverge.style.visibility = "hidden";
 popupCanvas1.style.visibility = "hidden";
 popupCanvas2.style.visibility = "hidden";
 popupCanvas3.style.visibility = "hidden";
+popupCanvasConv.style.visibility = "hidden";
+popupCanvasDiv.style.visibility = "hidden";
+
 
 
 //images
@@ -184,6 +192,68 @@ function createpopup3() {
     });
 
 }
+
+let rivePopupConv = null;
+let rivePopupDiv = null;
+let lancerConv, lancerDiv;
+
+
+function createrivePopupConv() {
+    if (rivePopupConv) {
+        lancerConv.fire();
+        return;
+    }
+
+    rivePopupConv = new rive.Rive({
+        src: "../rive/tecto_popup_convergence.riv",
+        canvas: document.getElementById("popupCanvasConv"),
+        autoplay: true,
+        stateMachines: "State Machine 1",
+        layout: new rive.Layout({
+            fit: rive.Fit.Contain,
+            alignment: rive.Alignment.Center,
+        }),
+        onLoad: () => {
+            const inputs = rivePopupConv.stateMachineInputs("State Machine 1");
+            lancerConv = inputs.find(i => i.name === 'lancerConvergence');
+
+            rivePopupConv.resizeDrawingSurfaceToCanvas();
+            lancerConv.fire();
+            riveEventCheck(rivePopupConv); // ✅ déplacer ici
+        },
+    });
+
+}
+
+
+function createrivePopupDiv() {
+    if (rivePopupDiv) {
+        lancerDiv.fire();
+        return;
+    }
+
+    rivePopupDiv = new rive.Rive({
+        src: "../rive/tecto_popup_divergence.riv",
+        canvas: document.getElementById("popupCanvasDiv"),
+        autoplay: true,
+        stateMachines: "State Machine 1",
+        layout: new rive.Layout({
+            fit: rive.Fit.Contain,
+            alignment: rive.Alignment.Center,
+        }),
+        onLoad: () => {
+            const inputs = rivePopupDiv.stateMachineInputs("State Machine 1");
+            lancerDiv = inputs.find(i => i.name === 'lancerDivergence');
+
+            rivePopupDiv.resizeDrawingSurfaceToCanvas();
+            lancerDiv.fire();
+            riveEventCheck(rivePopupDiv); // ✅ déplacer ici
+        },
+    });
+
+}
+
+
 let rConverge = null;
 function createConverge() {
     rConverge = new rive.Rive({
@@ -270,6 +340,20 @@ function resizeCanvasToViewport() {
     if (rDiverge) {
         rDiverge.resizeDrawingSurfaceToCanvas();
     }
+
+    popupCanvasDiv.width = window.innerWidth;
+    popupCanvasDiv.height = window.innerHeight;
+    if (rivePopupDiv) {
+        rivePopupDiv.resizeDrawingSurfaceToCanvas();
+    }
+
+    popupCanvasConv.width = window.innerWidth;
+    popupCanvasConv.height = window.innerHeight;
+    if (rivePopupConv) {
+        rivePopupConv.resizeDrawingSurfaceToCanvas();
+    }
+
+
 }
 
 function riveInstanceUnsibscribe(riveInstance) {
@@ -344,9 +428,14 @@ const onRiveEventReceived = (riveEvent) => {
         distances = [];
     }
 
+    if (eventData.name == "closeConvergenceRedondance") {
+        popupCanvasConv.style.visibility = "hidden";
+    }
 
 
-
+    if (eventData.name == "closeDivergenceRedondance") {
+        popupCanvasDiv.style.visibility = "hidden";
+    }
 
 
 }
@@ -605,6 +694,7 @@ async function startGestureRecognition() {
                     riveCanvasDiverge.style.visibility = "hidden";
                     baseToDonnees.fire();
                     console.log("pas assez donnes"); // pas assez de données
+                    previousResults.push("pasDonnées");
                 }
                 const firstHalf = distances.slice(0, len / 2);
                 const secondHalf = distances.slice(len / 2);
@@ -614,6 +704,7 @@ async function startGestureRecognition() {
                 const endAvg = avg(secondHalf);
                 const postureKey = `${dominantLeft}_${dominantRight}`; // e.g. "open_fist"
                 if (endAvg > startAvg + 0.01) {
+                    previousResults.push("DIV");
                     // divergence
                     riveCanvasConverge.style.visibility = "hidden";
                     riveCanvasDiverge.style.visibility = "visible";
@@ -634,8 +725,18 @@ async function startGestureRecognition() {
                             break;
                         default: console.log("Unknown posture key:", postureKey); break;
                     }
+
+                    if (previousResults.length >= 2 && previousResults[previousResults.length - 1] == "DIV" && previousResults[previousResults.length - 2] == "DIV") {
+                        console.log("Deux CONV de suite, lancer popup");
+                        setTimeout(() => {
+
+                            popupCanvasDiv.style.visibility = "visible";
+                            createrivePopupDiv()
+                        }, 1000);
+                    }
                 } else if (endAvg < startAvg - 0.01) {
                     // convergence
+                    previousResults.push("CONV");
 
                     console.log(postureKey + " convergence");
                     riveCanvasConverge.style.visibility = "visible";
@@ -655,6 +756,15 @@ async function startGestureRecognition() {
                             baseToOO.fire();
                             break;
                         default: console.log("Unknown posture key:", postureKey); break;
+                    }
+
+                    if (previousResults.length >= 2 && previousResults[previousResults.length - 1] == "CONV" && previousResults[previousResults.length - 2] == "CONV") {
+                        console.log("Deux CONV de suite, lancer popup");
+                        setTimeout(() => {
+
+                            popupCanvasConv.style.visibility = "visible";
+                            createrivePopupConv()
+                        }, 1000);
                     }
                 }
 

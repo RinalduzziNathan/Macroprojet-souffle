@@ -46,6 +46,8 @@ canvas {
 #popupCanvasDecalage { z-index: 24; }
 #popupCanvasInverse { z-index: 24; }
 #popupCanvasNormal { z-index: 24; }
+#popupCanvasConv { z-index: 24; }
+#popupCanvasDiv { z-index: 24; }
 
 #handCanvas {
     
