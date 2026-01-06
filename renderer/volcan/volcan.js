@@ -188,8 +188,18 @@ window.addEventListener('DOMContentLoaded', (event) => {
     var artBoard;
     let rvisqueux = null;
 
+    var soundDemoBubbles = new Audio('../sons/DEMObubbles.mp3');
+
+    var soundFaux = new Audio('../sons/erreur_sound.mp3');
+    soundFaux.volume = 0.1;
+    var soundVrai = new Audio('../sons/correct_sound.mp3');
+    soundVrai.volume = 0.1;
+
     function createvisqueux() {
 
+
+        soundDemoBubbles.loop = true;
+        soundDemoBubbles.play();
         riveInstanceUnsubscribe(popup2);
 
         popup2 = null;
@@ -338,13 +348,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
             popupCanvasEffusif.style.visibility = "hidden";
             if (tovisible) tovisible.fire();
             boutonRestart.style.visibility = "visible";
-           
+
         }
         if (eventData.name == "closeExplosifRedondance") {
             popupCanvasExplosif.style.visibility = "hidden";
             if (tovisible) tovisible.fire();
             boutonRestart.style.visibility = "visible";
-           
+
         }
 
 
@@ -374,6 +384,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
     showSouffleTest.addEventListener('click', () => {
+        soundDemoBubbles.pause();
         popupCanvas2.style.visibility = "visible";
         createpopup2();
         document.getElementById("dragDropContainer").style.display = "none"; // 👈 masquer les éléments
@@ -413,9 +424,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     });
 
     menuBtn.addEventListener("click", () => {
+        soundDemoBubbles.pause();
         window.location.href = "../hub/hub.html";
     });
     menuBtnLeft.addEventListener("click", () => {
+        soundDemoBubbles.pause();
         window.location.href = "../hub/hub.html";
     });
 
@@ -631,7 +644,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                 setTimeout(() => {
                                     boutonRestart.style.visibility = "visible";
                                 }, 7000);
-                        }
+                            }
                         }
                         //if (toEscape) toEscape.fire();
 
@@ -657,10 +670,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                 setTimeout(() => {
                                     boutonRestart.style.visibility = "visible";
                                 }, 7000);
-                        }}
+                            }
+                        }
                         //if (toPhoto) toPhoto.fire();
                     }
-        
+
 
 
                     finTableau = false;
@@ -725,6 +739,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             const draggedTarget = e.dataTransfer.getData("text/plain");
 
             if (target.id === draggedTarget) {
+                soundVrai.play();
                 resultMessage.textContent = "Vrai !";
                 resultMessage.style.color = "black";
 
@@ -732,6 +747,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 showSouffleTest.style.visibility = "visible";
 
             } else {
+                soundFaux.play();
                 resultMessage.textContent = "Faux.";
                 resultMessage.style.color = "black";
                 shakeCanvas();
