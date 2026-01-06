@@ -15,7 +15,8 @@
     "files": [
       "main/**/*",
       "renderer/**/*"
-    ]
+    ],
+     "icon": "renderer/build/icon"
   },
   
   "repository": {

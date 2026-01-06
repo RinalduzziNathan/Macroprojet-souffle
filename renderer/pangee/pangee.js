@@ -4,11 +4,11 @@ const menuBtn = document.getElementById("menuButton");
 const menuBtnLeft = document.getElementById("menuButtonLeft");
 const showNext = document.getElementById('showNext');
 const showNext2 = document.getElementById('showNext2');
-const boutonRestart = document.getElementById("boutonRestart");
+
 
 
 //canvas
-const canvasTimelapse = document.getElementById("canvasRive");
+const riveCanvasPangee  = document.getElementById("riveCanvasPangee");
 const riveCanvasMains = document.getElementById("riveCanvasMains");
 const canvas = document.getElementById('monCanvas');
 const ctx = canvas.getContext('2d');
@@ -44,10 +44,11 @@ menuBtn.style.visibility = "hidden"
 menuBtnLeft.style.visibility = "visible"
 showNext.style.visibility = "visible";
 showNext2.style.visibility = "hidden";
-boutonRestart.style.visibility = "hidden";
+
 
 //canvas
 riveCanvasMains.style.visibility = "hidden";
+riveCanvasPangee.style.visibility = "hidden";
 
 //texte
 resultMessage.style.visibility = "hidden";
@@ -62,11 +63,13 @@ let showNext1Clicked = false;
 
 let riveInstance = null;
 let triggerBlink;
+let toBase;
+let hover;
 
 function createRiveInstance() {
     riveInstance = new rive.Rive({
         src: "../rive/demogeo_pangee.riv",
-        canvas: canvasTimelapse,
+        canvas: document.getElementById("riveCanvasPangee"),
         autoplay: true,
         stateMachines: "State Machine 1",
         layout: new rive.Layout({
@@ -77,6 +80,7 @@ function createRiveInstance() {
             const inputs = riveInstance.stateMachineInputs("State Machine 1");
             triggerBlink = inputs.find(i => i.name === "terre");
             toBase = inputs.find(i => i.name === 'toBase');
+            hover = inputs.find(i => i.name === 'hover');
             resizeCanvasToViewport();
             riveEventCheck(riveInstance);
         },
@@ -109,8 +113,8 @@ function rechargePage() {
 
 
 function resizeCanvasToViewport() {
-    canvasTimelapse.width = window.innerWidth;
-    canvasTimelapse.height = window.innerHeight;
+    riveCanvasPangee.width = window.innerWidth;
+    riveCanvasPangee.height = window.innerHeight;
     if (riveInstance) {
         riveInstance.resizeDrawingSurfaceToCanvas();
     }
@@ -130,10 +134,7 @@ function riveEventCheck(riveInstance) {
             function onRiveEventReceived(riveEvent) {
                 const eventData = riveEvent.data;
                 console.log("Event data:", eventData);
-                if (eventData.name == "restart") {
-                    boutonRestart.style.visibility = "visible";
-
-                }
+            
 
                 if (eventData.name == "startBlink") {
                     blink = true;
@@ -164,7 +165,9 @@ showNext2.addEventListener('click', () => {
     document.body.style.backgroundColor = "#fcff32ff"
     if (exit1) exit1.fire();
 
+    riveCanvasPangee.style.visibility = "visible";    
     createRiveInstance();
+
     showNext1Clicked = false;
     menuBtn.style.visibility = "visible";
     menuBtnLeft.style.visibility = "hidden";
@@ -178,13 +181,7 @@ showNext2.addEventListener('click', () => {
 
 })
 
-boutonRestart.addEventListener("click", function () {
-        createRiveInstance();
-        if (toBase) toBase.fire();
-        boutonRestart.style.visibility = "hidden";
-        blink = false;
 
-    });
 
 
 

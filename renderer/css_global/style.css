@@ -35,6 +35,7 @@ canvas {
 #riveCanvas         { z-index: 1; }
 #riveCanvasVolcan   { z-index: 1;pointer-events: none; }
 #riveCanvasMains    { z-index: 15; }
+#riveCanvasPangee    { z-index: 15; }
 #riveCanvasTecto    { z-index: 5; }
 #riveCanvasTectoFleches { z-index: 5; }
 #riveCanvasConverge { z-index: 10; }
