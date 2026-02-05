@@ -12,7 +12,12 @@ body {
     overflow: hidden;
     position: relative;
     height: 100vh;
+    background-image: url("texture_papier.png");
+    background-repeat: repeat;
+    mix-blend-mode: multiply;
+    
   }
+  
   
 
 
@@ -29,6 +34,7 @@ body {
       linear-gradient(to bottom, #e0e0e0 1px, transparent 1px);
     background-size: 20px 20px;
     z-index: -10;
+    
   }
   
   /* Contenu centré */

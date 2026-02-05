@@ -162,7 +162,10 @@ menuBtnLeft.addEventListener("click", () => {
 });
 
 showNext2.addEventListener('click', () => {
+    console.log( document.body.style.backgroundColor);
     document.body.style.backgroundColor = "#fcff32ff"
+    
+    console.log( document.body.style.backgroundColor);
     if (exit1) exit1.fire();
 
     riveCanvasPangee.style.visibility = "visible";    
