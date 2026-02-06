@@ -18,7 +18,7 @@
       "main/**/*",
       "renderer/**/*"
     ],
-     "icon": "renderer/build/icon",
+     "icon": "renderer/build/icon.ico",
       "win":  {
     "target": [
       {
@@ -29,7 +29,8 @@
         "target": "portable",
         "arch": ["x64"]
       },
-      "zip"                            ]
+      "zip"                            ],
+       "icon": "icon.ico"  
   }
 
         
