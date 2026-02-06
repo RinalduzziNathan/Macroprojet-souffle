@@ -19,14 +19,18 @@
       "renderer/**/*"
     ],
      "icon": "renderer/build/icon",
-      "win": {
-        "target": [
-      "nsis",           
-      "portable",      
-      "zip"             
-    ],
-      "arch": ["x64"] 
-      }
+      "win":  {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]        
+      },
+      {
+        "target": "portable",
+        "arch": ["x64"]
+      },
+      "zip"                            ]
+  }
 
         
   },
