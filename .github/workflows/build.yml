@@ -23,7 +23,7 @@ jobs:
         run: npm ci             # ou yarn install --frozen-lockfile si tu utilises yarn
 
       - name: Build & package Windows
-        run: npm run build -- --win --x64
+        run: npm run build -- --win --x64 --publish never
         # OU plus explicite :
         # run: npx electron-builder --win --x64 --config electron-builder.yml
 
