@@ -16,8 +16,6 @@ function createWindow () {
   win.setAutoHideMenuBar(true)
 
 
-win.setMenuBarVisibility(false);
-
   win.loadFile(path.join(__dirname, '../renderer/index.html'));
 }
 

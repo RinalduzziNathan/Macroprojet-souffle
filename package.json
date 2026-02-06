@@ -11,14 +11,14 @@
     "appId": "DemoGeo",
     "productName": "Macroprojet Souffle",
     "directories": {
-      "buildResources": "assets",
+      "buildResources": "build",
       "output": "dist/"    
     },
     "files": [
       "main/**/*",
       "renderer/**/*"
     ],
-     "icon": "renderer/icon/icon.ico",
+     "icon": "icon.ico",
       "win":  {
     "target": [
       {
