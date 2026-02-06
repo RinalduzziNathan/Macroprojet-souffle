@@ -5,14 +5,18 @@ function createWindow () {
   const win = new BrowserWindow({
     width: 1280,
     height: 800,
-    icon: '/../renderer/icon/icon.icns',
+    icon: '/../renderer/build/icon.ico',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
       contextIsolation: true
     }
   });
-  win.removeMenu(); 
+  win.removeMenu();
+  win.setAutoHideMenuBar(true)
+
+
+win.setMenuBarVisibility(false);
 
   win.loadFile(path.join(__dirname, '../renderer/index.html'));
 }
