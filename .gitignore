@@ -8,7 +8,6 @@ yarn.lock
 
 # Dependencies
 dist/
-build/
 
 # Environment variables
 .env
