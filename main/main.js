@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
 
 function createWindow () {
@@ -12,6 +12,7 @@ function createWindow () {
       contextIsolation: true
     }
   });
+  win.removeMenu(); 
 
   win.loadFile(path.join(__dirname, '../renderer/index.html'));
 }
