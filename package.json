@@ -8,15 +8,27 @@
     "build": "electron-builder"
   },
   "build": {
-    "appId": "com.example.app",
+    "appId": "DemoGeo",
+    "productName": "Macroprojet Souffle",
     "directories": {
-      "buildResources": "assets"
+      "buildResources": "assets",
+      "output": "dist/"    
     },
     "files": [
       "main/**/*",
       "renderer/**/*"
     ],
-     "icon": "renderer/build/icon"
+     "icon": "renderer/build/icon",
+      "win": {
+        "target": [
+      "nsis",           
+      "portable",      
+      "zip"             
+    ],
+      "arch": ["x64"] 
+      }
+
+        
   },
   
   "repository": {

@@ -1,0 +1,43 @@
+name: Build Windows Installer
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:          # ← permet de lancer manuellement depuis GitHub
+
+jobs:
+  build-windows:
+    runs-on: windows-latest   # ou windows-2022 si tu veux être très conservateur
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20      # Electron 39 fonctionne bien avec Node 20 ou 22
+
+      - name: Install dependencies
+        run: npm ci             # ou yarn install --frozen-lockfile si tu utilises yarn
+
+      - name: Build & package Windows
+        run: npm run build -- --win --x64
+        # OU plus explicite :
+        # run: npx electron-builder --win --x64 --config electron-builder.yml
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: dist/
+          retention-days: 14
+
+      # Optionnel : publier une release GitHub si c'est un tag (ex: git tag v1.0.1 && git push --tags)
+      - name: Release if tagged
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          files: dist/**/*
+          generate_release_notes: true
