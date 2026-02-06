@@ -9,7 +9,7 @@
   },
   "build": {
     "appId": "DemoGeo",
-    "productName": "Macroprojet Souffle",
+    "productName": "Démo Géo",
     "directories": {
       "buildResources": "build",
       "output": "dist/"    
@@ -20,6 +20,7 @@
     ],
      "icon": "icon.ico",
       "win":  {
+        
     "target": [
       {
         "target": "nsis",
