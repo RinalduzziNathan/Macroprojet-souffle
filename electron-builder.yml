@@ -9,7 +9,7 @@ files:
   - main/**/*
   - renderer/**/*
 
-icon: renderer/build/icon.ico
+icon: renderer/icon/icon.ico
 
 win:
   target:
