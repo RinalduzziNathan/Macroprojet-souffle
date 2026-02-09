@@ -259,7 +259,7 @@ let baseToCC, baseToCO, baseToOO, baseToOC, baseToDonnees, toVisibleCONV, toInvi
 let rConverge = null;
 function createConverge() {
     rConverge = new rive.Rive({
-        src: "../rive/demogeo_tectonique_convergence2.riv",
+        src: "../rive/demogeo_tectonique_convergence.riv",
         canvas: document.getElementById("riveCanvasConverge"),
         autoplay: true,
         stateMachines: "State Machine 1",
@@ -292,7 +292,7 @@ let DIVbaseToCC, DIVbaseToCO, DIVbaseToOO, DIVbaseToOC, toVisible, toInvisibleCC
 let rDiverge = null;
 function createDiverge() {
     rDiverge = new rive.Rive({
-        src: "../rive/demogeo_tectonique_divergence2.riv",
+        src: "../rive/demogeo_tectonique_divergence.riv",
         canvas: document.getElementById("riveCanvasDiverge"),
         autoplay: true,
         stateMachines: "State Machine 1",
