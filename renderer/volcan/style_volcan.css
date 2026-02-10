@@ -89,10 +89,10 @@ body {
     display: flex;
     justify-content: space-around;
     position: absolute;
-    top: 5%;
+    top: 10%;
     /* Position where you want it */
     left: 30%;
-    gap: 100px; /* espace entre les deux rectangles */
+    gap: 25%; /* espace entre les deux rectangles */
 
     z-index: 20;
     font-family: "Bricolage Grotesque", sans-serif;
@@ -100,37 +100,36 @@ body {
     font-weight: 700;
     font-style: normal;
     font-variation-settings: "wdth" 100;
-    font-size: 24px;
+    font-size: 45px;
     color: black;
     
 }
 
 .draggable {
     padding: 10px 20px;
-    
     cursor: grab;
-   
     background-color: white;
     color: #00FF00;
     border: 3px, solid #00FF00;
     border-radius: 50px;
     box-shadow:5px 5px 5px #d6d6d6;
+    white-space: nowrap;
 }
 
 #dropTargets {
     position: absolute;
-    top: 22%;
+    top: 25%;
     /* Position where you want it */
-    left: 16%;
+    left: 17%;
     display: flex;
-    gap: 70px; /* espace entre les deux rectangles */
+    gap: 100px; /* espace entre les deux rectangles */
     opacity: 0;        /* rend invisible mais toujours cliquable */
     pointer-events: auto;    
 }
 
 .dropTarget {
-    width: 450px;
-    height: 450px;
+    width: 550px;
+    height: 550px;
     border-radius: 50%;
     text-align: center;
     line-height: 200px;

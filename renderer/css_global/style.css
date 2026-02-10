@@ -152,14 +152,14 @@ canvas {
     left: 50%;
     transform: translateX(-50%);
     font-family: "ZCOOL QingKe HuangYou", sans-serif;
-    font-size: 90px;
+    font-size: 120px;
     z-index: 21;
 }
 
 .titre {
     font-family: "Bricolage Grotesque", sans-serif;
     pointer-events: none;
-    font-size: 165px;
+    font-size: 270px;
     margin: 0;
     line-height: 0.8;
     display: inline-block;

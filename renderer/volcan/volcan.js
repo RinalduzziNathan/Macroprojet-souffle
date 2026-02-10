@@ -708,7 +708,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     const draggables = document.querySelectorAll(".draggable");
     const dropTargets = document.querySelectorAll(".dropTarget");
-    const resultMessage = document.getElementById("resultMessage");
 
     draggables.forEach(draggable => {
         draggable.addEventListener("dragstart", (e) => {
@@ -740,23 +739,19 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
             if (target.id === draggedTarget) {
                 soundVrai.play();
-                resultMessage.textContent = "Vrai !";
-                resultMessage.style.color = "black";
+          
 
                 bouncePage()
                 showSouffleTest.style.visibility = "visible";
 
             } else {
                 soundFaux.play();
-                resultMessage.textContent = "Faux.";
-                resultMessage.style.color = "black";
+                
                 shakeCanvas();
 
 
             }
 
-            // Optionnel : reset message après quelques secondes
-            setTimeout(() => resultMessage.textContent = "", 2000);
         });
 
     });

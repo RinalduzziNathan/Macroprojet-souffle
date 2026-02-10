@@ -3,7 +3,7 @@
     background-color: rgb(255, 255, 255);
     top: 2.5%;
     left: 2%;
-    border: 3px solid #00FF00;
+    border: 4px solid #00FF00;
     box-shadow:5px 5px 5px rgba(140, 140, 140, 0.5);
     border-radius: 80px;
     padding: 15px 18px;
@@ -17,7 +17,7 @@
     background-color: rgb(255, 255, 255);
     top: 2.5%;
     left: 93%;
-    border: 3px solid #00FF00;
+    border: 4px solid #00FF00;
     box-shadow:5px 5px 5px rgba(140, 140, 140, 0.5);
     border-radius: 80px;
     padding: 15px 18px;
@@ -29,13 +29,13 @@
 }
 
 .homebutton:hover {
-    padding: 20px 20px;
+    padding: 20px 22px;
     background-color: #00FF00;
     color: #ffffff;
     transition: 0.3s;
 }
 .homebuttonLeft:hover {
-    padding: 20px 20px;
+    padding: 20px 22px;
     background-color: #00FF00;
     color: #ffffff;
     transition: 0.3s;
@@ -56,7 +56,7 @@
     font-weight: 700;
     font-style: normal;
     font-variation-settings: "wdth" 100;
-    font-size: 24px;
+    font-size: 45px;
     cursor: pointer;
     box-shadow:5px 5px 5px #d6d6d6;
     z-index: 25;
@@ -85,7 +85,7 @@
     visibility: hidden;
     background-color: white;
     color:#000000;
-    border: 3px solid #00FF00;
+    border: 5px solid #00FF00;
     box-shadow:5px 5px 5px rgba(140, 140, 140, 0.5);
     border-radius: 100px;
     font-family: "Bricolage Grotesque", sans-serif;
@@ -93,7 +93,7 @@
     font-weight: 700;
     font-style: normal;
     font-variation-settings: "wdth" 100;
-    font-size: 90px;
+    font-size: 120px;
     cursor: pointer;
     z-index: 20;
     transition: 0.5s;
@@ -111,15 +111,15 @@
     position: absolute;
     line-height: 0.9;
     background-color: white;
-    top: 6.8%;
-    left: 23%;
+    top: 6%;
+    left: 20%;
     transform: translate(-50%, -50%);
     display: inline-block;
     padding: 15px 20px;
     visibility: hidden;
     background-color: white;
     color:#00FF00;
-    border: 3px solid #00FF00;
+    border: 5px solid #00FF00;
     box-shadow:5px 5px 5px rgba(140, 140, 140, 0.5);
     border-radius: 100px;
     font-family: "Bricolage Grotesque", sans-serif;
@@ -127,7 +127,7 @@
     font-weight: 700;
     font-style: normal;
     font-variation-settings: "wdth" 100;
-    font-size: 40px;
+    font-size: 65px;
     cursor: pointer;
     z-index: 20;
     transition: 0.5s;
