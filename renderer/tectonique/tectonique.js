@@ -26,7 +26,6 @@ const popupCanvasDiv = document.getElementById("popupCanvasDiv");
 
 //textes
 const titre = document.getElementById("titre")
-const texteMains = document.getElementById("texteMains");
 const timerDisplay = document.getElementById("timerDisplay");
 
 
@@ -56,7 +55,6 @@ showNext.style.visibility = "visible";
 
 
 //textes
-texteMains.style.visibility = "hidden";
 
 
 //autre
@@ -393,7 +391,6 @@ const onRiveEventReceived = (riveEvent) => {
         showNextClicked = false;
         titre.style.visibility = "hidden";
         showNext.style.visibility = "hidden"
-        texteMains.style.visibility = "hidden";
         document.getElementById("contidroite").style.display = "none";
         document.getElementById("contigauche").style.display = "none";
         document.getElementById("oceandroite").style.display = "none";
@@ -412,7 +409,6 @@ const onRiveEventReceived = (riveEvent) => {
         }, 250);
         popupCanvas3.style.visibility = "visible";
         riveCanvasTectoFleches.style.visibility = "hidden";
-        texteMains.style.visibility = "hidden";
     }
 
     if (eventData.name == "close4") {
@@ -427,7 +423,6 @@ const onRiveEventReceived = (riveEvent) => {
         menuBtn.style.visibility = "visible";
         menuBtnLeft.style.visibility = "hidden"
 
-        texteMains.style.visibility = "hidden";
         riveCanvasConverge.style.visibility = "visible";
         riveCanvasDiverge.style.visibility = "visible";
 
@@ -509,7 +504,6 @@ async function startGestureRecognition() {
         showNextClicked = true;
         titre.style.visibility = "hidden";
         canvas.style.visibility = "visible"
-        texteMains.style.visibility = "visible";
         detectionActive = true;
 
     })
@@ -564,14 +558,12 @@ async function startGestureRecognition() {
                 const handedness = results.multiHandedness[i].label; // "Left" ou "Right"
 
                 if (handedness === "Right" && isFistPose) {
-                    messages.push("Main droite : poing fermé");
                     if (contigauche.style.visibility !== "visible") {
                         //triggerBounce("oceangauche");
                         contigauche.style.visibility = "visible";
                     }
                 } else if (handedness === "Right" && !isFistPose) {
 
-                    messages.push("Main droite : main ouverte");
                     if (oceangauche.style.visibility !== "visible") {
                         //triggerBounce("contigauche");
 
@@ -580,14 +572,12 @@ async function startGestureRecognition() {
 
                 } else if (handedness === "Left" && isFistPose) {
                     //color = "blue";
-                    messages.push("Main gauche : poing fermé");
                     if (contidroite.style.visibility !== "visible") {
                         //triggerBounce("oceandroite");
                         contidroite.style.visibility = "visible";
 
                     }
                 } if (handedness === "Left" && !isFistPose) {
-                    messages.push("Main gauche : main ouverte");
                     if (oceandroite.style.visibility !== "visible") {
                         //triggerBounce("contidroite");
                         oceandroite.style.visibility = "visible";
@@ -601,7 +591,6 @@ async function startGestureRecognition() {
             oceangauche.style.visibility = "hidden";
             messages.push("Aucune main détectée");
         }
-        texteMains.innerText = messages.join("\n");
 
         document.getElementById("bigcontidroite").style.display = "none";
         document.getElementById("bigoceandroite").style.display = "none";
