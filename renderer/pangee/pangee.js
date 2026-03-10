@@ -15,12 +15,12 @@ const ctx = canvas.getContext('2d');
 const dpr = window.devicePixelRatio || 1;
 
 // Définit la taille CSS du canvas si besoin
-canvas.style.width = '1400px';
-canvas.style.height = '800px';
+canvas.style.width = window.innerWidth + 'px';
+canvas.style.height = window.innerHeight + 'px';
 
 // Définit la taille du canvas en pixels réels (multiplié par dpr)
-canvas.width = 1400 * dpr;
-canvas.height = 800 * dpr;
+canvas.width = window.innerWidth * dpr;
+canvas.height = window.innerHeight * dpr;
 
 // Applique la mise à l’échelle
 ctx.scale(dpr, dpr);
@@ -221,8 +221,8 @@ async function detectBlink() {
                         const textHeight = 30; // taille font
 
                         // Taille visible CSS du canvas (doit correspondre au style)
-                        const cssWidth = 1400;
-                        const cssHeight = 800;
+                        const cssWidth = window.innerWidth;
+                        const cssHeight = window.innerHeight;
 
                         const x = Math.random() * (cssWidth - textWidth);
                         const y = Math.random() * (cssHeight - textHeight) + textHeight;
