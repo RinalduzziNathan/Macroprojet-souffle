@@ -12,31 +12,32 @@
     "productName": "Démo Géo",
     "directories": {
       "buildResources": "build",
-      "output": "dist/"    
+      "output": "dist/"
     },
     "files": [
       "main/**/*",
       "renderer/**/*"
     ],
-     "icon": "icon.ico",
-      "win":  {
-        
-    "target": [
-      {
-        "target": "nsis",
-        "arch": ["x64"]        
-      },
-      {
-        "target": "portable",
-        "arch": ["x64"]
-      },
-      "zip"                            ],
-       "icon": "icon.ico"  
-  }
-
-        
+    "icon": "icon.ico",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
+        "zip"
+      ],
+      "icon": "icon.ico"
+    }
   },
-  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/RinalduzziNathan/Macroprojet-souffle.git"
@@ -52,7 +53,7 @@
   "devDependencies": {
     "concurrently": "^9.2.1",
     "electron": "^39.2.4",
-    "electron-builder": "^26.0.12",
+    "electron-builder": "^26.8.1",
     "vite": "^7.2.6",
     "wait-on": "^9.0.3"
   },
