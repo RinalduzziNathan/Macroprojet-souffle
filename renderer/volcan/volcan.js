@@ -452,7 +452,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
     function startTimer() {
-        let timeLeft = 5000; // 5 secondes en millisecondes
+        let timeLeft = 3000; // 5 secondes en millisecondes
         remplirTableau = true;
 
         const intervalId = setInterval(() => {
