@@ -387,7 +387,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         soundDemoBubbles.pause();
         popupCanvas2.style.visibility = "visible";
         createpopup2();
-        document.getElementById("dragDropContainer").style.display = "none"; // 👈 masquer les éléments
+        document.getElementById("dragDropContainer").style.display = "none"; 
         showSouffleTest.style.visibility = "hidden";
         visqueuseCanvas.style.visibility = "hidden";
         activeColorChange = true;
